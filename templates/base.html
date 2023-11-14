@@ -1,0 +1,49 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+        <title>Ecommerce</title>
+    </head>
+    <body>
+        <div class="top-bar">
+            <a href="#" class="logo">Your Logo</a>
+            <div class="search">
+                <input type="text" placeholder="Search...">
+                <span class="separator"></span>
+                <select>
+                    <option value="all">All</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="clothing">Clothing</option>
+                    <!-- Add more categories as needed -->
+                </select>
+                <button class="search-button" type="button">Search</button> <!-- Unicode for a search icon -->
+            </div>
+            <div class="icons">
+                <a href="#" class="icon">&#128722;</a> <!-- Unicode for a shopping cart icon -->
+                <a href="#" class="icon">&#128077;</a> <!-- Unicode for a wishlist icon -->
+                <a href="#" class="icon">&#128100;</a> <!-- Unicode for a user account icon -->
+            </div>
+        </div>
+        <div class="bar-separator"></div>
+        <div class="second-bar">
+            <ul class="tabs">
+                <button a href="#">Categories</a></button><!--navbar to expand-->
+                <button a href="#">Shop</a></button>
+                <button a href="#">For Sale</a></button>
+                <button a href="#">Vendors</a></button>
+                <button a href="#">About us</a></button>
+                <button a href="#">Contact us</a></button>
+                <button a href="#">Dupas us</a></button>
+                <!-- Add more tabs as needed -->
+            </ul>
+            <div class="bar-separator"></div>
+        </div>
+        <!-- Your main content goes here -->
+        <div class="main-content">
+            <p>Main content of the page</p>
+        </div>
+    </body>
+</html>
