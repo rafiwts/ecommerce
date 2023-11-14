@@ -1,7 +1,128 @@
-.text {
-    color: red;
+body {
+    margin: 0;
+    padding: 0;
+    background-color: rgba(131, 131, 150, 0.192);
+    font-family: 'Arial', sans-serif;
 }
 
-h1 {
-    color: pink;
+button {
+    padding: 8px;
+    box-sizing: border-box;
+    background-color: #fff;
+    color: #333;
+    border: none;
+    cursor: pointer;
+}
+
+input {
+    width: 60%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+select {
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.top-bar {
+    background-color: #f5f5f5;
+    color: #fff;
+    padding: 20px 250px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px black;
+}
+
+.logo {
+    text-decoration: none;
+    color: #fff;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.search {
+    flex-grow: 1;
+    margin: 0 20px;
+}
+
+.search-button {
+    background-color: whitesmoke;
+    font-size: 15px;
+    border: 2px black;
+}
+
+.search-button:hover {
+    color: white;
+    background-color: rgb(175, 175, 175);
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+
+}
+
+.separator {
+    border-right: 1px solid #fff;
+    height: 20px;
+    margin: 0 10px;
+}
+
+.icons {
+    display: flex;
+    align-items: center;
+}
+
+.icon {
+    margin-left: 40px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 1.2em;
+}
+
+.bar-separator {
+    height: 1px;
+    background-color: #b8b8b89f;
+}
+
+.second-bar {
+    background-color: #f7f7f7;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.tabs {
+    overflow: hidden;
+    margin-left: 200px;
+    margin-right: 200px;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.tabs button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    margin: 0;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+    line-height: 1;
+    flex: 1;
+}
+
+.tabs button:hover {
+    background-color: blue;
+}
+
+.main-content {
+    margin-left: 250px; /* Adjust the margin as needed */
+    margin-right: 250px;
 }
