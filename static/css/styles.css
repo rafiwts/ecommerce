@@ -5,35 +5,12 @@ body {
     font-family: 'Arial', sans-serif;
 }
 
-button {
-    padding: 8px;
-    box-sizing: border-box;
-    background-color: #fff;
-    color: #333;
-    border: none;
-    cursor: pointer;
-}
-
-input {
-    width: 60%;
-    padding: 8px;
-    box-sizing: border-box;
-}
-
-select {
-    padding: 8px;
-    box-sizing: border-box;
-}
-
 .top-bar {
     background-color: #f5f5f5;
     color: #fff;
-    padding: 20px 250px;
-    box-sizing: border-box;
+    padding: 15px 270px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 2px black;
+    height: 30px;
 }
 
 .logo {
@@ -55,8 +32,8 @@ select {
 }
 
 .search-button:hover {
-    color: white;
-    background-color: rgb(175, 175, 175);
+    color: #dc143c96;
+    background-color: rgba(211, 210, 210, 0.589);
 }
 
 .search-container {
@@ -125,4 +102,27 @@ select {
 .main-content {
     margin-left: 250px; /* Adjust the margin as needed */
     margin-right: 250px;
+}
+
+.search {
+    display: flex;
+    margin-left: 100px;
+}
+
+.search input,
+.search select {
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.search input {
+    width: 250px;
+    box-sizing: border-box;
+}
+
+.search button {
+    background-color: #dc143c;
+    color: white;
+    font-size: 14px; /* Adjust the font size to fit within the button height */
+    line-height: 20px;
 }
