@@ -1,0 +1,38 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 12px 250px 10px 250px;
+
+    background-color: rgb(241, 241, 241);
+    border-bottom-color: rgb(216, 216, 216);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+
+.search-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.search-bar {
+    width: 350px;
+    height: 25px;
+    font-size: 14px;
+    border: 1px solid rgb(75, 75, 75);
+}
+
+.search-button {
+    width: 34px;
+    height: 29px;
+    border: 1px solid rgb(75, 75, 75);
+    margin-left: -1px;
+}
+
+.search-icon {
+    width: 20px;
+    height: 20px;
+}
