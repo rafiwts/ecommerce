@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/general.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
         <title>Ecommerce</title>
     </head>
     <body>
@@ -21,15 +22,14 @@
                 </button>
                 <!--Add tooltip later on-->
             </div>
-            <div class="icon-sectoion">
-                <a href="#" class="icon"><img src="https://a.allegroimg.com/original/342704/5df50ccf415c9dc190264897d100/action-common-heart-322d64f02b"></a>
-                <a href="#" class="icon"><img src="https://a.allegroimg.com/original/34c243/da301c81474cabfb3a64e33c88f0/action-common-bell-3be8b9f339"></a>
-                <a href="#" class="icon"><img src="https://a.allegroimg.com/original/3486ac/feff2af24726bad68de181b2a403/action-common-bag-2b387e88bc.svg"></a>
-                <a href="#" class="icon"><img src="https://a.allegroimg.com/original/341d65/f72d7eef4b92b2ccace58549911b/action-common-user-fc042bf682"></a>
+            <div class="icon-section">
+                <a href="#" class="icon"><img src="{% static 'images/wishlist.svg' %}"></a>
+                <a href="#" class="icon"><img src="{% static 'images/messages.svg' %}"></a>
+                <a href="#" class="icon"><img src="{% static 'images/notifications.svg' %}"></a>
+                <a href="#" class="icon"><img src="{% static 'images/shopcart.svg' %}"></a>
             </div>
         </div>
-        <div class="bar-separator"></div>
-        <div class="second-bar">
+        <div class="tab-bar">
             <ul class="tabs">
                 <button a href="#">Categories</a></button><!--navbar to expand-->
                 <button a href="#">Shop</a></button>
@@ -37,7 +37,6 @@
                 <button a href="#">Vendors</a></button>
                 <button a href="#">About us</a></button>
                 <button a href="#">Contact us</a></button>
-                <button a href="#">Dupas us</a></button>
                 <!-- Add more tabs as needed -->
             </ul>
             <div class="bar-separator"></div>

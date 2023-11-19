@@ -1,15 +1,34 @@
 .header {
+    padding-top: 12px;
+    padding-bottom: 10px;
+}
+
+.icon-section {
+    width: 160px;
+}
+
+.tabs {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 0;
+    background-color: red;
+}
+
+.header,
+.tabs {
+    background-color: rgb(241, 241, 241);
+    max-width: 900px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.header,
+.icon-section,
+.tabs {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-
-    padding: 12px 250px 10px 250px;
-
-    background-color: rgb(241, 241, 241);
-    border-bottom-color: rgb(216, 216, 216);
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
 }
 
 .search-section {
@@ -19,20 +38,74 @@
 }
 
 .search-bar {
-    width: 350px;
-    height: 25px;
+    width: 450px;
+    height: 24px;
     font-size: 14px;
     border: 1px solid rgb(75, 75, 75);
 }
 
 .search-button {
     width: 34px;
-    height: 29px;
+    height: 24px;
     border: 1px solid rgb(75, 75, 75);
     margin-left: -1px;
+}
+
+.search-bar,
+.search-button {
+    box-sizing: border-box;
+}
+
+.search-button{
+    cursor: pointer;
+    transition: 0.2s;
+    background-color: rgba(158, 18, 18, 0.644);
+}
+
+.search-button:hover{
+    background-color: rgba(131, 15, 15, 0.37);
 }
 
 .search-icon {
     width: 20px;
     height: 20px;
+}
+
+.tab-bar {
+    border-top: 1px solid rgb(216, 216, 216);
+    border-bottom: 1px solid rgb(216, 216, 216);
+    height: 30px;
+}
+
+.tabs button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    margin: 0;
+    outline: none;
+    cursor: pointer;
+    padding: 9px 16px;
+    transition: 0.5s;
+    font-size: 12px;
+    line-height: 1;
+    flex: 1;
+}
+
+.tabs button:hover {
+    background-color: rgba(146, 30, 30, 0.336);
+    color: white;
+}
+
+.icon-section img {
+    height: 24px;
+    width: 24px;
+}
+
+.icon {
+    transition: 0.2s;
+    height: 24px;
+}
+
+.icon:hover {
+    background-color: rgb(221, 221, 221);
 }
