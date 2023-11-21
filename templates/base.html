@@ -7,9 +7,13 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/general.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/sidebar.css' %}">
         <title>Ecommerce</title>
     </head>
     <body>
+        <div class="help-bar">
+            <p>help bar</p>
+        </div>
         <div class="header-container">
             <div class="header">
                 <div class="logo-section">
@@ -24,37 +28,39 @@
                     </button>
                 </div>
                 <div class="icon-section">
-                    <div class="wishlist-icon-container">
+                    <div class="wishlist-container">
                         <a href="#" class="icon"><img src="{% static 'images/wishlist.svg' %}"></a>
                         <div class="wishlist-count">3</div>
                     </div>
-                    <div class="wishlist-icon-container">
-                        <a href="#" class="icon"><img src="{% static 'images/messages.svg' %}"></a>
-                        <div class="messages-count">3</div>
-                    </div>
-                    <div class="wishlist-icon-container">
-                        <a href="#" class="icon"><img src="{% static 'images/notifications.svg' %}"></a>
-                        <div class="notifications-count">3</div>
-                    </div>
-                    <div class="wishlist-icon-container">
+                    <div class="shopcart-container">
                         <a href="#" class="icon"><img src="{% static 'images/shopcart.svg' %}"></a>
                         <div class="shopcart-count">3</div>
+                    </div>
+                    <div class="notification-container">
+                        <a href="#" class="icon"><img src="{% static 'images/notifications.svg' %}"></a>
+                        <div class="notification-count">3</div>
+                    </div>
+                    <div class="account-container">
+                        <a href="#" class="icon"><img src="{% static 'images/account.svg' %}"></a>
                     </div>
                 </div>
             </div>
         </div>
         <div class="tabs-container">
             <div class="tab-bar">
-                <ul class="tabs">
-                    <button onclick="dropdownBox()" class="dropbtn">Categories <img src="{% static 'images/arrow.svg' %}"></button>
+                <button onclick="dropdownBox()" class="dropbtn">All Categories <img src="{% static 'images/arrow.svg' %}"></button>
                     <div id="dropdownList" class="dropdown-categories">
                         <a href="#">Category 1</a>
                         <a href="#">Category 2</a>
                         <a href="#">Category 3</a>
                         <!-- Add more categories as needed -->
                     </div>
+                <ul class="tabs">
                     <button onclick="window.location.href='{% url 'shop:shop' %}'" {%block active_shop%}{%endblock active_shop%}>Shop</button>
                     <button onclick="window.location.href='{% url 'shop:sale' %}'" {%block active_sale%}{%endblock active_sale%}>For Sale</a></button>
+                    <button>To be added</button>
+                    <button>To be added</button>
+                    <button>To be added</button>
                     <button onclick="window.location.href='{% url 'shop:vendor' %}'" {%block active_vendor%}{%endblock active_vendor%}>Vendors</a></button>
                     <button onclick="window.location.href='{% url 'shop:info' %}'" {%block active_info%}{%endblock active_info%}>About us</a></button>
                     <button onclick="window.location.href='{% url 'shop:contact' %}'" {%block active_contact%}{%endblock active_contact%}>Contact us</a></button>
@@ -67,6 +73,9 @@
             {%block content%}
             <p>Home</p>
             {%endblock content%}
+        </div>
+        <div class="footer">
+            <p>footer</p>
         </div>
     </body>
     <script src="{% static 'js/scripts.js' %}"></script>
