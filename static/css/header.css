@@ -1,27 +1,28 @@
-.header-container,
+.header-container {
+    background-color: rgb(241, 241, 241);
+    border-top: 1px solid rgb(216, 216, 216);
+}
+
+.help-bar,
 .tabs-container {
     background-color: rgb(241, 241, 241);
 }
 
 .header {
-    padding-top: 12px;
-    padding-bottom: 10px;
-}
-
-.icon-section {
-    width: 160px;
+    height: 100px;
+    max-width: 1100px;
 }
 
 .tabs {
     margin-top: 0px;
     margin-bottom: 0px;
+    max-width: 1100px;
     padding: 0;
 }
 
 .header,
 .tabs {
     background-color: rgb(241, 241, 241);
-    max-width: 900px;
     margin-right: auto;
     margin-left: auto;
 }
@@ -42,16 +43,20 @@
 }
 
 .search-bar {
-    width: 450px;
-    height: 24px;
+    width: 500px;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
     font-size: 14px;
-    border: 1px solid rgb(75, 75, 75);
+    padding-left: 10px;
 }
 
 .search-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 34px;
-    height: 24px;
-    border: 1px solid rgb(75, 75, 75);
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
     margin-left: -1px;
     cursor: pointer;
     transition: 0.2s;
@@ -61,14 +66,15 @@
 .search-bar,
 .search-button {
     box-sizing: border-box;
+    border: 1px solid rgb(75, 75, 75);
+    height: 40px;
 }
 
 .search-button:hover{
     background-color: rgba(131, 15, 15, 0.37);
 }
 
-.search-button .tooltip,
-.icon-section .tooltip {
+.search-button .tooltip {
     position: absolute;
     background-color: rgb(65, 65, 65);
     color: white;
@@ -77,65 +83,78 @@
     padding-left: 8px;
     padding-right: 8px;
     border-radius: 6px;
-    font-size: 12px;
+    font-size: 10px;
     opacity: 0;
     transition: opacity 0.15s;
     pointer-events: none;
     white-space: nowrap;
 }
 
-.search-button:hover .tooltip,
-.icon-section:hover .tooltip {
+.search-button:hover .tooltip {
     opacity: 1;
 }
 
 .search-icon {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
 }
 
-.wishlist-icon-container {
+.icon-section .icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+}
+
+.wishlist-container,
+.shopcart-container,
+.notification-container,
+.account-container {
+    flex: 1; /* Distribute available space evenly among child elements */
+    margin-right: 30px; /* Add margin between icons */
+}
+
+.wishlist-container,
+.shopcart-container,
+.notification-container {
     position: relative;
     width: 24px;
     height: 24px;
 }
 
 .wishlist-count,
-.messages-count,
-.notifications-count,
-.shopcart-count {
+.shopcart-count,
+.notification-count{
     position: absolute;
     top: 0px;
-    right: 100px;
-    background-color: rgb(200, 0, 0);
+    right: -8px;
+    background-color: rgb(182, 0, 0);
     color: white;
     font-size: 9px;
-    padding-left: 4px;
-    padding-right: 4px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    top: 10px;
-    right: -2px;
+    font-style: Arial;
+    padding-left: 3.7px;
+    padding-right: 3.7px;
+    padding-top: 0.7px;
+    padding-bottom: 0.01px;
     border-radius: 10px;
-  }
+}
 
 .tab-bar {
     border-top: 1px solid rgb(216, 216, 216);
     border-bottom: 1px solid rgb(216, 216, 216);
-    height: 30px;
+    height: 50px;
 }
 
 .tabs button {
-    float: left;
     border: none;
-    margin: 0;
     outline: none;
     cursor: pointer;
-    padding: 9px 16px;
-    transition: 0.5s;
-    font-size: 12px;
+    padding: 17px 16px;
+    font-size: 16px;
     line-height: 1;
     flex: 1;
+    transition: 0.5s;
+    box-sizing: content-box;
 }
 
 .tabs button:hover {
@@ -143,9 +162,33 @@
     color: white;
 }
 
-.dropbtn:hover, .dropbtn:focus {
-    background-color: rgb(241, 241, 241);
-  }
+.tabs img {
+    transform: rotate(90deg); /* Adjust the angle as needed */
+}
+
+.dropbtn {
+    position: absolute;
+    top: 126px;
+    left: 100px;
+    background-color: rgb(194, 119, 119);
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 22px;
+    cursor: pointer;
+}
+
+@media (max-width: 1620px) {
+    .dropbtn {
+        width: 2px;
+        padding: 0;
+    }
+}
+
+.dropbtn:hover {
+    background-color: rgba(194, 119, 119, 0.336);
+}
 
 .dropbtn img {
     width: 10px;
@@ -155,46 +198,28 @@
 .dropdown {
     position: relative;
     display: inline-block;
-  }
+}
 
 .dropdown-categories {
     display: none;
     position: absolute;
-    top: 100px;
+    top: 162px;
+    left: 100px;
     background-color: rgb(241, 241, 241);
     min-width: 150px;
     font-size: 12px;
     overflow: auto;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
-  }
+}
 
 .dropdown-categories a {
     color: black;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
-  }
+}
 
 .dropdown-categories a:hover {background-color: rgba(146, 30, 30, 0.336);}
 
 .show {display: block;}
-
-.tabs img {
-    transform: rotate(90deg); /* Adjust the angle as needed */
-}
-
-.icon-section img {
-    height: 24px;
-    width: 24px;
-}
-
-a.icon {
-    display: block;
-    transition: 0.2s;
-    height: 24px;
-}
-
-.icon:hover {
-    background-color: rgb(221, 221, 221);
-}

@@ -1,116 +1,27 @@
-.top-bar {
-    background-color: #f5f5f5;
-    color: #fff;
-    padding: 15px 270px;
-    display: flex;
-    height: 30px;
-}
-
-.logo {
-    text-decoration: none;
-    color: #fff;
-    font-size: 1.5em;
-    font-weight: bold;
-}
-
-.search {
-    flex-grow: 1;
-    margin: 0 20px;
-}
-
-.search-button {
-    background-color: whitesmoke;
-    font-size: 15px;
-    border: 2px black;
-}
-
-.search-button:hover {
-    color: #dc143c96;
-    background-color: rgba(211, 210, 210, 0.589);
-}
-
-.search-container {
-    display: flex;
-    align-items: center;
-
-}
-
-.separator {
-    border-right: 1px solid #fff;
-    height: 20px;
-    margin: 0 10px;
-}
-
-.icons {
-    display: flex;
-    align-items: center;
-}
-
-.icon {
-    margin-left: 40px;
-    text-decoration: none;
-    color: #fff;
-    font-size: 1.2em;
-}
-
-.bar-separator {
-    height: 1px;
-    background-color: #b8b8b89f;
-}
-
-
-.tabs {
-    overflow: hidden;
-    margin-left: 200px;
-    margin-right: 200px;
-    display: flex;
-    justify-content: space-around;
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-.tabs button {
-    background-color: inherit;
-    float: left;
-    border: none;
-    margin: 0;
-    outline: none;
-    cursor: pointer;
-    padding: 14px 16px;
-    transition: 0.3s;
-    font-size: 17px;
-    line-height: 1;
-    flex: 1;
-}
-
-.tabs button:hover {
-    background-color: blue;
-}
-
-.main-content {
-    margin-left: 250px; /* Adjust the margin as needed */
-    margin-right: 250px;
-}
-
-.search {
-    display: flex;
+.sidebar-container {
+    display: grid;
+    row-gap: 40px;
     margin-left: 100px;
+    margin-top: 30px;
+    bottom: 0;
+    top: 140px;
+    max-width: 250px;
+    transition: left 0.5s ease, right 0.5s ease, max-width 0.5s ease;
 }
 
-.search input,
-.search select {
-    border: 1px solid #ccc;
-    box-sizing: border-box;
+.sidebar-top,
+.sidebar-middle,
+.sidebar-bottom {
+    height: 400px;
+    background-color: rgb(236, 236, 236);
+    padding-top: 5px;
+    border-radius: 8px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
 
-.search input {
-    width: 250px;
-    box-sizing: border-box;
-}
-
-.search button {
-    background-color: #dc143c;
-    color: white;
-    font-size: 14px; /* Adjust the font size to fit within the button height */
-    line-height: 20px;
+@media (max-width: 1500px) {
+    .sidebar-container {
+        max-width: 0;
+        overflow: hidden;
+    }
 }
