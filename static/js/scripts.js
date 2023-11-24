@@ -1,11 +1,9 @@
 // change the rotation of the arrow for categories tab upon clicking
-console.log('Script is running!');
-
 function dropdownBox() {
     var dropdownList = document.getElementById("dropdownList");
     dropdownList.classList.toggle("show");
 
-    var arrow = document.querySelector('.tab-bar img');
+    var arrow = document.querySelector('.arrow');
     arrow.style.transform = dropdownList.classList.contains('show') ? 'rotate(270deg)' : 'rotate(90deg)';
 }
 
@@ -25,27 +23,27 @@ window.onclick = function (event) {
     }
 }
 
-// resize sidebar depending on the width of the site
-window.addEventListener('resize', updateSidebarWidth);
+// change the rotation of the arrow for categories tab upon clicking
+function dropdownBoxHelp() {
+    var dropdownList = document.getElementById("dropdownListHelp");
+    dropdownList.classList.toggle("dupsko");
 
-function updateSidebarWidth() {
-    var tabs = document.querySelector('.tabs');
-    var sidebar = document.getElementById('sidebar');
+    var arrow = document.querySelector('.arrow-help');
+    arrow.style.transform = dropdownList.classList.contains('dupsko') ? 'rotate(270deg)' : 'rotate(90deg)';
+}
 
-    if (tabs) {
-        var marginLeft = window.getComputedStyle(tabs).getPropertyValue('margin-left');
-        sidebar.style.width = marginLeft;
+window.onclick = function (event) {
+    if (!event.target.matches('.dropbtn-help')) {
+        var dropdowns = document.getElementsByClassName("dropdown-categories-help");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('dupsko')) {
+                openDropdown.classList.remove('dupsko');
 
-        // Check if the max-width is reached
-        var maxWidth = parseInt(window.getComputedStyle(sidebar).getPropertyValue('max-width'));
-        var adjustedMaxWidth = 250;
-
-        if (parseInt(marginLeft) > adjustedMaxWidth) {
-            sidebar.style.maxWidth = adjustedMaxWidth + 'px';
-        } else {
-            sidebar.style.maxWidth = '';
+                // Reset the arrow rotation
+                document.querySelector('.right-help-bar img').style.transform = 'rotate(90deg)';
+            }
         }
     }
 }
-
-updateSidebarWidth();
