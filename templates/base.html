@@ -11,13 +11,49 @@
         <title>Ecommerce</title>
     </head>
     <body>
-        <div class="help-bar">
-            <p>help bar</p>
+        <div class="help-bar-container">
+            <div class="help-bar">
+                <div class="left-help-bar">
+                    <span class="separator"><a href="#" title="Sign in">Sign in</a>
+                        or <a href="#" title="Register">Register</a>
+                    </span>
+                    <span class="separator"><a href="#" title="Account">Account</a></span>
+                    <span class="separator"><a href="#" title="Favourites">Favourites</a></span>
+                    <span class="separator"><a href="#" title="Other">Other</a></span>
+                </div>
+                <div class="middle-help-bar">
+                    <p>help bar 2</p>
+                </div>
+                <div class="right-help-bar">
+                    <span class="separator">Need help? Call us <a href="#" title="Contact Center">+48604320200</a></span>
+                    <span class="separator"><button class="dropbtn-help" id="dropbtn-help" onclick="dropdownBoxHelp()">
+                            Language <img class="arrow-help" src="{% static 'images/arrow.svg' %}">
+                        </button>
+                        <div id="dropdownListHelp" class="dropdown-categories-help">
+                            <a href="#">Category 1</a>
+                            <a href="#">Category 2</a>
+                            <a href="#">Category 3</a>
+                            <!-- Add more categories as needed -->
+                        </div>
+                    </span>
+                </div>
+            </div>
         </div>
         <div class="header-container">
             <div class="header">
                 <div class="logo-section">
                     <a href="{% url 'home' %}"><img src="{% static 'images/ecommerce-logo.svg' %}"></a>
+                </div>
+                <div class="dropdown-button">
+                    <button class="dropbtn" id="dropbtn" onclick="dropdownBox()">
+                        Browse All Categories <img class="arrow" src="{% static 'images/arrow.svg' %}">
+                    </button>
+                    <div id="dropdownList" class="dropdown-categories">
+                        <a href="#">Category 1</a>
+                        <a href="#">Category 2</a>
+                        <a href="#">Category 3</a>
+                        <!-- Add more categories as needed -->
+                    </div>
                 </div>
                 <div class="search-section">
                     <input class="search-bar" type="text" placeholder="Search...">
@@ -48,13 +84,6 @@
         </div>
         <div class="tabs-container">
             <div class="tab-bar">
-                <button onclick="dropdownBox()" class="dropbtn">All Categories <img src="{% static 'images/arrow.svg' %}"></button>
-                    <div id="dropdownList" class="dropdown-categories">
-                        <a href="#">Category 1</a>
-                        <a href="#">Category 2</a>
-                        <a href="#">Category 3</a>
-                        <!-- Add more categories as needed -->
-                    </div>
                 <ul class="tabs">
                     <button onclick="window.location.href='{% url 'shop:shop' %}'" {%block active_shop%}{%endblock active_shop%}>Shop</button>
                     <button onclick="window.location.href='{% url 'shop:sale' %}'" {%block active_sale%}{%endblock active_sale%}>For Sale</a></button>

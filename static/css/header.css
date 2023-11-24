@@ -3,33 +3,60 @@
     border-top: 1px solid rgb(216, 216, 216);
 }
 
-.help-bar,
+.separator {
+    padding: 8px; /* Adjust as needed */
+    position: relative;
+}
+
+.separator:not(:last-child)::after {
+    content: "";
+    border-left: 1px solid grey;
+    height: 8px;
+    position: absolute;
+    top: 14px;
+    right: 0; /* Adjust as needed */
+}
+
+.separator a {
+    color: rgb(95, 95, 95);
+}
+
+.separator a:hover {
+    color: rgb(59, 59, 59);
+}
+.help-bar-container,
 .tabs-container {
     background-color: rgb(241, 241, 241);
 }
 
 .header {
     height: 100px;
-    max-width: 1100px;
 }
 
 .tabs {
     margin-top: 0px;
     margin-bottom: 0px;
-    max-width: 1100px;
     padding: 0;
 }
 
+.help-bar {
+    height: 20px;
+}
+
 .header,
+.help-bar,
 .tabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     background-color: rgb(241, 241, 241);
+    max-width: 1400px;
     margin-right: auto;
     margin-left: auto;
 }
 
-.header,
-.icon-section,
-.tabs {
+.icon-section {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -37,6 +64,7 @@
 }
 
 .search-section {
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -67,7 +95,7 @@
 .search-button {
     box-sizing: border-box;
     border: 1px solid rgb(75, 75, 75);
-    height: 40px;
+    height: 50px;
 }
 
 .search-button:hover{
@@ -76,14 +104,16 @@
 
 .search-button .tooltip {
     position: absolute;
-    background-color: rgb(65, 65, 65);
+    top: 50px;
+    right: -60px;
+    background-color: rgb(29, 29, 29);
     color: white;
     padding-top: 4px;
     padding-bottom: 4px;
     padding-left: 8px;
     padding-right: 8px;
-    border-radius: 6px;
-    font-size: 10px;
+    font-size: 12px;
+    border: 1px solid white;
     opacity: 0;
     transition: opacity 0.15s;
     pointer-events: none;
@@ -110,8 +140,8 @@
 .shopcart-container,
 .notification-container,
 .account-container {
-    flex: 1; /* Distribute available space evenly among child elements */
-    margin-right: 30px; /* Add margin between icons */
+    flex: 1;
+    margin-right: 30px;
 }
 
 .wishlist-container,
@@ -162,28 +192,21 @@
     color: white;
 }
 
-.tabs img {
-    transform: rotate(90deg); /* Adjust the angle as needed */
+.dropdown-button {
+    position: relative;
 }
 
 .dropbtn {
-    position: absolute;
-    top: 126px;
-    left: 100px;
+    display: flex;
+    align-items: center;
     background-color: rgb(194, 119, 119);
+    position: relative;
     color: white;
     font-weight: bold;
     border: none;
     border-radius: 4px;
-    padding: 8px 22px;
+    padding: 15px 40px;
     cursor: pointer;
-}
-
-@media (max-width: 1620px) {
-    .dropbtn {
-        width: 2px;
-        padding: 0;
-    }
 }
 
 .dropbtn:hover {
@@ -191,24 +214,19 @@
 }
 
 .dropbtn img {
-    width: 10px;
-    height: 10px;
-}
-
-.dropdown {
-    position: relative;
-    display: inline-block;
+    margin-left: 5px;
+    width: 18px;
+    height: 15px;
+    transform: rotate(90deg);
 }
 
 .dropdown-categories {
     display: none;
     position: absolute;
-    top: 162px;
-    left: 100px;
+    top: 50px;
     background-color: rgb(241, 241, 241);
     min-width: 150px;
     font-size: 12px;
-    overflow: auto;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
 }
@@ -223,3 +241,48 @@
 .dropdown-categories a:hover {background-color: rgba(146, 30, 30, 0.336);}
 
 .show {display: block;}
+
+.dropdown-button-help {
+    position: relative;
+}
+
+.dropbtn-help {
+    background-color: inherit;
+    position: relative;
+    font-size: 10px;
+    color: rgb(0, 0, 0);
+    border: none;
+    cursor: pointer;
+}
+
+.dropbtn-help:hover {
+    background-color: rgba(110, 110, 110, 0.336);
+}
+
+.dropbtn-help img {
+    width: 10px;
+    height: 8px;
+    transform: rotate(90deg);
+}
+
+.dropdown-categories-help {
+    display: none;
+    position: absolute;
+    top: 0px;
+    background-color: rgb(241, 241, 241);
+    min-width: 150px;
+    font-size: 12px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-categories-help a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-categories-help a:hover {background-color: rgba(146, 30, 30, 0.336);}
+
+.dupsko {display: block;}
