@@ -1,10 +1,7 @@
 .sidebar-container {
     display: grid;
     row-gap: 40px;
-    margin-left: 100px;
-    margin-top: 30px;
-    bottom: 0;
-    top: 140px;
+    margin-top: 20px;
     max-width: 250px;
     transition: left 0.5s ease, right 0.5s ease, max-width 0.5s ease;
 }
@@ -14,12 +11,13 @@
 .sidebar-bottom {
     height: 400px;
     background-color: rgb(236, 236, 236);
+    width: 210px;
     padding-top: 5px;
     border-radius: 8px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
 
-@media (max-width: 1500px) {
+@media (max-width: 1400px) {
     .sidebar-container {
         max-width: 0;
         overflow: hidden;

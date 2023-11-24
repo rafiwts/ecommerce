@@ -1,5 +1,8 @@
 .main-content {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    max-width: 1400px;
+    margin-right: auto;
+    margin-left: auto;
     height: 150vh;
 }
