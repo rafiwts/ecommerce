@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "accounts",
     "shop",
 ]
 
@@ -89,6 +90,16 @@ DATABASES = {
         "PORT": os.getenv("PORT"),
     }
 }
+
+# superuser data
+
+SUPERUSER = {
+    "username": os.getenv("SUPERUSER_NAME"),
+    "email": os.getenv("SUPERUSER_EMAIL"),
+    "password": os.getenv("SUPERUSER_PASSWORD"),
+}
+
+AUTH_USER_MODEL = "accounts.User"
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

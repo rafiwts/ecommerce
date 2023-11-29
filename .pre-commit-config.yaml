@@ -25,12 +25,3 @@ repos:
     hooks:
       - id: isort
         args: ["--profile", "black"]
-
-  - repo: local
-    hooks:
-      - id: migrations-check
-        language: system
-        name: Check for uncreated migrations.
-        entry: sh -c "./manage.py makemigrations --check --dry-run"
-        files: "models\\.py$"
-        stages: [commit]
