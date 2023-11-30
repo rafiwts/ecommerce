@@ -5,6 +5,27 @@ description = "Web application for ecommerce"
 authors = ["rafiwts <rafiwts@gmail.com>"]
 readme = "README.md"
 
+[tool.black]
+exclude = '''
+(
+    /(
+        \.git
+      | \.hg
+      | \.mypy_cache
+      | \.tox
+      | \.venv
+      | _build
+      | buck-out
+      | build
+      | dist
+    )/
+  | migrations/
+)
+'''
+
+[tool.ruff]
+exclude = ["migrations"]
+
 [tool.poetry.dependencies]
 python = "^3.10"
 django = "^4.2.6"
