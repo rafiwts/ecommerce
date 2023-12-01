@@ -6,22 +6,7 @@ authors = ["rafiwts <rafiwts@gmail.com>"]
 readme = "README.md"
 
 [tool.black]
-exclude = '''
-(
-    /(
-        \.git
-      | \.hg
-      | \.mypy_cache
-      | \.tox
-      | \.venv
-      | _build
-      | buck-out
-      | build
-      | dist
-    )/
-  | migrations/
-)
-'''
+exclude = "migrations"
 
 [tool.ruff]
 exclude = ["migrations"]
