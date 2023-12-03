@@ -14,6 +14,7 @@ class UserAdmin(admin.ModelAdmin):
         "is_active",
         "id",
     )
+    list_filter = ["is_staff", "is_active"]
     fieldsets = [
         (
             None,
@@ -32,6 +33,7 @@ class UserAdmin(admin.ModelAdmin):
             },
         )
     ]
+    search_fields = ["email", "id", "username"]
     ordering = ["is_superuser", "is_staff", "username"]
 
     def get_account_type(self, obj):
@@ -53,7 +55,11 @@ class AccountAdmin(admin.ModelAdmin):
 
     @admin.display(description="Full name")
     def get_full_name(self, obj):
-        return f"{obj.last_name}, {obj.first_name}"
+        return (
+            f"{obj.last_name}, {obj.first_name}"
+            if obj.last_name or obj.first_name
+            else None
+        )
 
     def get_full_address(self, obj):
         if obj.address:
@@ -84,4 +90,6 @@ class AccountTypeAdmin(admin.ModelAdmin):
 @admin.register(UserAddress)
 class UserAddressAdmin(admin.ModelAdmin):
     list_display = ("street", "zip_code", "city", "state", "country")
+    list_filter = ["country", "city"]
+    search_fields = ["country", "city", "street"]
     ordering = ["country", "city", "street", "zip_code"]
