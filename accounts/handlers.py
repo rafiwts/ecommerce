@@ -1,6 +1,7 @@
 from datetime import datetime
 
 
-def image_directory_path(instance):
+def image_directory_path(instance, filename):
     now = datetime.now()
-    return f"{instance.first_name}-{instance.last_name}-{now}"
+    full_name = f"{instance.first_name} {instance.last_name}"
+    return f"{instance.id}-{full_name}-{now}-{filename}"
