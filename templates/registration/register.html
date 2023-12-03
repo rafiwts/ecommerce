@@ -1,0 +1,17 @@
+{%extends "base.html"%}
+
+{%block content%}
+<h2>Sign up</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ user_form.as_p }}
+  <button type="submit">Sign up</button>
+</form>
+
+{% if form.errors %}
+  <div class="errorlist">
+    <p>Please correct the errors below:</p>
+    {{ user_form.errors }}
+  </div>
+{% endif %}
+{%endblock content%}
