@@ -5,15 +5,7 @@ from .models import Account, AccountType, User, UserAddress
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = (
-        "username",
-        "email",
-        "get_account_type",
-        "is_staff",
-        "is_superuser",
-        "is_active",
-        "id",
-    )
+    list_display = ("id", "username", "email", "is_staff", "is_superuser", "is_active")
     list_filter = ["is_staff", "is_active"]
     fieldsets = [
         (
@@ -26,7 +18,6 @@ class UserAdmin(admin.ModelAdmin):
                     "is_staff",
                     "is_active",
                     "is_superuser",
-                    "account",
                     "groups",
                     "user_permissions",
                 ]
@@ -34,22 +25,20 @@ class UserAdmin(admin.ModelAdmin):
         )
     ]
     search_fields = ["email", "id", "username"]
-    ordering = ["is_superuser", "is_staff", "username"]
-
-    def get_account_type(self, obj):
-        return obj.account.account_type if obj.account else None
-
-    get_account_type.short_description = "Account Type"
+    ordering = ["-is_superuser", "-is_staff", "username"]
 
 
 @admin.register(Account)
 class AccountAdmin(admin.ModelAdmin):
     list_display = (
+        "id",
         "get_full_name",
         "get_full_address",
-        "get_account_name",
+        "date_of_birth",
         "image",
         "created_at",
+        "user_id",
+        "account_type_id",
     )
     ordering = ["last_name", "first_name"]
 
@@ -62,16 +51,17 @@ class AccountAdmin(admin.ModelAdmin):
         )
 
     def get_full_address(self, obj):
-        if obj.address:
-            address = obj.address
-            return (
-                f"{address.street}, "
-                f"{address.zip_code}, "
-                f"{address.city}, "
-                f"{address.country}"
-            )
-        else:
+        try:
+            address = UserAddress.objects.get(account=obj.id)
+        except UserAddress.DoesNotExist:
             return None
+
+        return (
+            f"{address.street}, "
+            f"{address.zip_code}, "
+            f"{address.city}, "
+            f"{address.country}"
+        )
 
     get_full_address.short_description = "Adress"
 
@@ -83,13 +73,13 @@ class AccountAdmin(admin.ModelAdmin):
 
 @admin.register(AccountType)
 class AccountTypeAdmin(admin.ModelAdmin):
-    list_display = ("name", "discount_value")
-    ordering = ["name"]
+    list_display = ("id", "name", "discount_value")
+    ordering = ["discount_value"]
 
 
 @admin.register(UserAddress)
 class UserAddressAdmin(admin.ModelAdmin):
-    list_display = ("street", "zip_code", "city", "state", "country")
+    list_display = ("street", "zip_code", "city", "state", "country", "account_id")
     list_filter = ["country", "city"]
     search_fields = ["country", "city", "street"]
     ordering = ["country", "city", "street", "zip_code"]
