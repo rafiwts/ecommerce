@@ -1,0 +1,26 @@
+{%extends "base.html"%}
+
+{%block content%}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<p>{{ user.username }}</p>
+<p>{{ user.email }}</p>
+<p>{{ user.account.first_name }}</p>
+<p>{{ user.account.last_name }}</p>
+<p>{{ user.account.birth_date }}</p>
+<p>{{ user.account.address.image }}</p>
+<p>{{ user.account.account_type }}</p>
+<p>{{ user.account.address.street }}</p>
+<p>{{ user.account.address.zip_code }}</p>
+<p>{{ user.account.address.city }}</p>
+<p>{{ user.account.address.state }}</p>
+<p>{{ user.account.address.country }}</p>
+<span><a href="{% url 'account:edit-profile' request.user.username %}">Edit profile</a></span>
+<span><a href="{% url 'account:change-password' request.user.username %}">Change password</a></span>
+
+{%endblock content%}

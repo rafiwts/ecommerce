@@ -13,7 +13,16 @@
 {%endif%}
 <div class="login-form">
     <form action="{% url 'account:login' %}" method="post">
-        {{ login_form.as_p }}
+        <div class="fieldWrapper">
+            {{ login_form.username.errors }}
+            <label for="{{ login_form.username.id_for_label }}">Username or email:</label>
+            {{ login_form.username }}
+        </div>
+        <div class="fieldWrapper">
+            {{ login_form.password.errors }}
+            <label for="{{ login_form.password.id_for_label }}">Password:</label>
+            {{ login_form.password }}
+        </div>
         {%csrf_token%}
         <input type="hidden" name="next" value="{{ next }}" /> <!--a hidden type, a value 'next' is sent, a value is an url to which you will be directed-->
         <p><input type="submit" value="Log in"></p>
