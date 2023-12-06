@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db.models.signals import post_migrate, post_save
 from django.dispatch import receiver
 
-from .models import Account, AccountType, User
+from .models import Account, AccountType, User, UserAddress
 
 superuser = settings.SUPERUSER
 
@@ -27,6 +27,7 @@ def create_superuser_and_account_types(sender, **kwargs):
 
 
 @receiver(post_save, sender=User)
-def create_account(sender, instance, created, **kwargs):
+def create_account_and_address(sender, instance, created, **kwargs):
     if created:
-        Account.objects.create(user=instance)
+        account = Account.objects.create(user=instance)
+        UserAddress.objects.create(account=account)

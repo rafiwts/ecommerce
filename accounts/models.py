@@ -113,18 +113,30 @@ class AccountType(models.Model):
 
 class UserAddress(models.Model):
     account = models.OneToOneField(
-        "Account", on_delete=models.CASCADE, null=True, blank=True
+        "Account",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="address",
     )
     street = models.CharField(max_length=50)
     zip_code = models.CharField(max_length=15, verbose_name="zip code")
     city = models.CharField(max_length=50)
     state = models.CharField(
-        max_length=50, help_text="The name of the province in which you live"
+        max_length=50,
+        help_text="The name of the province in which you live",
     )
     country = models.CharField(max_length=50)
 
     def __str__(self):
-        return f"{self.street}, {self.city}, {self.country}"
+        address_components = [self.street, self.zip_code, self.city, self.country]
+        if address_components:
+            non_empty_components = [
+                component for component in address_components if component
+            ]
+            return ", ".join(non_empty_components)
+
+        return None
 
     class Meta:
         db_table = "addresses"
