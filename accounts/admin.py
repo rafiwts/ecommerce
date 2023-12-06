@@ -33,7 +33,6 @@ class AccountAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "get_full_name",
-        "get_full_address",
         "date_of_birth",
         "image",
         "created_at",
@@ -50,21 +49,6 @@ class AccountAdmin(admin.ModelAdmin):
             else None
         )
 
-    def get_full_address(self, obj):
-        try:
-            address = UserAddress.objects.get(account=obj.id)
-        except UserAddress.DoesNotExist:
-            return None
-
-        return (
-            f"{address.street}, "
-            f"{address.zip_code}, "
-            f"{address.city}, "
-            f"{address.country}"
-        )
-
-    get_full_address.short_description = "Adress"
-
     def get_account_name(self, obj):
         return obj.account_type.name if obj.account_type else None
 
@@ -79,7 +63,15 @@ class AccountTypeAdmin(admin.ModelAdmin):
 
 @admin.register(UserAddress)
 class UserAddressAdmin(admin.ModelAdmin):
-    list_display = ("street", "zip_code", "city", "state", "country", "account_id")
+    list_display = (
+        "id",
+        "street",
+        "zip_code",
+        "city",
+        "state",
+        "country",
+        "account_id",
+    )
     list_filter = ["country", "city"]
     search_fields = ["country", "city", "street"]
     ordering = ["country", "city", "street", "zip_code"]
