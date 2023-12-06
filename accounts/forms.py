@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
-from accounts.models import Account, User
+from accounts.models import Account, User, UserAddress
 
 from .validators import email_validation, password_validation
 
@@ -48,7 +48,7 @@ class SingUpForm(UserCreationForm):
         return password2
 
 
-class EditAccountForm(forms.ModelForm):
+class AccountForm(forms.ModelForm):
     first_name = forms.CharField(max_length=50, label="First name", required=True)
     last_name = forms.CharField(max_length=50, label="Surname", required=True)
     date_of_birth = forms.DateField(
@@ -61,3 +61,17 @@ class EditAccountForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = ["first_name", "last_name", "date_of_birth", "image"]
+
+
+class UserAddressForm(forms.ModelForm):
+    class Meta:
+        model = UserAddress
+        fields = ["street", "zip_code", "city", "state", "country"]
+
+
+class ChangePasswordForm(forms.Form):
+    old_password = forms.CharField(widget=forms.PasswordInput, label="Old password")
+    new_password = forms.CharField(widget=forms.PasswordInput, label="New password")
+    confirm_password = forms.CharField(
+        widget=forms.PasswordInput, label="Confirm password"
+    )

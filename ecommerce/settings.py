@@ -56,6 +56,11 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+AUTHENTICATION_BACKENDS = [
+    "accounts.authentication_backends.EmailOrUsernameModelBackend",
+    "django.contrib.auth.backends.ModelBackend",
+    # Add other authentication backends as needed
+]
 ROOT_URLCONF = "ecommerce.urls"
 
 TEMPLATES = [
