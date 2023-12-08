@@ -82,7 +82,7 @@ def create_profile(request):
             logout(request)
             return redirect(reverse("account:login"))
         else:
-            return HttpResponse("Invalid data")
+            return messages.error(request, "Invaild data")
     else:
         profile_form = AccountForm(instance=request.user.account)
 
@@ -94,25 +94,25 @@ def create_profile(request):
 @login_required
 def edit_profile(request, username):
     if request.method == "POST":
-        account_form = AccountForm(
+        profile_form = AccountForm(
             instance=request.user.account, data=request.POST, files=request.FILES
         )
         address_form = UserAddressForm(
             instance=request.user.account.address, data=request.POST
         )
-        if account_form.is_valid() and address_form.is_valid():
-            account_form.save()
+        if profile_form.is_valid() and address_form.is_valid():
+            profile_form.save()
             address_form.save()
-            messages.success(request, "Ok")
-            return HttpResponse("Invalid data")
+            messages.success(request, "Data has been saved")
+            return redirect("account:profile-view", username=request.user.username)
     else:
-        account_form = AccountForm(instance=request.user.account)
+        profile_form = AccountForm(instance=request.user.account)
         address_form = UserAddressForm(instance=request.user.account.address)
 
     return render(
         request,
         "account/edit-profile.html",
-        {"account_form": account_form, "address_form": address_form},
+        {"profile_form": profile_form, "address_form": address_form},
     )
 
 
@@ -122,24 +122,22 @@ def change_password(request, username):
         password_form = ChangePasswordForm(data=request.POST)
         if password_form.is_valid():
             cleaned_data = password_form.cleaned_data
-            if request.user.check_password(cleaned_data["old_password"]):
-                if cleaned_data["new_password"] == cleaned_data["confirm_password"]:
-                    request.user.set_password(cleaned_data["new_password"])
-                    request.user.save()
-
-                    update_session_auth_hash(request, request.user)
-
-                    messages.success(request, "Password has been changed")
-
-                    return redirect(
-                        "account:profile-view", username=request.user.username
-                    )
-                else:
-                    messages.error(request, "Passwords do no match")
+            if not request.user.check_password(cleaned_data["old_password"]):
+                messages.error(request, "Invalid current password.")
+            elif cleaned_data["new_password"] != cleaned_data["confirm_password"]:
+                messages.error(request, "Passwords do not match.")
             else:
-                messages.error(request, "Invalid current password")
+                request.user.set_password(cleaned_data["new_password"])
+                request.user.save()
+
+                update_session_auth_hash(request, request.user)
+
+                messages.success(request, "Password has been changed")
+
+                return redirect("account:profile-view", username=request.user.username)
     else:
         password_form = ChangePasswordForm()
+
     return render(
         request, "account/change-password.html", {"password_form": password_form}
     )

@@ -7,7 +7,7 @@ from .validators import email_validation, password_validation
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField()
+    username = forms.CharField(label="Username or email")
     password = forms.CharField(widget=forms.PasswordInput)
 
 
@@ -71,7 +71,16 @@ class UserAddressForm(forms.ModelForm):
 
 class ChangePasswordForm(forms.Form):
     old_password = forms.CharField(widget=forms.PasswordInput, label="Old password")
-    new_password = forms.CharField(widget=forms.PasswordInput, label="New password")
+    new_password = forms.CharField(
+        widget=forms.PasswordInput,
+        label="New password",
+        validators=[password_validation],
+    )
     confirm_password = forms.CharField(
-        widget=forms.PasswordInput, label="Confirm password"
+        widget=forms.PasswordInput,
+        label="Confirm password",
+        help_text=(
+            "Password must contain at least 8 characters "
+            "with one uppercase and one digit"
+        ),
     )

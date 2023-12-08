@@ -6,10 +6,16 @@ from accounts.models import User
 
 
 def password_validation(password):
+    if not re.search(r"[A-Z]", password) and not re.search(r"\d", password):
+        raise ValidationError(
+            "New password must contain at least one uppercase letter and one digit."
+        )
     if not re.search(r"[A-Z]", password):
-        raise ValidationError("Password has no uppercase letter")
-    if not re.search(r"[0-9]", password):
-        raise ValidationError("Password has no digit")
+        raise ValidationError(
+            "New password must contain at least one uppercase letter."
+        )
+    if not re.search(r"\d", password):
+        raise ValidationError("New password must contain at least one digit.")
 
 
 def email_validation(email):
