@@ -37,6 +37,7 @@ class Account(models.Model):
     account_type = models.ForeignKey(
         "AccountType", on_delete=models.SET_NULL, null=True, blank=True
     )
+    client_id = models.IntegerField(null=True, blank=True, verbose_name="Client ID")
     first_name = models.CharField(max_length=100, null=False, verbose_name="name")
     last_name = models.CharField(max_length=100, null=False, verbose_name="surname")
     date_of_birth = models.DateField(null=True, blank=True, verbose_name="Birth date")
@@ -60,6 +61,9 @@ class Account(models.Model):
         help_text="When the account was updated",
         verbose_name="updated",
     )
+
+    def get_full_name(self):
+        return f"{self.first_name} {self.last_name}"
 
     def delete(self, *args, **kwargs):
         """
@@ -127,6 +131,14 @@ class UserAddress(models.Model):
         help_text="The name of the province in which you live",
     )
     country = models.CharField(max_length=50)
+
+    def get_full_address(self):
+        if self.city:
+            return (
+                f"{self.street}, {self.zip_code}\n" f"{self.city}\n" f"{self.country}"
+            )
+        else:
+            return False
 
     def __str__(self):
         address_components = [self.street, self.zip_code, self.city, self.country]

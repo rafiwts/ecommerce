@@ -32,6 +32,7 @@ class UserAdmin(admin.ModelAdmin):
 class AccountAdmin(admin.ModelAdmin):
     list_display = (
         "id",
+        "client_id",
         "get_full_name",
         "date_of_birth",
         "image",
