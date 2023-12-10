@@ -1,12 +1,33 @@
 {%extends "base.html"%}
 
 {%block content%}
-<h2>Sign up</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ user_form.as_p }}
-  <button type="submit">Sign up</button>
-</form>
+<h1>Sing up</h1>
+    <div class="register-form">
+      <form method="post" action="{% url 'account:register' %}">
+        <div class="register-field">
+          <label for="register_form.username.id_for_label">{{ register_form.username.label }}</label>
+          {{ register_form.username }}
+          <span class="register-help-text">{{ register_form.username.help_text }}</span>
+        </div>
+        <div class="register-field">
+          <label for="register_form.email.id_for_label">{{ register_form.email.label }}:</label>
+          {{ register_form.email }}
+          <span class="register-help-text">{{ register_form.email.help_text }}</span>
+        </div>
+        <div class="register-field">
+          <label for="register_form.password1.id_for_label">{{ register_form.password1.label }}:</label>
+          {{ register_form.password1 }}
+          <span class="register-help-text">{{ register_form.password1.help_text }}</span>
+        </div>
+        <div class="register-account-field">
+          <label for="register_form.password2.id_for_label">{{ register_form.password2.label }}:</label>
+          {{ register_form.password2 }}
+          <span class="register-help-text">{{ register_form.password2.help_text }}</span>
+        </div>
+        {%csrf_token%}
+        <button type="submit">Save Changes</button>
+      </form>
+    </div>
 
 {% if form.errors %}
   <div class="errorlist">
