@@ -1,0 +1,28 @@
+{%extends "base.html"%}
+
+{%block content%}
+<button class="" onclick="window.location.href='{% url 'account:profile-view' request.user.username %}'">Shop</button>
+<h1>Edit your account</h1>
+    <div class="edit-account-form">
+      <form method="post" action="{% url 'account:edit-account' %}">
+        <div class="edit-account-field">
+          <label for="account_form.first_name.id_for_label">{{ account_form.first_name.label }}</label>
+          {{ account_form.first_name }}
+        </div>
+        <div class="edit-account-field">
+          <label for="account_form.last_name.id_for_label">{{ account_form.last_name.label }}:</label>
+          {{ account_form.last_name }}
+        </div>
+        <div class="edit-account-field">
+          <label for="account_form.date_of_birth.id_for_label">{{ account_form.date_of_birth.label }}:</label>
+          {{ account_form.date_of_birth }}
+        </div>
+        <div class="edit-account-field">
+          <label for="account_form.image.id_for_label">{{ account_form.image.label }}:</label>
+          {{ account_form.image }}
+        </div>
+        {%csrf_token%}
+        <button type="submit">Save Changes</button>
+      </form>
+    </div>
+{%endblock content%}

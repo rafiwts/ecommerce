@@ -1,0 +1,32 @@
+{%extends "base.html"%}
+
+{%block content%}
+<button class="" onclick="window.location.href='{% url 'account:profile-view' request.user.username %}'">Shop</button>
+<h1>Edit your address</h1>
+    <div class="edit-address-form">
+      <form method="post" action="{% url 'account:address' %}">
+        <div class="edit-address-field">
+          <label for="address_form.image.id_for_label">{{ address_form.street.label }}:</label>
+          {{ address_form.street }}
+        </div>
+        <div class="edit-address-field">
+          <label for="address_form.image.id_for_label">{{ address_form.zip_code.label }}:</label>
+          {{ address_form.zip_code }}
+        </div>
+        <div class="edit-address-field">
+          <label for="address_form.image.id_for_label">{{ address_form.city.label }}:</label>
+          {{ address_form.city }}
+        </div>
+        <div class="edit-address-field">
+          <label for="address_form.image.id_for_label">{{ address_form.state.label }}:</label>
+          {{ address_form.state }}
+        </div>
+        <div class="edit-address-field">
+          <label for="address_form.image.id_for_label">{{ address_form.country.label }}:</label>
+          {{ address_form.country }}
+        </div>
+        {%csrf_token%}
+        <button type="submit">Save Changes</button>
+      </form>
+    </div>
+{%endblock content%}

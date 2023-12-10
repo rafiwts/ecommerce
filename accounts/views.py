@@ -45,10 +45,10 @@ def logout_view(request):
 
 def register(request):
     if request.method == "POST":
-        user_form = SingUpForm(request.POST)
-        if user_form.is_valid():
-            cleaned_data = user_form.cleaned_data
-            new_user = user_form.save(commit=False)
+        register_form = SingUpForm(request.POST)
+        if register_form.is_valid():
+            cleaned_data = register_form.cleaned_data
+            new_user = register_form.save(commit=False)
             new_user.set_password(cleaned_data["password1"])
             new_user.save()
 
@@ -59,9 +59,9 @@ def register(request):
 
             return redirect(reverse("account:create-profile"))
     else:
-        user_form = SingUpForm()
+        register_form = SingUpForm()
 
-    return render(request, "account/register.html", {"user_form": user_form})
+    return render(request, "account/register.html", {"register_form": register_form})
 
 
 @login_required
@@ -92,28 +92,31 @@ def create_profile(request):
 
 
 @login_required
-def edit_profile(request, username):
+def edit_account(request, username):
     if request.method == "POST":
-        profile_form = AccountForm(
+        account_form = AccountForm(
             instance=request.user.account, data=request.POST, files=request.FILES
         )
-        address_form = UserAddressForm(
-            instance=request.user.account.address, data=request.POST
-        )
-        if profile_form.is_valid() and address_form.is_valid():
-            profile_form.save()
+        if account_form.is_valid():
+            account_form.save()
+            messages.success(request, "Data has been saved")
+            return redirect("account:profile-view", username=request.user.username)
+    else:
+        account_form = AccountForm(instance=request.user.account)
+    return render(request, "account/edit-account.html", {"account_form": account_form})
+
+
+@login_required
+def edit_address(request, username):
+    if request.method == "POST":
+        address_form = UserAddressForm(instance=request.user.account, data=request.POST)
+        if address_form.is_valid():
             address_form.save()
             messages.success(request, "Data has been saved")
             return redirect("account:profile-view", username=request.user.username)
     else:
-        profile_form = AccountForm(instance=request.user.account)
-        address_form = UserAddressForm(instance=request.user.account.address)
-
-    return render(
-        request,
-        "account/edit-profile.html",
-        {"profile_form": profile_form, "address_form": address_form},
-    )
+        address_form = UserAddressForm(instance=request.user.account)
+    return render(request, "account/edit-address.html", {"address_form": address_form})
 
 
 @login_required

@@ -62,7 +62,7 @@
                 <p class="profile-view-account-field">{{ user.account.account_type }}</p>
             </div>
             <!--Add edit account-->
-            <span><a href="{% url 'account:edit-profile' request.user.username %}">Edit profile</a></span>
+            <span><a href="{% url 'account:edit-account' request.user.username %}">Edit account</a></span>
             <span><a href="{% url 'account:change-password' request.user.username %}">Change password</a></span>
         </div>
     </div>
@@ -90,10 +90,8 @@
         <div class="profile-view-panel-address-right">
             <div class="profile-view-address-section">
                 <!--Add edit address-->
-                <span><a href="{% url 'account:edit-profile' request.user.username %}">Edit profile</a></span>
-                <span><a href="{% url 'account:change-password' request.user.username %}">Change password</a></span>
+                <span><a href="{% url 'account:edit-address' request.user.username %}">Edit address</a></span>
             </div>
-
         </div>
     </div>
 {%endblock content%}
