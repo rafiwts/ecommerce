@@ -4,25 +4,19 @@
 <button class="" onclick="window.location.href='{% url 'account:profile-view' request.user.username %}'">Shop</button>
 <h1>Edit your account</h1>
     <div class="edit-account-form">
-      <form method="post" action="{% url 'account:edit-account' %}">
-        <div class="edit-account-field">
-          <label for="account_form.first_name.id_for_label">{{ account_form.first_name.label }}</label>
-          {{ account_form.first_name }}
-        </div>
-        <div class="edit-account-field">
-          <label for="account_form.last_name.id_for_label">{{ account_form.last_name.label }}:</label>
-          {{ account_form.last_name }}
-        </div>
-        <div class="edit-account-field">
-          <label for="account_form.date_of_birth.id_for_label">{{ account_form.date_of_birth.label }}:</label>
-          {{ account_form.date_of_birth }}
-        </div>
-        <div class="edit-account-field">
-          <label for="account_form.image.id_for_label">{{ account_form.image.label }}:</label>
-          {{ account_form.image }}
-        </div>
+      <form method="post" action="{% url 'account:edit-account' request.user.username %}">
+        {% for field in account_form %}
+          {% for error in field.errors %}
+            <div class="edit-account-error-message">{{ error }}</div>
+          {% endfor %}
+          <div class="edit-account-field {% if field.errors %}has-error{% endif %}">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            <span class="edit-account-help-text">{{ field.help_text }}</span>
+          </div>
+        {% endfor %}
         {%csrf_token%}
-        <button type="submit">Save Changes</button>
+        <button class="edit-account-button" type="submit">Save Changes</button>
       </form>
     </div>
 {%endblock content%}

@@ -1,25 +1,30 @@
 {%extends "base.html"%}
 
 {%block content%}
+{% for message in messages %}
+    <div class="login-{{ message.tags }}">
+        {{ message }}
+    </div>
+{% endfor %}
+
 <h1>Log-in</h1>
 <p>Please, use the following form to log-in. If you
 do not have an account, you have to <a href="{% url 'account:register' %}">create</a> a new one.</p>
 <div class="login-form">
     <form action="{% url 'account:login' %}" method="post">
-        <div class="fieldWrapper">
-            {{ login_form.username.errors }}
-            <label for="{{ login_form.username.id_for_label }}">{{ login_form.username.label }}:</label>
-            {{ login_form.username }}
-        </div>
-        <div class="fieldWrapper">
-            {{ login_form.password.errors }}
-            <label for="{{ login_form.password.id_for_label }}">{{ login_form.password.label }}:</label>
-            {{ login_form.password }}
-        </div>
+        {% for field in login_form %}
+            {% for error in field.error %}
+                <div class="login-error-message">{{ error }}</div>
+            {% endfor %}
+            <div class="login-field {% if field.errors %}has-error{% endif %}">
+                <label for="{{ login.id_for_label }}">{{ field.label }}:</label>
+                {{ field }}
+                <span class="login-help-text">{{ field.help_text }}</span>
+            </div>
+        {% endfor %}
         {%csrf_token%}
-        <input type="hidden" name="next" value="{{ next }}" />
-        <p><input type="submit" value="Log in"></p>
+        <button class="login-button" type="submit">Log in</button>
     </form>
-    <p><a href="#">Forgot your password?</a></p>
+    <p><a href="{% url 'account:reset-password' %}">Forgot your password?</a></p>
 </div>
 {%endblock content%}

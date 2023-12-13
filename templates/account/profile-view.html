@@ -42,6 +42,10 @@
                 <p class="profile-view-account-field">{{ user.username }}</p>
             </div>
             <div class="profile-view-account-section">
+                <h3 class="profile-view-account-field">NAME AND SURNAME</h3>
+                <p class="profile-view-account-field">{{ user.account.get_full_name }}</p>
+            </div>
+            <div class="profile-view-account-section">
                 <h3 class="profile-view-account-field">BIRTH DATE</h3>
                 <p class="profile-view-account-field">{{ user.account.date_of_birth }}</p>
             </div>

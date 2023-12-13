@@ -4,35 +4,18 @@
 <h1>Sing up</h1>
     <div class="register-form">
       <form method="post" action="{% url 'account:register' %}">
-        <div class="register-field">
-          <label for="register_form.username.id_for_label">{{ register_form.username.label }}</label>
-          {{ register_form.username }}
-          <span class="register-help-text">{{ register_form.username.help_text }}</span>
-        </div>
-        <div class="register-field">
-          <label for="register_form.email.id_for_label">{{ register_form.email.label }}:</label>
-          {{ register_form.email }}
-          <span class="register-help-text">{{ register_form.email.help_text }}</span>
-        </div>
-        <div class="register-field">
-          <label for="register_form.password1.id_for_label">{{ register_form.password1.label }}:</label>
-          {{ register_form.password1 }}
-          <span class="register-help-text">{{ register_form.password1.help_text }}</span>
-        </div>
-        <div class="register-account-field">
-          <label for="register_form.password2.id_for_label">{{ register_form.password2.label }}:</label>
-          {{ register_form.password2 }}
-          <span class="register-help-text">{{ register_form.password2.help_text }}</span>
-        </div>
+        {% for field in register_form %}
+          {% for error in field.errors %}
+            <div class="register-error-message">{{ error }}</div>
+          {% endfor %}
+          <div class="register-field {% if field.errors %}has-error{% endif %}">
+            <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+            {{ field }}
+            <span class="register-help-text">{{ field.help_text }}</span>
+          </div>
+        {% endfor %}
         {%csrf_token%}
-        <button type="submit">Save Changes</button>
+        <button class="register-button" type="submit">Save Changes</button>
       </form>
     </div>
-
-{% if form.errors %}
-  <div class="errorlist">
-    <p>Please correct the errors below:</p>
-    {{ user_form.errors }}
-  </div>
-{% endif %}
 {%endblock content%}
