@@ -1,14 +1,20 @@
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import send_mail
+from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
 from .forms import (
     AccountForm,
     ChangePasswordForm,
     LoginForm,
+    ResetPasswordForm,
     SingUpForm,
     UserAddressForm,
 )
@@ -28,9 +34,11 @@ def login_view(request):
                     login(request, user)
                     return redirect(reverse("home"))
                 else:
-                    return HttpResponse("The account is blocked")
+                    messages.error(
+                        request, "The account is not active. Please contanc the support"
+                    )
             else:
-                return HttpResponse("Invalid credentials")
+                messages.error(request, "Invalid credentials")
     else:
         login_form = LoginForm()
 
@@ -93,29 +101,32 @@ def create_profile(request):
 
 @login_required
 def edit_account(request, username):
+    user = request.user
     if request.method == "POST":
         account_form = AccountForm(
-            instance=request.user.account, data=request.POST, files=request.FILES
+            instance=user.account, data=request.POST, files=request.FILES
         )
         if account_form.is_valid():
             account_form.save()
             messages.success(request, "Data has been saved")
-            return redirect("account:profile-view", username=request.user.username)
+            return redirect("account:profile-view", username=username)
     else:
-        account_form = AccountForm(instance=request.user.account)
+        account_form = AccountForm(instance=user.account)
     return render(request, "account/edit-account.html", {"account_form": account_form})
 
 
 @login_required
 def edit_address(request, username):
+    account = request.user.account
     if request.method == "POST":
-        address_form = UserAddressForm(instance=request.user.account, data=request.POST)
+        address_form = UserAddressForm(instance=account.address, data=request.POST)
         if address_form.is_valid():
+            print(address_form.cleaned_data)
             address_form.save()
             messages.success(request, "Data has been saved")
-            return redirect("account:profile-view", username=request.user.username)
+            return redirect("account:profile-view", username=username)
     else:
-        address_form = UserAddressForm(instance=request.user.account)
+        address_form = UserAddressForm(instance=account.address)
     return render(request, "account/edit-address.html", {"address_form": address_form})
 
 
@@ -137,10 +148,82 @@ def change_password(request, username):
 
                 messages.success(request, "Password has been changed")
 
-                return redirect("account:profile-view", username=request.user.username)
+                return redirect("account:profile-view", username=username)
     else:
         password_form = ChangePasswordForm()
 
     return render(
         request, "account/change-password.html", {"password_form": password_form}
+    )
+
+
+def reset_password(request):
+    company_email = settings.EMAIL_HOST_USER
+    if request.method == "POST":
+        password_form = ResetPasswordForm(request.POST)
+        if password_form.is_valid():
+            email = password_form.cleaned_data["email"]
+            user = User.objects.filter(email=email).first()
+
+            if user:
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                print(uid)
+                token = default_token_generator.make_token(user)
+                print(token)
+
+                reset_url = request.build_absolute_uri(
+                    f"/account/reset-password/{uid}/{token}"
+                )
+
+                subject = "Password Reset"
+                message = render_to_string(
+                    "account/reset-password-email.html",
+                    {"reset_url": reset_url, "user": user},
+                )
+
+                send_mail(subject, message, company_email, [email])
+                messages.success(
+                    request, "Password reset email sent. Check your inbox."
+                )
+
+                return redirect("account:login")
+            else:
+                messages.error(request, "User with this email address not found")
+    else:
+        password_form = ResetPasswordForm()
+
+    return render(
+        request, "account/reset-password.html", {"password_form": password_form}
+    )
+
+
+def reset_password_confirmation(request, uidb64, token):
+    uid = force_str(urlsafe_base64_decode(uidb64))
+    user = get_object_or_404(User, pk=uid)
+    if request.method == "POST":
+        password_form = ChangePasswordForm(data=request.POST)
+        if password_form.is_valid():
+            cleaned_data = password_form.cleaned_data
+            new_password1 = cleaned_data["new_password"]
+            new_password2 = cleaned_data["confirm_password"]
+            if new_password1 != new_password2:
+                messages.error(request, "Passwords do not match.")
+            else:
+                user.set_password(new_password1)
+                user.save()
+
+                messages.success(
+                    request,
+                    "Password has been changed. You can "
+                    "log in again using a new password",
+                )
+
+                return redirect("account:login")
+    else:
+        password_form = ChangePasswordForm()
+
+    return render(
+        request,
+        "account/reset-password-confirmation.html",
+        ({"password_form": password_form, "token": token, "uidb64": uidb64}),
     )

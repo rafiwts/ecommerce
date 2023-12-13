@@ -11,6 +11,10 @@ class LoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
 
 
+class ResetPasswordForm(forms.Form):
+    email = forms.EmailField(label="Email")
+
+
 class SingUpForm(UserCreationForm):
     username = forms.CharField(max_length=100, help_text="Choose unique username")
     email = forms.EmailField(
@@ -70,7 +74,9 @@ class UserAddressForm(forms.ModelForm):
 
 
 class ChangePasswordForm(forms.Form):
-    old_password = forms.CharField(widget=forms.PasswordInput, label="Old password")
+    old_password = forms.CharField(
+        widget=forms.PasswordInput, label="Old password", required=False
+    )
     new_password = forms.CharField(
         widget=forms.PasswordInput,
         label="New password",
