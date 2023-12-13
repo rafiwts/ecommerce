@@ -1,0 +1,8 @@
+.register-field.has-error {
+    /* border: 2px solid red; Add a red border to highlight the field with errors */
+    background-color: red;
+}
+
+.register-error-nessage {
+    color: red;
+}
