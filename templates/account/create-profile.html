@@ -15,7 +15,7 @@
       {% for error in field.errors %}
         <div class="create-profile-error-message">{{ error }}</div>
       {% endfor %}
-      <div class="create-profile-field {% if field.errors %}has-error{% endif %}">
+      <div class="create-profile-box {% if field.errors %}has-error{% endif %}">
         <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
         {{ field }}
         <span class="create-profile-help-text">{{ field.help_text }}</span>

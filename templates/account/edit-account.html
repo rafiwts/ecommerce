@@ -9,7 +9,7 @@
           {% for error in field.errors %}
             <div class="edit-account-error-message">{{ error }}</div>
           {% endfor %}
-          <div class="edit-account-field {% if field.errors %}has-error{% endif %}">
+          <div class="edit-account-box {% if field.errors %}has-error{% endif %}">
             <label for="{{ field.id_for_label }}">{{ field.label }}</label>
             {{ field }}
             <span class="edit-account-help-text">{{ field.help_text }}</span>

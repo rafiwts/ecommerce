@@ -16,8 +16,8 @@ do not have an account, you have to <a href="{% url 'account:register' %}">creat
             {% for error in field.error %}
                 <div class="login-error-message">{{ error }}</div>
             {% endfor %}
-            <div class="login-field {% if field.errors %}has-error{% endif %}">
-                <label for="{{ login.id_for_label }}">{{ field.label }}:</label>
+            <div class="login-box {% if field.errors %}has-error{% endif %}">
+                <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
                 {{ field }}
                 <span class="login-help-text">{{ field.help_text }}</span>
             </div>
