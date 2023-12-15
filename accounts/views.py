@@ -1,14 +1,10 @@
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
-from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.encoding import force_bytes, force_str
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 
 from .forms import (
     AccountForm,
@@ -18,6 +14,7 @@ from .forms import (
     SingUpForm,
     UserAddressForm,
 )
+from .handlers import reset_password_email_handler
 from .models import User
 
 
@@ -158,7 +155,6 @@ def change_password(request, username):
 
 
 def reset_password(request):
-    company_email = settings.EMAIL_HOST_USER
     if request.method == "POST":
         password_form = ResetPasswordForm(request.POST)
         if password_form.is_valid():
@@ -166,26 +162,7 @@ def reset_password(request):
             user = User.objects.filter(email=email).first()
 
             if user:
-                uid = urlsafe_base64_encode(force_bytes(user.pk))
-                print(uid)
-                token = default_token_generator.make_token(user)
-                print(token)
-
-                reset_url = request.build_absolute_uri(
-                    f"/account/reset-password/{uid}/{token}"
-                )
-
-                subject = "Password Reset"
-                message = render_to_string(
-                    "account/reset-password-email.html",
-                    {"reset_url": reset_url, "user": user},
-                )
-
-                send_mail(subject, message, company_email, [email])
-                messages.success(
-                    request, "Password reset email sent. Check your inbox."
-                )
-
+                reset_password_email_handler(request, user, email)
                 return redirect("account:login")
             else:
                 messages.error(request, "User with this email address not found")
