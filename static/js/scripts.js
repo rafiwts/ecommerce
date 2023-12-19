@@ -63,3 +63,40 @@ window.onclick = function (event) {
         }
     }
 }
+
+// add login fields transition
+const inputs = document.querySelectorAll(".login-field");
+
+function addClass(){
+    let parent = this.parentNode.parentNode;
+    parent.classList.add("focus");
+}
+
+function removeClass(){
+    let parent = this.parentNode.parentNode;
+    if(this.value == ""){
+        parent.classList.remove("focus");
+    }
+
+}
+
+inputs.forEach(input => {
+    input.addEventListener("focus", addClass);
+    input.addEventListener("blur", removeClass)
+});
+
+
+// add button that displays password
+function show() {
+    var userPassword = document.getElementById('password');
+    var icon = document.querySelector('.fas');
+    if (userPassword.type === "password") {
+        userPassword.type = "text";
+        icon.style.color = "#cf3b3b";
+    } else{
+        userPassword.type = "password";
+        icon.style.color = "#c7b9b3";
+    }
+
+
+}
