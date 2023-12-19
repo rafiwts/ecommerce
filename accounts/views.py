@@ -32,10 +32,12 @@ def login_view(request):
                     return redirect(reverse("home"))
                 else:
                     messages.error(
-                        request, "The account is not active. Please contanc the support"
+                        request, "The account is inactive. Please contact our support!"
                     )
             else:
-                messages.error(request, "Invalid credentials")
+                messages.error(request, "Invalid credentials. Try again!")
+
+            login_form = LoginForm()
     else:
         login_form = LoginForm()
 

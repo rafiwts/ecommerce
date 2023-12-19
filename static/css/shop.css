@@ -1,0 +1,8 @@
+.shop-container {
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    max-width: 1400px;
+    margin-right: auto;
+    margin-left: auto;
+    height: 150vh;
+}

@@ -13,7 +13,7 @@ class LoginForm(forms.Form):
             attrs={
                 "class": "login-field",
                 "id": "username",
-                "autocomplete": "username",
+                "autocomplete": "off",
             }
         ),
     )
