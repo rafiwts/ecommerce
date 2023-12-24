@@ -1,21 +1,102 @@
-{%extends "base.html"%}
-
-{%block content%}
-<h1>Sing up</h1>
-    <div class="register-form">
-      <form method="post" action="{% url 'account:register' %}">
-        {% for field in register_form %}
-          {% for error in field.errors %}
-            <div class="register-error-message">{{ error }}</div>
-          {% endfor %}
-          <div class="register-box {% if field.errors %}has-error{% endif %}">
-            <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
-            {{ field }}
-            <span class="register-help-text">{{ field.help_text }}</span>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/general.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/register-form.css' %}">
+      <script src="https://kit.fontawesome.com/e48d166edc.js" crossorigin="anonymous"></script>
+      <title>Register</title>
+  </head>
+  <body>
+    <div class="register-form-container">
+      <div class="register-img">
+        <img src="{% static 'images/register-image.jpg' %}" alt="register-image">
+      </div>
+      <div class="register-form">
+        <form method="post" action="{% url 'account:register' %}">
+          <div class="register-form-title">
+            <h1>Sing up</h1>
+            <h2>Join Ecommerce today!</h2>
+            <p>Get access to all offers.</p>
           </div>
-        {% endfor %}
-        {%csrf_token%}
-        <button class="register-button" type="submit">Save Changes</button>
-      </form>
+          {% for message in messages %}
+          <div class="register-{{ message.tags }}">
+            <div class="register-error-image">
+              <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <div class="register-error-message">
+              {{ message }}
+            </div>
+          </div>
+          {% endfor %}
+          <div class="register-form-box">
+            <div class="register-form-field username {% if register_form.username.errors %}has-error{% endif %}">
+              <div class="register-icon">
+                <i class="far fa-user-circle"></i>
+              </div>
+              <div class="register-form-field-box">
+                <h5>{{ register_form.username.label }}</h5>
+                {{ register_form.username }}
+              </div>
+              <i class="fas fa-info-circle"></i>
+            </div>
+            {% if register_form.username.errors %}
+              <div class="register-field-error-message">{{ register_form.username.errors }}</div>
+            {% endif %}
+            <!-- <span class="register-help-text">{{ register_form.username.help_text }}</span> -->
+            <div class="register-form-field email {% if register_form.email.errors and not register_form.username.errors %}has-error{% endif %}">
+              <div class="register-icon">
+                <i class="far fa-envelope"></i>
+              </div>
+              <div class="register-form-field-box">
+                <h5>{{ register_form.email.label }}</h5>
+                {{ register_form.email }}
+              </div>
+              <i class="fas fa-info-circle"></i>
+            </div>
+            {% if register_form.email.errors and not register_form.username.errors %}
+              <div class="register-field-error-message">{{ register_form.email.errors }}</div>
+            {% endif %}
+            <!-- <span class="register-help-text">{{ register_form.email.help_text }}</span> -->
+            <div class="register-form-field password1 {% if register_form.password1.errors %}has-error{% endif %}">
+              <div class="register-icon">
+                <i class="fas fa-eye password" onclick="showPassword('password', '.fas.fa-eye.password')"></i>
+              </div>
+              <div class="register-form-field-box">
+                <h5>{{ register_form.password1.label }}</h5>
+                {{ register_form.password1 }}
+              </div>
+              <i class="fas fa-info-circle"></i>
+              <!-- <span class="register-help-text">{{ register_form.password1.help_text }}</span> -->
+            </div>
+            {% if register_form.password1.errors %}
+              <div class="register-field-error-message">{{ register_form.password1.errors }}</div>
+            {% endif %}
+            <div class="register-form-field password2 {% if register_form.password2.errors and not register_form.password1.errors %}has-error{% endif %}">
+              <div class="register-icon">
+                <i class="fas fa-eye confirm" onclick="showPassword('password-confirm', '.fas.fa-eye.confirm')"></i>
+              </div>
+              <div class="register-form-field-box">
+                <h5>{{ register_form.password2.label }}</h5>
+                {{ register_form.password2 }}
+              </div>
+              <i class="fas fa-info-circle"></i>
+            </div>
+            {% if register_form.password2.errors and not register_form.password1.errors%}
+              <div class="register-field-error-message">{{ register_form.password2.errors }}</div>
+            {% endif %}
+              <!-- <span class="register-help-text">{{ register_form.password2.help_text }}</span> -->
+          </div>
+          {%csrf_token%}
+          <input type="submit" class="register-btn" value="Register">
+        </form>
+      </div>
     </div>
-{%endblock content%}
+    <div class="footer">
+      <p>footer</p>
+    </div>
+  </body>
+  <script src="{% static 'js/scripts.js' %}"></script>
+</html>
