@@ -20,4 +20,9 @@ def password_validation(password):
 
 def email_validation(email):
     if User.objects.filter(email=email):
-        raise ValidationError(f"The email {email} already exists")
+        raise ValidationError(f"The email {email} already exists.")
+
+
+def username_validation(username):
+    if User.objects.filter(username=username):
+        raise ValidationError(f"The username {username} already exists.")

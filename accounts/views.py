@@ -65,6 +65,11 @@ def register(request):
             login(request, user)
 
             return redirect(reverse("account:create-profile"))
+        else:
+            # if form is invalid, return message error...
+            messages.error(request, "Invalid input! Try again!")
+            # ... and remove autofocus after sumbitting
+            register_form.fields["username"].widget.attrs.pop("autofocus", None)
     else:
         register_form = SingUpForm()
 

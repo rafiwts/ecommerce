@@ -3,7 +3,97 @@ from django.contrib.auth.forms import UserCreationForm
 
 from accounts.models import Account, User, UserAddress
 
-from .validators import email_validation, password_validation
+from .validators import email_validation, password_validation, username_validation
+
+
+class NonstickyTextInput(forms.TextInput):
+    # clear the submitted input box
+    def get_context(self, name, value, attrs):
+        value = None
+        return super().get_context(name, value, attrs)
+
+
+class NonstickyEmailInput(forms.EmailInput):
+    def get_context(self, name, value, attrs):
+        value = None
+        return super().get_context(name, value, attrs)
+
+
+class CustomTextInput(NonstickyTextInput, forms.TextInput):
+    def __init__(self, attrs=None):
+        NonstickyTextInput.__init__(self, attrs)
+        forms.TextInput.__init__(self, attrs)
+
+
+class CustomEmailInput(NonstickyEmailInput, forms.EmailInput):
+    def __init__(self, attrs=None):
+        NonstickyEmailInput.__init__(self, attrs)
+        forms.EmailInput.__init__(self, attrs)
+
+
+class SingUpForm(UserCreationForm):
+    username = forms.CharField(
+        max_length=100,
+        label="Username",
+        help_text="Choose unique username",
+        validators=[username_validation],
+        widget=CustomTextInput(
+            attrs={
+                "class": "register-field",
+                "id": "username",
+                "autocomplete": "off",
+            }
+        ),
+    )
+    email = forms.EmailField(
+        max_length=100,
+        label="Email",
+        help_text="Enter a valid email address",
+        validators=[email_validation],
+        widget=CustomEmailInput(
+            attrs={"class": "register-field", "id": "email", "autocomplete": "off"}
+        ),
+    )
+    password1 = forms.CharField(
+        label="Password",
+        help_text=(
+            "Password must contain at least 8 characters "
+            "with one uppercase and one digit"
+        ),
+        validators=[password_validation],
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "register-field",
+                "id": "password",
+                "autocomplete": "off",
+            }
+        ),
+    )
+    password2 = forms.CharField(
+        label="Password confirmation",
+        help_text="Confirm the password",
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "register-field",
+                "id": "password-confirm",
+                "autocomplete": "off",
+            }
+        ),
+    )
+
+    class Meta:
+        model = User
+        fields = ["username", "email", "password1", "password2"]
+
+    def clean_password(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get("password1")
+        password2 = cleaned_data.get("password2")
+
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Passwords do not match.")
+
+        return password2
 
 
 class LoginForm(forms.Form):
@@ -36,74 +126,10 @@ class ResetPasswordForm(forms.Form):
             attrs={
                 "class": "reset-password-field",
                 "id": "email",
-                "autocomplete": "email",
-            }
-        ),
-    )
-
-
-class SingUpForm(UserCreationForm):
-    username = forms.CharField(
-        max_length=100,
-        label="Username",
-        help_text="Choose unique username",
-        widget=forms.TextInput(
-            attrs={
-                "class": "register-field",
-                "id": "username",
-                "autocomplete": "username",
-            }
-        ),
-    )
-    email = forms.EmailField(
-        max_length=100,
-        label="Email",
-        help_text="Enter a valid email address",
-        validators=[email_validation],
-        widget=forms.EmailInput(
-            attrs={"class": "register-field", "id": "email", "autocomplete": "email"}
-        ),
-    )
-    password1 = forms.CharField(
-        label="Password",
-        help_text=(
-            "Password must contain at least 8 characters "
-            "with one uppercase and one digit"
-        ),
-        validators=[password_validation],
-        widget=forms.PasswordInput(
-            attrs={
-                "class": "register-field",
-                "id": "password1",
                 "autocomplete": "off",
             }
         ),
     )
-    password2 = forms.CharField(
-        label="Password confirmation",
-        help_text="Confirm the password",
-        widget=forms.PasswordInput(
-            attrs={
-                "class": "register-field",
-                "id": "password2",
-                "autocomplete": "off",
-            }
-        ),
-    )
-
-    class Meta:
-        model = User
-        fields = ["username", "email", "password1", "password2"]
-
-    def clean_password(self):
-        cleaned_data = super().clean()
-        password1 = cleaned_data.get("password1")
-        password2 = cleaned_data.get("password2")
-
-        if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Passwords do not match.")
-
-        return password2
 
 
 class AccountForm(forms.ModelForm):
