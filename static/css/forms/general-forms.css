@@ -1,0 +1,32 @@
+body {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 100vh;
+}
+
+a {
+    text-decoration: none;
+    color: unset;
+}
+
+h5 {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+a:hover {
+    color: #cf3b3b !important;
+}
+
+
+.login-form-container a,
+.register-form-container a {
+    display: inline-block;
+    text-decoration: underline;
+    color: rgb(92, 90, 255);
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    transition: .3s;
+}

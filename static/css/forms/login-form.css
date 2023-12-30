@@ -1,19 +1,3 @@
-body {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    min-height: 100vh;
-}
-
-a {
-    text-decoration: none;
-    color: unset;
-}
-
-a:hover {
-    color: #cf3b3b !important;
-}
-
 .login-form-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -24,6 +8,9 @@ a:hover {
     margin-right: auto;
     margin-left: auto;
     margin-top: 60px;
+    padding: 5px 10px 20px 10px;
+    border-radius: 50px;
+    box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.664);
     flex: 10;
 }
 
@@ -67,12 +54,6 @@ a:hover {
     font-size: 15px;
     font-weight: 400;
     color: #919191;
-}
-
-.login-form-container {
-    padding: 5px 10px 20px 10px;
-    border-radius: 50px;
-    box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.664);
 }
 
 .login-form-field.has-error,
@@ -186,16 +167,6 @@ a:hover {
     margin-bottom: 4px;
 }
 
-.login-form-container a {
-    display: inline-block;
-    text-decoration: underline;
-    color: rgb(92, 90, 255);
-    margin-top: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    transition: .3s;
-}
-
 .login-form-container h5 {
     display: block;
     text-align: right;
@@ -224,11 +195,6 @@ a:hover {
 
 .login-btn:hover {
     background-position: right;
-}
-
-h5 {
-    font-size: 14px;
-    font-weight: 500;
 }
 
 .footer {
@@ -292,11 +258,18 @@ h5 {
    }
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 810px) {
+    body {
+        background-color: rgb(238, 238, 238);
+    }
+
     .login-form-container {
-        grid-template-columns: 1fr;
-        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         margin: 0px;
+        box-shadow: none;
+        border-radius: 0px;
     }
 
     .login-img {
