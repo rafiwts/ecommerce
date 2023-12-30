@@ -5,7 +5,8 @@
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <link rel="stylesheet" type="text/css" href="{% static 'css/general.css' %}">
-      <link rel="stylesheet" type="text/css" href="{% static 'css/register-form.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/forms/general-forms.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/forms/register-form.css' %}">
       <script src="https://kit.fontawesome.com/e48d166edc.js" crossorigin="anonymous"></script>
       <title>Register</title>
   </head>
@@ -41,6 +42,7 @@
                 {{ register_form.username }}
               </div>
               <i class="fas fa-info-circle"></i>
+              <div class="register-tooltip user">{{ register_form.username.help_text }}</div>
             </div>
             {% if register_form.username.errors %}
               <div class="register-field-error-message">{{ register_form.username.errors }}</div>
@@ -55,6 +57,7 @@
                 {{ register_form.email }}
               </div>
               <i class="fas fa-info-circle"></i>
+              <div class="register-tooltip mail">{{ register_form.email.help_text }}</div>
             </div>
             {% if register_form.email.errors and not register_form.username.errors %}
               <div class="register-field-error-message">{{ register_form.email.errors }}</div>
@@ -69,6 +72,7 @@
                 {{ register_form.password1 }}
               </div>
               <i class="fas fa-info-circle"></i>
+              <div class="register-tooltip pass1">{{ register_form.password1.help_text }}</div>
               <!-- <span class="register-help-text">{{ register_form.password1.help_text }}</span> -->
             </div>
             {% if register_form.password1.errors %}
@@ -83,6 +87,7 @@
                 {{ register_form.password2 }}
               </div>
               <i class="fas fa-info-circle"></i>
+              <div class="register-tooltip pass2">{{ register_form.password2.help_text }}</div>
             </div>
             {% if register_form.password2.errors and not register_form.password1.errors%}
               <div class="register-field-error-message">{{ register_form.password2.errors }}</div>
@@ -91,6 +96,7 @@
           </div>
           {%csrf_token%}
           <input type="submit" class="register-btn" value="Register">
+          <h5>Already have an account? <a href="{% url 'account:login' %}">Log in</a></h5>
         </form>
       </div>
     </div>
