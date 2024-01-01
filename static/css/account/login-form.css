@@ -1,0 +1,287 @@
+.login-form-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0 2rem; /* top/bottom is 0 and left/right is 2 x font size */
+    background-color: rgb(238, 238, 238);
+    max-width: 1200px;
+    width: 100vw;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 60px;
+    padding: 5px 10px 20px 10px;
+    border-radius: 50px;
+    box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.664);
+    flex: 10;
+}
+
+.login-img {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-img img {
+    width: 450px;
+}
+
+.login-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.login-form-title {
+    text-align: center;
+    padding-bottom: 40px;
+}
+
+.login-form-title h1 {
+    color: #942525;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.login-form-title h2 {
+    font-size: 30px;
+    font-weight: 500;
+    text-transform: none;
+    margin: 2px 0;
+}
+
+.login-form-title p {
+    font-size: 15px;
+    font-weight: 400;
+    color: #919191;
+}
+
+.login-form-field.has-error,
+.login-form-field {
+    position: relative;
+    display: grid;
+    grid-template-columns: 7% 93%;
+    margin: 5px;
+    padding: 5px 0;
+}
+
+.login-form-field {
+    border-bottom: 2px solid #d9d9d9;
+}
+
+.login-form-field.has-error {
+    border-bottom: 2px solid #e20707;
+}
+
+.login-form-field.username.has-error,
+.login-form .login-form-field.username {
+    margin-top: 0;
+}
+
+.login-icon {
+    color: #c7b9b3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.login-icon i {
+    transition: .5s;
+}
+
+.login-form-field.has-error,
+.login-form-field > div {
+    position: relative;
+    height: 45px;
+}
+
+.login-form-field.has-error,
+.login-form-field > div {
+    position: relative;
+    height: 45px;
+}
+
+.login-form-field.has-error > div > h5,
+.login-form-field > div > h5 {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 15px;
+    transition: .3s;
+    font-weight: 500;
+}
+
+.login-form-field.has-error:before, .login-form-field.has-error:after,
+.login-form-field:before, .login-form-field:after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    width: 0%;
+    height: 2px;
+    background-color: #777777;
+    transition: .5s;
+}
+
+.login-form-field.has-error:before,
+.login-form-field:before {
+    right: 50%;
+}
+
+.login-form-field.has-error:after,
+.login-form-field:after {
+    left: 50%;
+}
+
+.login-form-field.has-error.focus:before, .login-form-field.has-error.focus:after,
+.login-form-field.focus:before, .login-form-field.focus:after {
+    width: 50%;
+}
+
+.login-form-field.has-error.focus > div > h5,
+.login-form-field.focus > div > h5 {
+    top: 3px;
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.login-form-field.has-error > div > input,
+.login-form-field > div > input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: none;
+    padding: 0.5rem 0.7rem;
+    font-size: 15px;
+    color: #555;
+}
+
+.login-form-field.password.has-error,
+.login-form-field.password {
+    margin-bottom: 4px;
+}
+
+.login-form-container h5 {
+    display: block;
+    text-align: right;
+}
+
+.forgot-password-link {
+    display: inline; /* This ensures that the span only takes up as much width as its content */
+}
+
+.login-btn {
+    display: block;
+    width: 100%;
+    height: 50px;
+    border-radius: 50px;
+    outline: none;
+    border: none;
+    background-image: linear-gradient(to right, #fa5b5bee, #b82a2aee, #fa5b5bee);
+    background-size: 200%;
+    font-size: 1.2rem;
+    color: #fff;
+    font-weight: bold;
+    margin: 1rem 0;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.login-btn:hover {
+    background-position: right;
+}
+
+.footer {
+    flex: 1;
+}
+
+.login-error {
+    display: flex;
+    align-items: center;
+    background: rgb(202, 126, 126);
+    border: solid 2px;
+    border-color: #8b0c0c;
+    height: 50px;
+    margin-bottom: 20px;
+    box-shadow: 3px 3px 3px #030101;
+}
+
+.login-error-message {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    padding-left: 5px;
+    height: 100%;
+}
+
+.login-error-image {
+    display: flex;
+    align-items: center;
+    padding: 0px 1.5rem;
+}
+
+.login-error-image i {
+    font-size: 24px;
+    color: rgb(131, 0, 0);
+}
+
+@media screen and (max-width: 1050px) {
+    .login-form-container {
+        grid-gap: 5rem;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+   .login-form-title h2 {
+       font-size: 25px !important;
+   }
+
+   form {
+       width: 290px;
+   }
+
+   .login-form h2 {
+       font-size: 2.4rem;
+       margin: 8px 0;
+   }
+
+   .login-img img {
+       width: 400px;
+   }
+}
+
+@media screen and (max-width: 810px) {
+    body {
+        background-color: rgb(238, 238, 238);
+    }
+
+    .login-form-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0px;
+        box-shadow: none;
+        border-radius: 0px;
+    }
+
+    .login-img {
+        display: none;
+
+    }
+
+    .login-form {
+        justify-content: center;
+    }
+
+    .footer {
+        display: none;
+    }
+}

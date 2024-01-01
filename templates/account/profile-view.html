@@ -1,5 +1,10 @@
 {%extends "base.html"%}
+
 {%load static%}
+
+{% block extra_styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/account/profile-view.css' %}">
+{% endblock %}
 
 {%block content%}
 {% if messages %}
@@ -9,32 +14,40 @@
     {% endfor %}
 </ul>
 {% endif %}
-<div class="profile-view"></div>
+<div class="profile-view">
     <h1 class="profile-view-title">Personal data</h1>
-    <div class="profile-view-data">
-        <div class="profile-main-view-box">
-            <div class="profile-main-view-panel-left">
-                <div class="profile-main-view-section">
-                    <div class="profile-main-view-section-left">
-                        <h1 class="profile-main-view-greeting">Hi {{user.account.first_name}}!</h1>
-                        <p class="profile-main-view-email-display">{{ user.email }}</p>
-                    </div>
-                    <div class="profile-main-view-section-right">
-                        <button classs="profile-image-button">
-                            {% if user.account.image %}
-                            <img src="{{ user.account.image.url }}" alt="Profile image">
-                            {% else %}
-                            <img src="{% static 'images/no-image-account.webp' %}" alt="Profile image">
-                            {% endif %}
-                        </button>
-                    </div>
-                    <div class="profile-main-view-section-right">
-                        <!--To do when products are added-->
-                        <p>The list of recently purchased products</p>
-                    </div>
+    <div class="profile-view-main-box">
+        <div class="profile-view-main-left">
+            <div class="profile-view-main-left-email">
+                <h1>Hi {{user.account.first_name}}!</h1>
+                <p>{{ user.email }}</p>
+            </div>
+            <div class="profile-view-main-left-image">
+                <div class="profile-view-main-left-image-show">
+                    {% if user.account.image %}
+                    <img src="{{ user.account.image.url }}" alt="Profile image">
+                    {% else %}
+                    <img src="{% static 'images/no-image-account.webp' %}" alt="Profile image">
+                    {% endif %}
+                </div>
+                <div class="profile-view-main-left-image-edit">
+                    <img src="{% static 'images/edit-image-icon.svg' %}">
                 </div>
             </div>
         </div>
+        <div class="profile-view-main-right">
+            <div class="profile-view-main-right-section">
+                <div class="provile-view-main-right-counter">
+                    <p>You are with us</p>
+                    <p>x days x months x days</p>
+                </div>
+                <div class="profile-view-main-right-products">
+                    <!--To do when products are added-->
+                    <p>The list of recently purchased products</p>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="profile-view-account-box">
         <div class="profile-view-account-panel-left">
             <div class="profile-view-account-section">
@@ -98,4 +111,5 @@
             </div>
         </div>
     </div>
+</div>
 {%endblock content%}
