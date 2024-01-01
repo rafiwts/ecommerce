@@ -4,7 +4,9 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        {% include 'stylesheet_static.html' %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/general.css' %}">
+        {% block extra_styles %}{% endblock %}
         <title>Ecommerce</title>
     </head>
     <body>

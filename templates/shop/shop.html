@@ -1,5 +1,13 @@
 {%extends "base.html"%}
+
+{% load static %}
+
 {%block active_shop%}class="active"{%endblock active_shop%}
+
+{% block extra_styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/shop.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/sidebar.css' %}">
+{% endblock %}
 
 {%block content%}
 <div class="shop-container">
