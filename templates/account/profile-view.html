@@ -25,13 +25,13 @@
             <div class="profile-view-main-left-image">
                 <div class="profile-view-main-left-image-show">
                     {% if user.account.image %}
-                    <img src="{{ user.account.image.url }}" alt="Profile image">
+                    <img id="profileImage" src="{{ user.account.image.url }}" alt="Profile image" onclick="openImageBlock()">
                     {% else %}
-                    <img src="{% static 'images/no-image-account.webp' %}" alt="Profile image">
+                    <img id="profileImage" src="{% static 'images/no-image-account.webp' %}" alt="Profile image" onclick="openImageBlock()">
                     {% endif %}
                 </div>
                 <div class="profile-view-main-left-image-edit">
-                    <img src="{% static 'images/edit-image-icon.svg' %}">
+                    <img src="{% static 'images/edit-image-icon.svg' %}" onclick="openImageBlock()">
                 </div>
             </div>
         </div>
@@ -112,4 +112,35 @@
         </div>
     </div>
 </div>
+
+<!-- profile image block -->
+<div class="image-block-display" id="newImageBlock">
+    <h2>Change profile image</h2>
+    <div class="image-block-content">
+        <span class="close" onclick="closeImageBlock()">&times;</span>
+        <div class="profile-image-edit">
+            {% if user.account.image %}
+            <img src="{{ user.account.image.url }}" alt="Profile image">
+            {% else %}
+            <img src="{% static 'images/no-image-account.webp' %}" alt="Profile image">
+            {% endif %}
+        </div>
+        <div class="edit-image-form">
+            <form class="edit-image-form" method="post" enctype="multipart/form-data">
+                <div class="image-form-field">
+                    <div class="image-form-field-box">
+                        <h5>{{ image_form.image.label }}</h5>
+                        {{ image_form }}
+                    </div>
+                </div>
+                {%csrf_token%}
+                <input type="submit" value="Save image">
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- overlay -->
+<div id="overlay" class="block-overlay"></div>
+
 {%endblock content%}

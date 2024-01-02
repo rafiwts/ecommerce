@@ -9,6 +9,7 @@ from django.utils.http import urlsafe_base64_decode
 from .forms import (
     AccountForm,
     ChangePasswordForm,
+    ImageForm,
     LoginForm,
     ResetPasswordForm,
     SingUpForm,
@@ -80,7 +81,24 @@ def register(request):
 def profile_view(request, username):
     user = User.objects.select_related("account").get(username=username)
 
-    return render(request, "account/profile-view.html", {"user": user})
+    if request.method == "POST":
+        image_form = ImageForm(
+            request.POST, instance=request.user.account, files=request.FILES
+        )
+        if image_form.is_valid():
+            print("its good")
+            image_form.save()
+            return redirect("account:profile-view", username=username)
+        else:
+            print("error")
+            return messages.error(request, "Invaild data")
+    else:
+        print("else?")
+        image_form = ImageForm(instance=request.user.account)
+
+    return render(
+        request, "account/profile-view.html", {"user": user, "image_form": image_form}
+    )
 
 
 @login_required
@@ -107,9 +125,7 @@ def create_profile(request):
 def edit_account(request, username):
     user = request.user
     if request.method == "POST":
-        account_form = AccountForm(
-            instance=user.account, data=request.POST, files=request.FILES
-        )
+        account_form = AccountForm(instance=user.account, data=request.POST)
         if account_form.is_valid():
             account_form.save()
             messages.success(request, "Data has been saved")

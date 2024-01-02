@@ -103,3 +103,44 @@ function showPassword(passwordInputID, icon) {
         icon.style.color = "#c7b9b3";
     }
 }
+
+// display block for editing profile picture
+function openImageBlock() {
+    let block = document.getElementById("newImageBlock");
+    let overlay = document.getElementById('overlay');
+
+    block.style.display = "block";
+    overlay.style.display = "block";
+}
+
+function closeImageBlock() {
+    let block = document.getElementById("newImageBlock");
+    let overlay = document.getElementById('overlay');
+
+    block.style.display = "none";
+    overlay.style.display = "none";
+}
+
+window.onclick = function(event) {
+    var block = document.getElementById("newImageBlock");
+    var overlay = document.getElementById("overlay")
+
+    if (event.target == block) {
+        block.style.display = "none";
+        overlay.style.display = "none"
+    }
+}
+
+// function to update the block width on window resize
+function updateModalWidth() {
+    var block = document.querySelector('.image-block-display');
+    var windowWidth = window.innerWidth;
+    var distanceFromEdge = 50;
+
+    var newWidth = windowWidth - 2 * distanceFromEdge;
+
+    block.style.width = newWidth + 'px';
+}
+
+window.addEventListener('resize', updateModalWidth);
+updateModalWidth();

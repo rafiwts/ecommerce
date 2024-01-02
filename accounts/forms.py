@@ -170,13 +170,28 @@ class AccountForm(forms.ModelForm):
             }
         ),
     )
+
+    class Meta:
+        model = Account
+        fields = ["first_name", "last_name", "date_of_birth"]
+
+
+class ImageForm(forms.ModelForm):
     image = forms.ImageField(
-        label="Image", required=False, widget=forms.FileInput(attrs={"id": "image"})
+        label="Image",
+        required=True,
+        widget=forms.FileInput(
+            attrs={
+                "id": "profileImage",
+                "class": "profile-image",
+                "autocomplete": "off",
+            }
+        ),
     )
 
     class Meta:
         model = Account
-        fields = ["first_name", "last_name", "date_of_birth", "image"]
+        fields = ("image",)
 
 
 class UserAddressForm(forms.ModelForm):
