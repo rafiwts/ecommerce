@@ -116,7 +116,7 @@
 <!-- profile image block -->
 <div class="image-block-display" id="newImageBlock">
     <h2>Change profile image</h2>
-    <div class="image-block-content">
+    <div id="imageBlockContent" class="image-block-content">
         <span class="close" onclick="closeImageBlock()">&times;</span>
         <div class="profile-image-edit">
             {% if user.account.image %}
@@ -124,13 +124,16 @@
             {% else %}
             <img src="{% static 'images/no-image-account.webp' %}" alt="Profile image">
             {% endif %}
+            <div id="uploadFilePreview" class="upload-file-preview"></div>
         </div>
         <div class="edit-image-form">
-            <form class="edit-image-form" method="post" enctype="multipart/form-data">
+            <form id="uploadImageForm" class="edit-image-form" method="post" enctype="multipart/form-data" >
                 <div class="image-form-field">
                     <div class="image-form-field-box">
-                        <h5>{{ image_form.image.label }}</h5>
-                        {{ image_form }}
+                        <label for="uploadProfileImage" id="uploadFileLabel" class="file-input-label">
+                            Choose File
+                        </label>
+                        {{ image_form.image }}
                     </div>
                 </div>
                 {%csrf_token%}

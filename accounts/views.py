@@ -86,11 +86,9 @@ def profile_view(request, username):
             request.POST, instance=request.user.account, files=request.FILES
         )
         if image_form.is_valid():
-            print("its good")
             image_form.save()
             return redirect("account:profile-view", username=username)
         else:
-            print("error")
             return messages.error(request, "Invaild data")
     else:
         print("else?")

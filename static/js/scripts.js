@@ -1,4 +1,4 @@
-// change the rotation of the arrow for categories tab upon clicking for 3 buttons:
+// changes the rotation of the arrow for categories tab upon clicking for 3 buttons:
 function dropdownCategory() {
     var dropdownList = document.getElementById("dropdownListCategory");
     dropdownList.classList.toggle("show-categories");
@@ -24,7 +24,7 @@ function dropdownCurrency() {
 }
 
 window.onclick = function (event) {
-    // Check for category dropdown
+    // checks for category dropdown
     if (!event.target.matches('.category-dropbtn')) {
         var categoryDropdowns = document.getElementsByClassName("categories-dropdown");
         var i;
@@ -37,7 +37,7 @@ window.onclick = function (event) {
         }
     }
 
-    // Check for language dropdown
+    // checks for language dropdown
     if (!event.target.matches('.language-dropbtn')) {
         var languageDropdowns = document.getElementsByClassName("languages-dropdown");
         var j;
@@ -50,7 +50,7 @@ window.onclick = function (event) {
         }
     }
 
-    // Check for currency dropdown
+    // checks for currency dropdown
     if (!event.target.matches('.currency-dropbtn')) {
         var currencyDropdowns = document.getElementsByClassName("currencies-dropdown");
         var k;
@@ -64,7 +64,7 @@ window.onclick = function (event) {
     }
 }
 
-// add login and register fields transition
+// adds login and register fields transition
 function addClass(){
     let parent = this.parentNode.parentNode;
     parent.classList.add("focus");
@@ -91,7 +91,7 @@ function setupFieldListeners(inputs) {
 setupFieldListeners(loginInputs);
 setupFieldListeners(registerInputs);
 
-// add button that displays password
+// adds button that displays password
 function showPassword(passwordInputID, icon) {
     var userPassword = document.getElementById(passwordInputID);
     var icon = document.querySelector(icon);
@@ -104,28 +104,35 @@ function showPassword(passwordInputID, icon) {
     }
 }
 
-// display block for editing profile picture
+// displays and closes block for editing profile picture
 function openImageBlock() {
     let block = document.getElementById("newImageBlock");
     let overlay = document.getElementById('overlay');
 
-    block.style.display = "block";
+    block.style.display = "flex";
     overlay.style.display = "block";
 }
 
 function closeImageBlock() {
     let block = document.getElementById("newImageBlock");
     let overlay = document.getElementById('overlay');
+    const filePreview = document.getElementById("uploadFilePreview");
+
+    // deletes an uploaded file if it was not saved in the database
+    while (filePreview.firstChild) {
+        filePreview.removeChild(filePreview.firstChild);
+    }
 
     block.style.display = "none";
     overlay.style.display = "none";
 }
 
 window.onclick = function(event) {
-    var block = document.getElementById("newImageBlock");
-    var overlay = document.getElementById("overlay")
+    let block = document.getElementById("newImageBlock");
+    let blockContent = document.getElementById("imageBlockContent")
+    let overlay = document.getElementById("overlay")
 
-    if (event.target == block) {
+    if (event.target == block || event.target == blockContent) {
         block.style.display = "none";
         overlay.style.display = "none"
     }
@@ -144,3 +151,21 @@ function updateModalWidth() {
 
 window.addEventListener('resize', updateModalWidth);
 updateModalWidth();
+
+// displays a preview of the image before saving
+document.getElementById("uploadProfileImage").addEventListener("change", function () {
+    var fileInput = document.getElementById("uploadProfileImage");
+    var filePreview = document.getElementById("uploadFilePreview");
+
+    while (filePreview.firstChild) {
+            filePreview.removeChild(filePreview.firstChild);
+        }
+
+    if (fileInput.files && fileInput.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            filePreview.innerHTML += "<br><img src='" + e.target.result + "' />";
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    }
+    });

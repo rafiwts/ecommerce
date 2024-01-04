@@ -182,9 +182,8 @@ class ImageForm(forms.ModelForm):
         required=True,
         widget=forms.FileInput(
             attrs={
-                "id": "profileImage",
-                "class": "profile-image",
-                "autocomplete": "off",
+                "id": "uploadProfileImage",
+                "class": "upload-profile-image",
             }
         ),
     )
