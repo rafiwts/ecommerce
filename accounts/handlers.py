@@ -49,3 +49,10 @@ def reset_password_email_handler(request, user, email):
         messages.success(
             request, "Internal error. The message has not been sent. Try again."
         )
+
+
+def upload_image_handler(request, user):
+    if user.account.image:
+        messages.info(request, "The profile image has been changed!")
+    else:
+        messages.info(request, "The new profile image has been added!")

@@ -7,15 +7,15 @@
 {% endblock %}
 
 {%block content%}
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+{% for message in messages %}
+    <div class="upload-{{ message.tags }}-container">
+        <div class="upload-{{ message.tags }}-message">
+            {{ message }}
+        </div>
+    </div>
+{% endfor %}
 <div class="profile-view">
-    <h1 class="profile-view-title">Personal data</h1>
+    <h1 class="profile-view-title">Profile</h1>
     <div class="profile-view-main-box">
         <div class="profile-view-main-left">
             <div class="profile-view-main-left-email">
@@ -48,8 +48,12 @@
             </div>
         </div>
     </div>
-    <div class="profile-view-account-box">
-        <div class="profile-view-account-panel-left">
+    <div class="profile-view-personal-data-title">
+        <h1 class="profile-view-title">Personal data</h1>
+        <h1 class="profile-view-title">Home address</h1>
+    </div>
+    <div class="profile-view-personal-data-box">
+        <div class="profile-view-account">
             <div class="profile-view-account-section">
                 <h3 class="profile-view-account-title">USERNAME</h3>
                 <p class="profile-view-account-field">{{ user.username }}</p>
@@ -62,8 +66,6 @@
                 <h3 class="profile-view-account-field">BIRTH DATE</h3>
                 <p class="profile-view-account-field">{{ user.account.date_of_birth }}</p>
             </div>
-        </div>
-        <div class="profile-view-panel-account-center">
             <div class="profile-view-account-section">
                 <h3 class="profile-view-account-title">CLIENT ID</h3>
                 <p class="profile-view-account-field">{{ user.account.client_id }}</p>
@@ -72,19 +74,12 @@
                 <h3 class="profile-view-account-field">EMAIL</h3>
                 <p class="profile-view-account-field">{{ user.email }}</p>
             </div>
-        </div>
-        <div class="profile-view-panel-account-right">
-            <div class="profile-view-account-section">
-                <h3 class="profile-view-account-title">ACCOUNT</h3>
-                <p class="profile-view-account-field">{{ user.account.account_type }}</p>
+            <div class="profile-view-edit-account">
+                <span><a href="{% url 'account:edit-account' request.user.username %}">EDIT ACCOUNT</a></span>
+                <span><a href="{% url 'account:change-password' request.user.username %}">CHANGE PASSWORD</a></span>
             </div>
-            <!--Add edit account-->
-            <span><a href="{% url 'account:edit-account' request.user.username %}">Edit account</a></span>
-            <span><a href="{% url 'account:change-password' request.user.username %}">Change password</a></span>
         </div>
-    </div>
-    <div class="profile-view-address-box">
-        <div class="profile-view-address-panel-left">
+        <div class="profile-view-home-address">
             <div class="profile-view-address-section">
                 <h3 class="profile-view-address-title">STREET</h3>
                 <p class="profile-view-address-field">{{ user.account.address.street }}</p>
@@ -93,8 +88,6 @@
                 <h3 class="profile-view-address-field">ZIP CODE</h3>
                 <p class="profile-view-address-field">{{ user.account.address.zip_code }}</p>
             </div>
-        </div>
-        <div class="profile-view-address-panel-center">
             <div class="profile-view-address-section">
                 <h3 class="profile-view-address-title">CITY</h3>
                 <p class="profile-view-address-field">{{ user.account.address.city }}</p>
@@ -103,13 +96,14 @@
                 <h3 class="profile-view-address-field">COUNTRY</h3>
                 <p class="profile-view-address-field">{{ user.account.address.country }}</p>
             </div>
-        </div>
-        <div class="profile-view-panel-address-right">
             <div class="profile-view-address-section">
-                <!--Add edit address-->
-                <span><a href="{% url 'account:edit-address' request.user.username %}">Edit address</a></span>
+                <h3 class="profile-view-account-title">ACCOUNT</h3>
+                <p class="profile-view-account-field">{{ user.account.account_type }}</p>
             </div>
+            <span><a href="{% url 'account:edit-address' request.user.username %}">CHANGE ADDRESS</a></span>
         </div>
+        <!--TODO: replace email with phone number, client ID to profile for profile one more box with account and
+        and change password so that the personal data and home address are aligned-->
     </div>
 </div>
 
@@ -135,9 +129,9 @@
                         </label>
                         {{ image_form.image }}
                     </div>
+                    <input type="submit" class="profile-image-btn" value="Save image">
                 </div>
                 {%csrf_token%}
-                <input type="submit" value="Save image">
             </form>
         </div>
     </div>

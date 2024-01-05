@@ -15,7 +15,7 @@ from .forms import (
     SingUpForm,
     UserAddressForm,
 )
-from .handlers import reset_password_email_handler
+from .handlers import reset_password_email_handler, upload_image_handler
 from .models import User
 
 
@@ -69,7 +69,7 @@ def register(request):
         else:
             # if form is invalid, return message error...
             messages.error(request, "Invalid input! Try again!")
-            # ... and remove autofocus after sumbitting
+            # ...and remove autofocus after sumbitting
             register_form.fields["username"].widget.attrs.pop("autofocus", None)
     else:
         register_form = SingUpForm()
@@ -87,11 +87,11 @@ def profile_view(request, username):
         )
         if image_form.is_valid():
             image_form.save()
+            upload_image_handler(request, user)
             return redirect("account:profile-view", username=username)
         else:
             return messages.error(request, "Invaild data")
     else:
-        print("else?")
         image_form = ImageForm(instance=request.user.account)
 
     return render(
