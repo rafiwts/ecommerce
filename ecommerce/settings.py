@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "accounts",
     "shop",
     "phonenumber_field",
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
@@ -162,3 +163,6 @@ EMAIL_HOST_USER = os.environ.get("EMAIL")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+# Shell_plus settings
+SHELL_PLUS_PRINT_SQL_TRUNCATE = 10000
