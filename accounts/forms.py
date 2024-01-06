@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from phonenumber_field.formfields import PhoneNumberField
+from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
 from accounts.models import Account, User, UserAddress
 
@@ -132,6 +134,20 @@ class ResetPasswordForm(forms.Form):
     )
 
 
+country_choices = [
+    ("DE", "Germany"),
+    ("FR", "France"),
+    ("PL", "Poland"),
+    ("RU", "Russia"),
+    ("IT", "Italy"),
+    ("ES", "Spain"),
+    ("NO", "Norway"),
+    ("UK", "The United Kingdom"),
+]
+
+sorted_country_choices = sorted(country_choices, key=lambda x: x[1])
+
+
 class AccountForm(forms.ModelForm):
     first_name = forms.CharField(
         max_length=50,
@@ -170,10 +186,18 @@ class AccountForm(forms.ModelForm):
             }
         ),
     )
+    phone = PhoneNumberField(
+        label="Phone number",
+        required=False,
+        region="PL",
+        widget=PhoneNumberPrefixWidget(
+            initial="PL", country_choices=sorted_country_choices
+        ),
+    )
 
     class Meta:
         model = Account
-        fields = ["first_name", "last_name", "date_of_birth"]
+        fields = ["first_name", "last_name", "date_of_birth", "phone"]
 
 
 class ImageForm(forms.ModelForm):

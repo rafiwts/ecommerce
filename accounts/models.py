@@ -2,6 +2,7 @@ import os
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
 
 from .handlers import image_directory_path
 
@@ -47,6 +48,7 @@ class Account(models.Model):
         blank=True,
         verbose_name="profile picture",
     )
+    phone = PhoneNumberField(null=True, blank=True, unique=True)
     created_at = models.DateTimeField(
         auto_now_add=True,
         null=True,
@@ -61,6 +63,10 @@ class Account(models.Model):
         help_text="When the account was updated",
         verbose_name="updated",
     )
+
+    @property
+    def account_type_default(self):
+        return self.account_type or "No premium account"
 
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}"

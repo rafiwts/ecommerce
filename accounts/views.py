@@ -110,7 +110,7 @@ def create_profile(request):
             logout(request)
             return redirect(reverse("account:login"))
         else:
-            return messages.error(request, "Invaild data")
+            messages.error(request, "Invaild data")
     else:
         profile_form = AccountForm(instance=request.user.account)
 
