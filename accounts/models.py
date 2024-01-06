@@ -7,7 +7,6 @@ from phonenumber_field.modelfields import PhoneNumberField
 from .handlers import image_directory_path
 
 
-# TODO: apply login to a website
 class User(AbstractUser):
     def delete(self, *args, **kwargs):
         """
@@ -117,18 +116,8 @@ class AccountType(models.Model):
     def __str__(self):
         return self.name
 
-    class Meta:
-        db_table = "account_types"
 
-
-class UserAddress(models.Model):
-    account = models.OneToOneField(
-        "Account",
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-        related_name="address",
-    )
+class Adress(models.Model):
     street = models.CharField(max_length=50)
     zip_code = models.CharField(max_length=15, verbose_name="zip code")
     city = models.CharField(max_length=50)
@@ -157,5 +146,32 @@ class UserAddress(models.Model):
         return None
 
     class Meta:
+        abstract = True
+
+
+class UserAddress(Adress):
+    account = models.OneToOneField(
+        "Account",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="address",
+    )
+
+    class Meta:
         db_table = "addresses"
         verbose_name_plural = "User addresses"
+
+
+class UserShippingAddress(Adress):
+    account = models.ForeignKey(
+        "Account",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="shipping_address",
+    )
+
+    class Meta:
+        db_table = "shipping_addresses"
+        verbose_name_plural = "User shipping addresses"

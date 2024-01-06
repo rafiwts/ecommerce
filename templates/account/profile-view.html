@@ -18,9 +18,20 @@
     <h1 class="profile-view-title">Profile</h1>
     <div class="profile-view-main-box">
         <div class="profile-view-main-left">
-            <div class="profile-view-main-left-email">
+            <div class="profile-view-main-left-account">
                 <h1>Hi {{user.account.first_name}}!</h1>
                 <p>{{ user.email }}</p>
+                <p>{{ user.account.client_id }}</p>
+                <p>{{ user.account.account_type_default }}
+                {% if user.account.account_type %}
+                <span><a href="{% url 'account:edit-account' request.user.username %}">EDIT ACCOUNT</a></span>
+                {% else %}
+                <span><a href="{% url 'account:edit-account' request.user.username %}">ADD ACCOUNT</a></span>
+                {% endif %}
+                </p>
+                <p class="profile-view-main-change-password">
+                    <span><a href="{% url 'account:change-password' request.user.username %}">CHANGE PASSWORD</a></span>
+                </p>
             </div>
             <div class="profile-view-main-left-image">
                 <div class="profile-view-main-left-image-show">
@@ -59,25 +70,20 @@
                 <p class="profile-view-account-field">{{ user.username }}</p>
             </div>
             <div class="profile-view-account-section">
-                <h3 class="profile-view-account-field">NAME AND SURNAME</h3>
+                <h3 class="profile-view-account-title">NAME AND SURNAME</h3>
                 <p class="profile-view-account-field">{{ user.account.get_full_name }}</p>
             </div>
             <div class="profile-view-account-section">
-                <h3 class="profile-view-account-field">BIRTH DATE</h3>
+                <h3 class="profile-view-account-title">BIRTH DATE</h3>
                 <p class="profile-view-account-field">{{ user.account.date_of_birth }}</p>
             </div>
             <div class="profile-view-account-section">
-                <h3 class="profile-view-account-title">CLIENT ID</h3>
-                <p class="profile-view-account-field">{{ user.account.client_id }}</p>
+                <h3 class="profile-view-account-title">PHONE NUMBER</h3>
+                <p class="profile-view-account-field">{{ user.account.phone }}</p>
             </div>
-            <div class="profile-view-account-section">
-                <h3 class="profile-view-account-field">EMAIL</h3>
-                <p class="profile-view-account-field">{{ user.email }}</p>
-            </div>
-            <div class="profile-view-edit-account">
+            <p class="profile-view-edit-account">
                 <span><a href="{% url 'account:edit-account' request.user.username %}">EDIT ACCOUNT</a></span>
-                <span><a href="{% url 'account:change-password' request.user.username %}">CHANGE PASSWORD</a></span>
-            </div>
+            </p>
         </div>
         <div class="profile-view-home-address">
             <div class="profile-view-address-section">
@@ -85,7 +91,7 @@
                 <p class="profile-view-address-field">{{ user.account.address.street }}</p>
             </div>
             <div class="profile-view-address-section">
-                <h3 class="profile-view-address-field">ZIP CODE</h3>
+                <h3 class="profile-view-address-title">ZIP CODE</h3>
                 <p class="profile-view-address-field">{{ user.account.address.zip_code }}</p>
             </div>
             <div class="profile-view-address-section">
@@ -96,14 +102,13 @@
                 <h3 class="profile-view-address-field">COUNTRY</h3>
                 <p class="profile-view-address-field">{{ user.account.address.country }}</p>
             </div>
-            <div class="profile-view-address-section">
-                <h3 class="profile-view-account-title">ACCOUNT</h3>
-                <p class="profile-view-account-field">{{ user.account.account_type }}</p>
-            </div>
-            <span><a href="{% url 'account:edit-address' request.user.username %}">CHANGE ADDRESS</a></span>
+            <p class="profile-view-change-address">
+                <span><a href="{% url 'account:edit-account' request.user.username %}">CHANGE ADDRESS</a></span>
+            </p>
         </div>
-        <!--TODO: replace email with phone number, client ID to profile for profile one more box with account and
-        and change password so that the personal data and home address are aligned-->
+    </div>
+    <div class="profile-view-shipping-address">
+        <p>Sziping</p>
     </div>
 </div>
 

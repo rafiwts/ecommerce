@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Account, AccountType, User, UserAddress
+from .models import Account, AccountType, User, UserAddress, UserShippingAddress
 
 
 @admin.register(User)
@@ -62,8 +62,7 @@ class AccountTypeAdmin(admin.ModelAdmin):
     ordering = ["discount_value"]
 
 
-@admin.register(UserAddress)
-class UserAddressAdmin(admin.ModelAdmin):
+class BaseAddressAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "street",
@@ -76,3 +75,13 @@ class UserAddressAdmin(admin.ModelAdmin):
     list_filter = ["country", "city"]
     search_fields = ["country", "city", "street"]
     ordering = ["country", "city", "street", "zip_code"]
+
+
+@admin.register(UserAddress)
+class UserAddressAdmin(BaseAddressAdmin):
+    pass
+
+
+@admin.register(UserShippingAddress)
+class UserShippingAddressAdmin(BaseAddressAdmin):
+    pass

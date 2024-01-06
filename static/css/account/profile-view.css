@@ -65,13 +65,18 @@
     font-size: 14px;
 }
 
-.profile-view-main-box {
+.profile-view-main-box,
+.profile-view-personal-data-box,
+.profile-view-shipping-address {
     display: flex;
-    flex: 1;
     background-color: rgb(241, 241, 241);
     border: 1px solid rgb(190, 190, 190);
     border-radius: 5px;
     margin: 10px 0;
+}
+
+.profile-view-personal-data-box {
+    height: 600px;
 }
 
 .profile-view-title {
@@ -94,7 +99,7 @@
     margin: 30px 0px;
 }
 
-.profile-view-main-left-email p {
+.profile-view-main-left-account p {
     margin: 8px 0px;
 }
 
@@ -293,27 +298,18 @@
     color: rgb(30, 95, 0);
 }
 
-.profile-view-personal-data-box {
-    display: flex;
-    height: 600px;
-    background-color: rgb(241, 241, 241);
-    border: 1px solid rgb(190, 190, 190);
-    border-radius: 5px;
-    margin: 10px 0;
-}
-
-
 .profile-view-home-address,
 .profile-view-account {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     flex: 1;
-    margin: 20px 40px;
+    margin: 10px 40px;
 }
 
-.profile-view-edit-account {
-    display: flex;
+.profile-view-edit-account,
+.profile-view-change-address {
+    text-align: center;
 }
 
 .profile-view-edit-account span {
@@ -321,6 +317,12 @@
     text-align: center;
 }
 
+.profile-view-main-change-password {
+    margin-top: 25px !important;
+    text-align: center;
+}
+
+.profile-view-main-left-account a,
 .profile-view-edit-account a,
 .profile-view-home-address a {
     text-decoration: none;
@@ -329,6 +331,12 @@
     cursor: pointer;
 }
 
+.profile-view-main-left-account a {
+    letter-spacing: 1px;
+    margin-left: 20px;
+}
+
+.profile-view-main-left-account a:hover,
 .profile-view-edit-account a:hover,
 .profile-view-home-address a:hover {
     color: rgb(112, 221, 183);

@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
-from accounts.models import Account, User, UserAddress
+from accounts.models import Account, User, UserAddress, UserShippingAddress
 
 from .validators import email_validation, password_validation, username_validation
 
@@ -217,7 +217,7 @@ class ImageForm(forms.ModelForm):
         fields = ("image",)
 
 
-class UserAddressForm(forms.ModelForm):
+class BaseAddressForm(forms.ModelForm):
     street = forms.CharField(
         max_length=50,
         label="Street",
@@ -260,7 +260,18 @@ class UserAddressForm(forms.ModelForm):
     )
 
     class Meta:
+        abstract = True
+
+
+class UserAddressForm(BaseAddressForm):
+    class Meta(BaseAddressForm.Meta):
         model = UserAddress
+        fields = ["street", "zip_code", "city", "state", "country"]
+
+
+class UserShippingAddressForm(BaseAddressForm):
+    class Meta(BaseAddressForm.Meta):
+        model = UserShippingAddress
         fields = ["street", "zip_code", "city", "state", "country"]
 
 
