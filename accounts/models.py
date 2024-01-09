@@ -34,7 +34,7 @@ class Account(models.Model):
     user = models.OneToOneField(
         "User", on_delete=models.CASCADE, null=True, blank=True, related_name="account"
     )
-    account_type = models.ForeignKey(
+    account = models.OneToOneField(
         "AccountType", on_delete=models.SET_NULL, null=True, blank=True
     )
     client_id = models.IntegerField(null=True, blank=True, verbose_name="Client ID")
@@ -65,7 +65,7 @@ class Account(models.Model):
 
     @property
     def account_type_default(self):
-        return self.account_type or "No premium account"
+        return self.account or "No premium account"
 
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}"
@@ -149,6 +149,20 @@ class Adress(models.Model):
         abstract = True
 
 
+class UserShippingAddress(Adress):
+    account = models.ForeignKey(
+        "Account",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="shipping_addresses",
+    )
+
+    class Meta:
+        db_table = "shipping_addresses"
+        verbose_name_plural = "User shipping addresses"
+
+
 class UserAddress(Adress):
     account = models.OneToOneField(
         "Account",
@@ -161,17 +175,3 @@ class UserAddress(Adress):
     class Meta:
         db_table = "addresses"
         verbose_name_plural = "User addresses"
-
-
-class UserShippingAddress(Adress):
-    account = models.ForeignKey(
-        "Account",
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-        related_name="shipping_address",
-    )
-
-    class Meta:
-        db_table = "shipping_addresses"
-        verbose_name_plural = "User shipping addresses"

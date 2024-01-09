@@ -38,7 +38,7 @@ class AccountAdmin(admin.ModelAdmin):
         "image",
         "created_at",
         "user_id",
-        "account_type_id",
+        "account",
     )
     ordering = ["last_name", "first_name"]
 
