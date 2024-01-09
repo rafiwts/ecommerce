@@ -65,9 +65,9 @@
     font-size: 14px;
 }
 
-.profile-view-main-box,
-.profile-view-personal-data-box,
-.profile-view-shipping-address {
+.profile-view-main-container,
+.profile-view-personal-data-container,
+.profile-view-shipping-address-container {
     display: flex;
     background-color: rgb(241, 241, 241);
     border: 1px solid rgb(190, 190, 190);
@@ -75,8 +75,14 @@
     margin: 10px 0;
 }
 
-.profile-view-personal-data-box {
-    height: 600px;
+.profile-view-personal-data-container {
+    height: 500px;
+}
+
+.profile-view-shipping-address-container {
+    display: grid;
+    row-gap: 10px;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 
 .profile-view-title {
@@ -324,7 +330,8 @@
 
 .profile-view-main-left-account a,
 .profile-view-edit-account a,
-.profile-view-home-address a {
+.profile-view-home-address a,
+.profile-view-shipping-address-edit a {
     text-decoration: none;
     letter-spacing: 2px;
     color: rgb(29, 183, 129);
@@ -344,4 +351,41 @@
 
 .profile-view-home-address span {
     text-align: end;
+}
+
+.profile-view-shipping-address {
+    display: flex;
+    height: 300px;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin: 20px;
+    border-left: 1px solid rgb(195, 195, 195);
+}
+
+.profile-view-shipping-address-edit {
+    display: flex;
+    width: 50%;
+    justify-content: space-between;
+}
+
+.profile-view-shipping-address-add {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+}
+
+.profile-view-shipping-address-add i {
+    font-size: 50px;
+    color: rgb(29, 183, 129);
+    cursor: pointer;
+}
+
+.profile-view-shipping-address-add i:hover {
+    color: rgb(112, 221, 183);
+}
+
+.profile-view-shipping-address-section,
+.profile-view-shipping-address-edit {
+    margin-left: 20px;
 }

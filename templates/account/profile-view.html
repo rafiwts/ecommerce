@@ -4,6 +4,7 @@
 
 {% block extra_styles %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/account/profile-view.css' %}">
+<script src="https://kit.fontawesome.com/e48d166edc.js" crossorigin="anonymous"></script>
 {% endblock %}
 
 {%block content%}
@@ -16,17 +17,17 @@
 {% endfor %}
 <div class="profile-view">
     <h1 class="profile-view-title">Profile</h1>
-    <div class="profile-view-main-box">
+    <div class="profile-view-main-container">
         <div class="profile-view-main-left">
             <div class="profile-view-main-left-account">
                 <h1>Hi {{user.account.first_name}}!</h1>
                 <p>{{ user.email }}</p>
                 <p>{{ user.account.client_id }}</p>
                 <p>{{ user.account.account_type_default }}
-                {% if user.account.account_type %}
-                <span><a href="{% url 'account:edit-account' request.user.username %}">EDIT ACCOUNT</a></span>
+                {% if user.account.account %}
+                <span><a href="#">EDIT ACCOUNT</a></span>
                 {% else %}
-                <span><a href="{% url 'account:edit-account' request.user.username %}">ADD ACCOUNT</a></span>
+                <span><a href="#">ADD ACCOUNT</a></span>
                 {% endif %}
                 </p>
                 <p class="profile-view-main-change-password">
@@ -63,7 +64,7 @@
         <h1 class="profile-view-title">Personal data</h1>
         <h1 class="profile-view-title">Home address</h1>
     </div>
-    <div class="profile-view-personal-data-box">
+    <div class="profile-view-personal-data-container">
         <div class="profile-view-account">
             <div class="profile-view-account-section">
                 <h3 class="profile-view-account-title">USERNAME</h3>
@@ -103,12 +104,41 @@
                 <p class="profile-view-address-field">{{ user.account.address.country }}</p>
             </div>
             <p class="profile-view-change-address">
-                <span><a href="{% url 'account:edit-account' request.user.username %}">CHANGE ADDRESS</a></span>
+                <span><a href="{% url 'account:edit-address' request.user.username %}">CHANGE ADDRESS</a></span>
             </p>
         </div>
     </div>
-    <div class="profile-view-shipping-address">
-        <p>Sziping</p>
+    <h1 class="profile-view-title">Shipping address</h1>
+    <div class="profile-view-shipping-address-container">
+        {% for address in shipping_addresses %}
+        <div class="profile-view-shipping-address">
+            <div class="profile-view-shipping-address-section">
+                <h3 class="profile-view-shipping-address-title">STREET</h3>
+                <p class="profile-view-shipping-address-field">{{ address.street }}</p>
+            </div>
+            <div class="profile-view-shipping-address-section">
+                <h3 class="profile-view-shipping-address-title">ZIP CODE</h3>
+                <p class="profile-view-shipping-address-field">{{ address.zip_code }}</p>
+            </div>
+            <div class="profile-view-shipping-address-section">
+                <h3 class="profile-view-shipping-address-title">CITY</h3>
+                <p class="profile-view-shipping-address-field">{{ address.city }}</p>
+            </div>
+            <div class="profile-view-shipping-address-section">
+                <h3 class="profile-view-shipping-address-field">COUNTRY</h3>
+                <p class="profile-view-shipping-address-field">{{ address.country }}</p>
+            </div>
+            <div class="profile-view-shipping-address-edit">
+                <span><a href="{% url 'account:edit-shipping-address' request.user.username address.id 'edit' %}">EDIT</a></span>
+                <span><a href="{% url 'account:edit-shipping-address' request.user.username address.id 'delete' %}">DELETE</a></span>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="profile-view-shipping-address-add">
+            <div class="profile-view-shipping-address-icon">
+                <i class="fas fa-plus"></i>
+            </div>
+        </div>
     </div>
 </div>
 

@@ -14,9 +14,10 @@ from .forms import (
     ResetPasswordForm,
     SingUpForm,
     UserAddressForm,
+    UserShippingAddressForm,
 )
 from .handlers import reset_password_email_handler, upload_image_handler
-from .models import User
+from .models import User, UserShippingAddress
 
 
 def login_view(request):
@@ -79,7 +80,10 @@ def register(request):
 
 @login_required
 def profile_view(request, username):
-    user = User.objects.select_related("account").get(username=username)
+    user = User.objects.prefetch_related(
+        "account__address", "account__shipping_addresses"
+    ).get(username=username)
+    shipping_addresses = user.account.shipping_addresses.all()
 
     if request.method == "POST":
         image_form = ImageForm(
@@ -95,7 +99,13 @@ def profile_view(request, username):
         image_form = ImageForm(instance=request.user.account)
 
     return render(
-        request, "account/profile-view.html", {"user": user, "image_form": image_form}
+        request,
+        "account/profile-view.html",
+        {
+            "user": user,
+            "image_form": image_form,
+            "shipping_addresses": shipping_addresses,
+        },
     )
 
 
@@ -130,6 +140,7 @@ def edit_account(request, username):
             return redirect("account:profile-view", username=username)
     else:
         account_form = AccountForm(instance=user.account)
+
     return render(request, "account/edit-account.html", {"account_form": account_form})
 
 
@@ -145,7 +156,38 @@ def edit_address(request, username):
             return redirect("account:profile-view", username=username)
     else:
         address_form = UserAddressForm(instance=account.address)
+
     return render(request, "account/edit-address.html", {"address_form": address_form})
+
+
+@login_required
+# TODO: change it into a class view - will be more readable
+def edit_shipping_address(request, username, address_id, action):
+    shipping_address = UserShippingAddress.objects.get(id=address_id)
+    if action == "edit":
+        if request.method == "POST":
+            shipping_address_form = UserShippingAddressForm(
+                instance=shipping_address, data=request.POST
+            )
+            if shipping_address_form.is_valid():
+                shipping_address_form.save()
+                messages.success(request, "The shipping address has been edited")
+                return redirect("account:profile-view", username=username)
+        else:
+            shipping_address_form = UserAddressForm(instance=shipping_address)
+
+        return render(
+            request,
+            "account/edit-shipping-address.html",
+            {
+                "shipping_address_form": shipping_address_form,
+                "shipping_address": shipping_address,
+            },
+        )
+    else:
+        shipping_address.delete()
+        messages.success(request, "The new shipping address has been deleted")
+        return redirect("account:profile-view", username=username)
 
 
 @login_required
