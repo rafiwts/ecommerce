@@ -331,11 +331,18 @@
 .profile-view-main-left-account a,
 .profile-view-edit-account a,
 .profile-view-home-address a,
-.profile-view-shipping-address-edit a {
+.profile-view-shipping-address-edit a,
+.profile-view-shipping-address-edit button {
     text-decoration: none;
+    font-size: 15px;
     letter-spacing: 2px;
     color: rgb(29, 183, 129);
     cursor: pointer;
+}
+
+.profile-view-shipping-address-edit button {
+    border: none;
+    font-size: 15px;
 }
 
 .profile-view-main-left-account a {
@@ -345,7 +352,9 @@
 
 .profile-view-main-left-account a:hover,
 .profile-view-edit-account a:hover,
-.profile-view-home-address a:hover {
+.profile-view-home-address a:hover,
+.profile-view-shipping-address-edit a:hover,
+.profile-view-shipping-address-edit button:hover {
     color: rgb(112, 221, 183);
 }
 

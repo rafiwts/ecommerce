@@ -15,7 +15,11 @@
 
 <h1>Edit shipping address</h1>
 <div class="edit-shipping-address">
+    {% if shipping_address %}
     <form method="post" action="{% url 'account:edit-shipping-address' request.user.username shipping_address.id 'edit'%}">
+    {% else %}
+    <form method="post" action="{% url 'account:edit-shipping-address' request.user.username 'add'%}">
+    {% endif %}
         {% for field in shipping_address_form %}
             {% for error in field.errors %}
                 <div class="edit-shipping-address-error-message">{{ error }}</div>
@@ -29,5 +33,6 @@
         {% csrf_token %}
         <button type="submit">Saved</button>
     </form>
+
 </div>
 {%endblock content%}

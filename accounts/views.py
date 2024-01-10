@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
+from django.views import View
 
 from .forms import (
     AccountForm,
@@ -161,36 +162,6 @@ def edit_address(request, username):
 
 
 @login_required
-# TODO: change it into a class view - will be more readable
-def edit_shipping_address(request, username, address_id, action):
-    shipping_address = UserShippingAddress.objects.get(id=address_id)
-    if action == "edit":
-        if request.method == "POST":
-            shipping_address_form = UserShippingAddressForm(
-                instance=shipping_address, data=request.POST
-            )
-            if shipping_address_form.is_valid():
-                shipping_address_form.save()
-                messages.success(request, "The shipping address has been edited")
-                return redirect("account:profile-view", username=username)
-        else:
-            shipping_address_form = UserAddressForm(instance=shipping_address)
-
-        return render(
-            request,
-            "account/edit-shipping-address.html",
-            {
-                "shipping_address_form": shipping_address_form,
-                "shipping_address": shipping_address,
-            },
-        )
-    else:
-        shipping_address.delete()
-        messages.success(request, "The new shipping address has been deleted")
-        return redirect("account:profile-view", username=username)
-
-
-@login_required
 def change_password(request, username):
     if request.method == "POST":
         password_form = ChangePasswordForm(data=request.POST)
@@ -267,3 +238,88 @@ def reset_password_confirmation(request, uidb64, token):
         "account/reset-password-confirmation.html",
         ({"password_form": password_form, "token": token, "uidb64": uidb64}),
     )
+
+
+class ShippingAddressView(View):
+    # TODO: improve the styles
+    template_name = "account/edit-shipping-address.html"
+
+    def get_current_user(self, username):
+        return User.objects.prefetch_related("account__shipping_addresses").get(
+            username=username
+        )
+
+    def get_model_or_none(self, address_id):
+        try:
+            shipping_address = UserShippingAddress.objects.get(id=address_id)
+        except UserShippingAddress.DoesNotExist:
+            shipping_address = None
+
+        return shipping_address
+
+    def get_shipping_address_form(self, instance=None, data=None):
+        return UserShippingAddressForm(instance=instance, data=data)
+
+    def get(self, request, *args, **kwargs):
+        # address_id is None for adding address
+        address_id = kwargs.get("address_id", None)
+
+        if address_id:
+            shipping_address = self.get_model_or_none(address_id)
+            shipping_address_form = self.get_shipping_address_form(
+                instance=shipping_address
+            )
+            return render(
+                request,
+                self.template_name,
+                {
+                    "shipping_address_form": shipping_address_form,
+                    "shipping_address": shipping_address,
+                },
+            )
+        else:
+            shipping_address_form = self.get_shipping_address_form()
+            return render(
+                request,
+                self.template_name,
+                {"shipping_address_form": shipping_address_form},
+            )
+
+    def post(self, request, *args, **kwargs):
+        # address_id is None for adding address
+        address_id = kwargs.get("address_id", None)
+        action = kwargs["action"]
+        username = kwargs["username"]
+
+        shipping_address = self.get_model_or_none(address_id)
+        current_user = self.get_current_user(username)
+
+        if action == "add" and not shipping_address:
+            shipping_address_form = self.get_shipping_address_form(data=request.POST)
+            if shipping_address_form.is_valid():
+                shipping_address = shipping_address_form.save(commit=False)
+                shipping_address.save()
+                current_user.account.shipping_addresses.add(shipping_address)
+                messages.success(request, "The shipping address has been added")
+                return redirect("account:profile-view", username=username)
+        elif action == "edit":
+            shipping_address_form = self.get_shipping_address_form(
+                instance=shipping_address, data=request.POST
+            )
+            if shipping_address_form.is_valid():
+                shipping_address_form.save()
+                messages.success(request, "The shipping address has been edited")
+                return redirect("account:profile-view", username=username)
+        else:
+            shipping_address.delete()
+            messages.success(request, "The shipping address has been deleted")
+            return redirect("account:profile-view", username=username)
+
+        return render(
+            request,
+            self.template_name,
+            {
+                "shipping_address_form": shipping_address_form,
+                "shipping_address": shipping_address,
+            },
+        )

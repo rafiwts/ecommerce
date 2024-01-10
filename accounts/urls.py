@@ -1,11 +1,11 @@
 from django.urls import path
 
 from .views import (
+    ShippingAddressView,
     change_password,
     create_profile,
     edit_account,
     edit_address,
-    edit_shipping_address,
     login_view,
     logout_view,
     profile_view,
@@ -33,7 +33,12 @@ urlpatterns = [
     path("<str:username>/change-password/", change_password, name="change-password"),
     path(
         "<str:username>/<int:address_id>/<str:action>/",
-        edit_shipping_address,
+        ShippingAddressView.as_view(),
+        name="edit-shipping-address",
+    ),
+    path(
+        "<str:username>/<str:action>/",
+        ShippingAddressView.as_view(),
         name="edit-shipping-address",
     ),
 ]

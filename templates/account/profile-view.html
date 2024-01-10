@@ -130,13 +130,19 @@
             </div>
             <div class="profile-view-shipping-address-edit">
                 <span><a href="{% url 'account:edit-shipping-address' request.user.username address.id 'edit' %}">EDIT</a></span>
-                <span><a href="{% url 'account:edit-shipping-address' request.user.username address.id 'delete' %}">DELETE</a></span>
+                <span>
+                    <form method="post" action="{% url 'account:edit-shipping-address' request.user.username address.id 'delete' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="delete">
+                        <button type="submit" onclick="return confirm('Are you sure you want to delete this address?')">DELETE</button>
+                    </form>
+                </span>
             </div>
         </div>
         {% endfor %}
         <div class="profile-view-shipping-address-add">
             <div class="profile-view-shipping-address-icon">
-                <i class="fas fa-plus"></i>
+                <a href="{% url 'account:edit-shipping-address' request.user.username 'edit' %}"><i class="fas fa-plus"></i></a>
             </div>
         </div>
     </div>
