@@ -1,14 +1,14 @@
 from django.urls import path
 
 from .views import (
+    ChangePassword,
+    EditAccount,
+    EditAddress,
+    ProfileView,
     ShippingAddressView,
-    change_password,
     create_profile,
-    edit_account,
-    edit_address,
     login_view,
     logout_view,
-    profile_view,
     register,
     reset_password,
     reset_password_confirmation,
@@ -27,10 +27,14 @@ urlpatterns = [
     path("login/", login_view, name="login"),
     path("logout/", logout_view, name="logout"),
     path("create-profile/", create_profile, name="create-profile"),
-    path("<str:username>/", profile_view, name="profile-view"),
-    path("<str:username>/edit-account/", edit_account, name="edit-account"),
-    path("<str:username>/edit-address/", edit_address, name="edit-address"),
-    path("<str:username>/change-password/", change_password, name="change-password"),
+    path("<str:username>/", ProfileView.as_view(), name="profile-view"),
+    path("<str:username>/edit-account/", EditAccount.as_view(), name="edit-account"),
+    path("<str:username>/edit-address/", EditAddress.as_view(), name="edit-address"),
+    path(
+        "<str:username>/change-password/",
+        ChangePassword.as_view(),
+        name="change-password",
+    ),
     path(
         "<str:username>/<int:address_id>/<str:action>/",
         ShippingAddressView.as_view(),

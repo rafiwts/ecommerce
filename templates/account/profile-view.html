@@ -9,8 +9,8 @@
 
 {%block content%}
 {% for message in messages %}
-    <div class="upload-{{ message.tags }}-container">
-        <div class="upload-{{ message.tags }}-message">
+    <div class="profile-view-{{ message.tags }}-container">
+        <div class="profile-view-{{ message.tags }}-message">
             {{ message }}
         </div>
     </div>
@@ -31,7 +31,7 @@
                 {% endif %}
                 </p>
                 <p class="profile-view-main-change-password">
-                    <span><a href="{% url 'account:change-password' request.user.username %}">CHANGE PASSWORD</a></span>
+                    <button onclick="openPasswordBlock()">CHANGE PASSWORD</a></button>
                 </p>
             </div>
             <div class="profile-view-main-left-image">
@@ -83,7 +83,7 @@
                 <p class="profile-view-account-field">{{ user.account.phone }}</p>
             </div>
             <p class="profile-view-edit-account">
-                <span><a href="{% url 'account:edit-account' request.user.username %}">EDIT ACCOUNT</a></span>
+                <button onclick="openEditAccountBlock()">EDIT ACCOUNT</a></button>
             </p>
         </div>
         <div class="profile-view-home-address">
@@ -104,7 +104,7 @@
                 <p class="profile-view-address-field">{{ user.account.address.country }}</p>
             </div>
             <p class="profile-view-change-address">
-                <span><a href="{% url 'account:edit-address' request.user.username %}">CHANGE ADDRESS</a></span>
+                <button onclick="openChangeAddressBlock()">CHANGE ADDRESS</a></button>
             </p>
         </div>
     </div>
@@ -148,12 +148,12 @@
     </div>
 </div>
 
-<!-- profile image block -->
-<div class="image-block-display" id="newImageBlock">
+<!-- edit profile image block -->
+<div id="editImageBlock" class="edit-image-block-display">
     <h2>Change profile image</h2>
-    <div id="imageBlockContent" class="image-block-content">
+    <div id="editImageBlockContent" class="edit-image-block-content">
         <span class="close" onclick="closeImageBlock()">&times;</span>
-        <div class="profile-image-edit">
+        <div class="profile-view-image-edit">
             {% if user.account.image %}
             <img src="{{ user.account.image.url }}" alt="Profile image">
             {% else %}
@@ -173,6 +173,78 @@
                     <input type="submit" class="profile-image-btn" value="Save image">
                 </div>
                 {%csrf_token%}
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- change password block -->
+<div id="changePasswordBlock" class="change-password-block-display">
+    <h2>Change password</h2>
+    <div id="changePasswordBlockContent" class="change-password-block-content">
+        <span class="closet" onclick="closePasswordBlock()">&times;</span>
+        <div class="change-password-form">
+            <form method="post" action="{% url 'account:change-password' request.user.username %}">
+                {% for field in password_form %}
+                    {% for error in field.errors %}
+                        <div class="change-password-error-message">{{ error }}</div>
+                    {% endfor %}
+                    <div class="change-password-box {% if field.errors %}has-error{% endif %}">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                        {{ field }}
+                        <span class="change-password-help-text">{{ field.help_text }}</span>
+                    </div>
+                {% endfor %}
+                {% csrf_token %}
+                <button class="change-password-button" type="submit">Change Password</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- edit account block -->
+<div id="editAccountBlock" class="edit-account-block-display">
+    <h1>Edit your account</h1>
+    <div id="editAccountBlockContent" class="edit-account-block-content">
+        <span class="closet1" onclick="closeEditAccountBlock()">&times;</span>
+        <div class="edit-account-form">
+            <form method="post" action="{% url 'account:edit-account' request.user.username %}">
+                {% for field in account_form %}
+                {% for error in field.errors %}
+                    <div class="edit-account-error-message">{{ error }}</div>
+                {% endfor %}
+                <div class="edit-account-box {% if field.errors %}has-error{% endif %}">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    <span class="edit-account-help-text">{{ field.help_text }}</span>
+                </div>
+                {% endfor %}
+                {%csrf_token%}
+                <button class="edit-account-button" type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- change address block -->
+<div id="changeAddressBlock" class="change-address-block-display">
+    <h1>Edit your address</h1>
+    <div id="changeAddressBlockContent" class="change-address-block-content">
+        <span class="closet2" onclick="closeChangeAddressBlock()">&times;</span>
+        <div class="change-address-form">
+            <form method="post" action="{% url 'account:edit-address' request.user.username %}">
+                {% for field in address_form %}
+                {% for error in field.errors %}
+                    <div class="change-address-error-message">{{ error }}</div>
+                {% endfor %}
+                <div class="change-address-box {% if field.errors %}has-error{% endif %}">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                    {{ field }}
+                    <span class="change-address-help-text">{{ field.help_text }}</span>
+                </div>
+                {% endfor %}
+                {%csrf_token%}
+                <button class="change-address-button" type="submit">Save Changes</button>
             </form>
         </div>
     </div>

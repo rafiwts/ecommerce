@@ -80,37 +80,6 @@ def register(request):
 
 
 @login_required
-def profile_view(request, username):
-    user = User.objects.prefetch_related(
-        "account__address", "account__shipping_addresses"
-    ).get(username=username)
-    shipping_addresses = user.account.shipping_addresses.all()
-
-    if request.method == "POST":
-        image_form = ImageForm(
-            request.POST, instance=request.user.account, files=request.FILES
-        )
-        if image_form.is_valid():
-            image_form.save()
-            upload_image_handler(request, user)
-            return redirect("account:profile-view", username=username)
-        else:
-            return messages.error(request, "Invaild data")
-    else:
-        image_form = ImageForm(instance=request.user.account)
-
-    return render(
-        request,
-        "account/profile-view.html",
-        {
-            "user": user,
-            "image_form": image_form,
-            "shipping_addresses": shipping_addresses,
-        },
-    )
-
-
-@login_required
 def create_profile(request):
     if request.method == "POST":
         profile_form = AccountForm(
@@ -127,64 +96,6 @@ def create_profile(request):
 
     return render(
         request, "account/create-profile.html", {"profile_form": profile_form}
-    )
-
-
-@login_required
-def edit_account(request, username):
-    user = request.user
-    if request.method == "POST":
-        account_form = AccountForm(instance=user.account, data=request.POST)
-        if account_form.is_valid():
-            account_form.save()
-            messages.success(request, "Data has been saved")
-            return redirect("account:profile-view", username=username)
-    else:
-        account_form = AccountForm(instance=user.account)
-
-    return render(request, "account/edit-account.html", {"account_form": account_form})
-
-
-@login_required
-def edit_address(request, username):
-    account = request.user.account
-    if request.method == "POST":
-        address_form = UserAddressForm(instance=account.address, data=request.POST)
-        if address_form.is_valid():
-            print(address_form.cleaned_data)
-            address_form.save()
-            messages.success(request, "Data has been saved")
-            return redirect("account:profile-view", username=username)
-    else:
-        address_form = UserAddressForm(instance=account.address)
-
-    return render(request, "account/edit-address.html", {"address_form": address_form})
-
-
-@login_required
-def change_password(request, username):
-    if request.method == "POST":
-        password_form = ChangePasswordForm(data=request.POST)
-        if password_form.is_valid():
-            cleaned_data = password_form.cleaned_data
-            if not request.user.check_password(cleaned_data["old_password"]):
-                messages.error(request, "Invalid current password.")
-            elif cleaned_data["new_password"] != cleaned_data["confirm_password"]:
-                messages.error(request, "Passwords do not match.")
-            else:
-                request.user.set_password(cleaned_data["new_password"])
-                request.user.save()
-
-                update_session_auth_hash(request, request.user)
-
-                messages.success(request, "Password has been changed")
-
-                return redirect("account:profile-view", username=username)
-    else:
-        password_form = ChangePasswordForm()
-
-    return render(
-        request, "account/change-password.html", {"password_form": password_form}
     )
 
 
@@ -300,7 +211,7 @@ class ShippingAddressView(View):
                 shipping_address = shipping_address_form.save(commit=False)
                 shipping_address.save()
                 current_user.account.shipping_addresses.add(shipping_address)
-                messages.success(request, "The shipping address has been added")
+                messages.info(request, "The shipping address has been added")
                 return redirect("account:profile-view", username=username)
         elif action == "edit":
             shipping_address_form = self.get_shipping_address_form(
@@ -308,11 +219,11 @@ class ShippingAddressView(View):
             )
             if shipping_address_form.is_valid():
                 shipping_address_form.save()
-                messages.success(request, "The shipping address has been edited")
+                messages.info(request, "The shipping address has been edited")
                 return redirect("account:profile-view", username=username)
         else:
             shipping_address.delete()
-            messages.success(request, "The shipping address has been deleted")
+            messages.info(request, "The shipping address has been deleted")
             return redirect("account:profile-view", username=username)
 
         return render(
@@ -323,3 +234,129 @@ class ShippingAddressView(View):
                 "shipping_address": shipping_address,
             },
         )
+
+
+class ProfileView(View):
+    template_name = "account/profile-view.html"
+
+    def get_user(self, username):
+        return User.objects.prefetch_related(
+            "account__address", "account__shipping_addresses"
+        ).get(username=username)
+
+    def get_shipping_address(self, user):
+        return user.account.shipping_addresses.all()
+
+    def get_image_form(self, user):
+        return ImageForm(instance=user.account)
+
+    def get_password_form(self):
+        return ChangePasswordForm()
+
+    def get_account_form(self, user):
+        return AccountForm(instance=user.account)
+
+    def get_address_form(self, user):
+        return UserAddressForm(instance=user.account)
+
+    def get_context_data(self, **kwargs):
+        username = kwargs["username"]
+        user = self.get_user(username)
+        shipping_address = self.get_shipping_address(user)
+        image_form = self.get_image_form(user)
+        password_form = self.get_password_form()
+        account_form = self.get_account_form(user)
+        address_form = self.get_address_form(user)
+
+        return {
+            "user": user,
+            "image_form": image_form,
+            "shipping_addresses": shipping_address,
+            "password_form": password_form,
+            "account_form": account_form,
+            "address_form": address_form,
+        }
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        image_form = ImageForm(request.POST, instance=user.account, files=request.FILES)
+
+        if image_form.is_valid():
+            image_form.save()
+            upload_image_handler(request, user)
+            return redirect("account:profile-view", username=user)
+        else:
+            messages.error(request, "Invalid image data")
+            return self.get(request, *args, **kwargs)
+
+
+# FIXME: after invalid form the block disappears - it shouldn't go away
+class ChangePassword(ProfileView, View):
+    # once there is an error the form should be overridden to display errors
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["password_form"] = self.password_form
+        return context
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        self.password_form = ChangePasswordForm(data=request.POST)
+        if self.password_form.is_valid():
+            cleaned_data = self.password_form.cleaned_data
+            if not user.check_password(cleaned_data["old_password"]):
+                messages.error(request, "Invalid current password.")
+            elif cleaned_data["new_password"] != cleaned_data["confirm_password"]:
+                messages.error(request, "Passwords do not match.")
+            else:
+                user.set_password(cleaned_data["new_password"])
+                request.save()
+
+                update_session_auth_hash(request, user)
+
+                messages.success(request, "Password has been changed")
+
+            return redirect("account:profile-view", username=user)
+        else:
+            return super().get(request, *args, **kwargs)
+
+
+class EditAccount(ProfileView, View):
+    # once there is an error the form should be overridden to display errors
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["account_form"] = self.account_form
+        return context
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        self.account_form = AccountForm(instance=user.account, data=request.POST)
+        if self.account_form.is_valid():
+            self.account_form.save()
+            messages.success(request, "Data has been saved")
+            return redirect("account:profile-view", username=user)
+        else:
+            return super().get(request, *args, **kwargs)
+
+
+class EditAddress(ProfileView, View):
+    # once there is an error the form should be overridden to display errors
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["address_form"] = self.address_form
+        return context
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        self.address_form = UserAddressForm(
+            instance=user.account.address, data=request.POST
+        )
+        if self.address_form.is_valid():
+            self.address_form.save()
+            messages.success(request, "Data has been saved")
+            return redirect("account:profile-view", username=user)
+        else:
+            return super().get(request, *args, **kwargs)

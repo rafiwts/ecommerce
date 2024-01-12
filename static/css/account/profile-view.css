@@ -164,7 +164,24 @@
 
 /* code for the rest of the profile view site */
 
-.image-block-display {
+.edit-image-block-display {
+    display: none;
+    position: fixed;
+    flex-direction: column;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #e4e4e4;
+    border: 1px solid rgb(222, 222, 222);
+    height: 600px;
+    max-width: 850px;
+    z-index: 1;
+}
+
+.change-password-block-display,
+.edit-account-block-display,
+.change-address-block-display {
     display: none;
     position: fixed;
     flex-direction: column;
@@ -198,21 +215,27 @@
     cursor: pointer;
 }
 
-.image-block-display h2 {
+.edit-image-block-display h2,
+.change-password-block-display h2,
+.edit-account-block-display h2,
+.change-address-block-display h2 {
     margin: 60px 0px 0px 0px;
 }
 
-.profile-image-edit {
+.profile-view-image-edit {
     position: relative;
 }
 
-.profile-image-edit img {
+.profile-view-image-edit img {
     width: 200px;
     height: 200px;
     border-radius: 50%;
 }
 
-.image-block-content {
+.edit-image-block-content,
+.change-password-block-content,
+.edit-account-block-content,
+.change-address-block-content {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -226,7 +249,10 @@
     margin: 0 20px;
 }
 
-.edit-image-form {
+.edit-image-form,
+.change-password-form,
+.edit-account-form,
+.change-address-form {
     display: flex;
     align-items: center;
     width: 100%;
@@ -278,16 +304,16 @@
     border-radius: 50%;
 }
 
-.upload-info-container,
-.upload-error-container {
+.profile-view-info-container,
+.profile-view-error-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 10px 0;
+    margin: 15px 0;
 }
 
-.upload-info-message,
-.upload-error-message {
+.profile-view-info-message,
+.profile-view-error-message {
     text-align: center;
     background-color: rgb(214, 181, 181);
     border: 2px solid rgb(158, 0, 0);
@@ -298,7 +324,7 @@
     box-shadow: 0px 0px 5px 1px rgb(121, 121, 121);
 }
 
-.upload-info-message {
+.profile-view-info-message {
     background-color: rgb(190, 214, 181);
     border: 2px solid rgb(42, 129, 42);
     color: rgb(30, 95, 0);
@@ -328,12 +354,14 @@
     text-align: center;
 }
 
+.profile-view-main-change-password button,
 .profile-view-main-left-account a,
-.profile-view-edit-account a,
-.profile-view-home-address a,
+.profile-view-edit-account button,
+.profile-view-home-address button,
 .profile-view-shipping-address-edit a,
 .profile-view-shipping-address-edit button {
     text-decoration: none;
+    border: none;
     font-size: 15px;
     letter-spacing: 2px;
     color: rgb(29, 183, 129);
@@ -350,9 +378,10 @@
     margin-left: 20px;
 }
 
+.profile-view-main-change-password button:hover
 .profile-view-main-left-account a:hover,
-.profile-view-edit-account a:hover,
-.profile-view-home-address a:hover,
+.profile-view-edit-account button:hover,
+.profile-view-home-address button:hover,
 .profile-view-shipping-address-edit a:hover,
 .profile-view-shipping-address-edit button:hover {
     color: rgb(112, 221, 183);
@@ -378,10 +407,16 @@
 }
 
 .profile-view-shipping-address-add {
+    position: relative;
     display: flex;
-    justify-content: center;
-    align-items: center;
     height: 300px;
+
+}
+
+.profile-view-shipping-address-icon {
+    position: absolute;
+    top: 130px;
+    left: 130px;
 }
 
 .profile-view-shipping-address-add i {

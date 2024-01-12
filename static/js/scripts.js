@@ -106,7 +106,7 @@ function showPassword(passwordInputID, icon) {
 
 // displays and closes block for editing profile picture
 function openImageBlock() {
-    let block = document.getElementById("newImageBlock");
+    let block = document.getElementById("editImageBlock");
     let overlay = document.getElementById('overlay');
 
     block.style.display = "flex";
@@ -114,7 +114,7 @@ function openImageBlock() {
 }
 
 function closeImageBlock() {
-    let block = document.getElementById("newImageBlock");
+    let block = document.getElementById("editImageBlock");
     let overlay = document.getElementById('overlay');
     const filePreview = document.getElementById("uploadFilePreview");
 
@@ -127,9 +127,60 @@ function closeImageBlock() {
     overlay.style.display = "none";
 }
 
+/* TODO: make it function and then adjust the logic */
+function openPasswordBlock() {
+    let block = document.getElementById("changePasswordBlock");
+    let overlay = document.getElementById('overlay');
+
+    block.style.display = "flex";
+    overlay.style.display = "block";
+}
+
+function closePasswordBlock() {
+    let block = document.getElementById("changePasswordBlock");
+    let overlay = document.getElementById('overlay');
+
+    block.style.display = "none";
+    overlay.style.display = "none";
+}
+
+function openEditAccountBlock() {
+    let block = document.getElementById("editAccountBlock");
+    let overlay = document.getElementById('overlay');
+
+    block.style.display = "flex";
+    overlay.style.display = "block";
+}
+
+function closeEditAccountBlock() {
+    let block = document.getElementById("editAccountBlock");
+    let overlay = document.getElementById('overlay');
+
+    block.style.display = "none";
+    overlay.style.display = "none";
+}
+
+
+function openChangeAddressBlock() {
+    let block = document.getElementById("changeAddressBlock");
+    let overlay = document.getElementById('overlay');
+
+    block.style.display = "flex";
+    overlay.style.display = "block";
+}
+
+function closeChangeAddressBlock() {
+    let block = document.getElementById("changeAddressBlock");
+    let overlay = document.getElementById('overlay');
+
+    block.style.display = "none";
+    overlay.style.display = "none";
+}
+
+
 window.onclick = function(event) {
-    let block = document.getElementById("newImageBlock");
-    let blockContent = document.getElementById("imageBlockContent")
+    let block = document.getElementById("editImageBlock");
+    let blockContent = document.getElementById("editImageBlockContent")
     let overlay = document.getElementById("overlay")
 
     if (event.target == block || event.target == blockContent) {
@@ -140,7 +191,7 @@ window.onclick = function(event) {
 
 // function to update the block width on window resize
 function updateModalWidth() {
-    var block = document.querySelector('.image-block-display');
+    var block = document.querySelector('.edit-image-block-display');
     var windowWidth = window.innerWidth;
     var distanceFromEdge = 50;
 
