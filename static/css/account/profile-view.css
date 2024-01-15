@@ -181,7 +181,9 @@
 
 .change-password-block-display,
 .edit-account-block-display,
-.change-address-block-display {
+.edit-address-block-display,
+.add-shipping-address-block-display,
+.edit-shipping-address-block-display {
     display: none;
     position: fixed;
     flex-direction: column;
@@ -218,7 +220,9 @@
 .edit-image-block-display h2,
 .change-password-block-display h2,
 .edit-account-block-display h2,
-.change-address-block-display h2 {
+.edit-address-block-display h2,
+.add-shipping-address-block-display h2,
+.edit-shipping-address-block-display h2 {
     margin: 60px 0px 0px 0px;
 }
 
@@ -235,7 +239,9 @@
 .edit-image-block-content,
 .change-password-block-content,
 .edit-account-block-content,
-.change-address-block-content {
+.edit-address-block-content,
+.add-shipping-address-block-content,
+.edit-shipping-address-block-content {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -252,7 +258,9 @@
 .edit-image-form,
 .change-password-form,
 .edit-account-form,
-.change-address-form {
+.edit-address-form
+.add-shipping-address-form,
+.edit-shipping-address-form {
     display: flex;
     align-items: center;
     width: 100%;
@@ -358,7 +366,6 @@
 .profile-view-main-left-account a,
 .profile-view-edit-account button,
 .profile-view-home-address button,
-.profile-view-shipping-address-edit a,
 .profile-view-shipping-address-edit button {
     text-decoration: none;
     border: none;
@@ -382,7 +389,6 @@
 .profile-view-main-left-account a:hover,
 .profile-view-edit-account button:hover,
 .profile-view-home-address button:hover,
-.profile-view-shipping-address-edit a:hover,
 .profile-view-shipping-address-edit button:hover {
     color: rgb(112, 221, 183);
 }

@@ -161,16 +161,48 @@ function closeEditAccountBlock() {
 }
 
 
-function openChangeAddressBlock() {
-    let block = document.getElementById("changeAddressBlock");
+function openEditAddressBlock() {
+    let block = document.getElementById("editAddressBlock");
     let overlay = document.getElementById('overlay');
 
     block.style.display = "flex";
     overlay.style.display = "block";
 }
 
-function closeChangeAddressBlock() {
-    let block = document.getElementById("changeAddressBlock");
+function closeEditAddressBlock() {
+    let block = document.getElementById("editAddressBlock");
+    let overlay = document.getElementById('overlay');
+
+    block.style.display = "none";
+    overlay.style.display = "none";
+}
+
+function openAddShippingAddressBlock() {
+    let block = document.getElementById("addShippingAddressBlock");
+    let overlay = document.getElementById('overlay');
+
+    block.style.display = "flex";
+    overlay.style.display = "block";
+}
+
+function closeAddShippingAddressBlock() {
+    let block = document.getElementById("addShippingAddressBlock");
+    let overlay = document.getElementById('overlay');
+
+    block.style.display = "none";
+    overlay.style.display = "none";
+}
+
+function openEditShippingAddressBlock(addressID) {
+    let block = document.getElementById(`editShippingAddressBlock-${addressID}`);
+    let overlay = document.getElementById('overlay');
+
+    block.style.display = "flex";
+    overlay.style.display = "block";
+}
+
+function closeEditShippingAddressBlock(addressID) {
+    let block = document.getElementById(`editShippingAddressBlock-${addressID}`);
     let overlay = document.getElementById('overlay');
 
     block.style.display = "none";

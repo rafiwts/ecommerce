@@ -161,6 +161,7 @@ class UserShippingAddress(Adress):
     class Meta:
         db_table = "shipping_addresses"
         verbose_name_plural = "User shipping addresses"
+        ordering = ["-id"]
 
 
 class UserAddress(Adress):

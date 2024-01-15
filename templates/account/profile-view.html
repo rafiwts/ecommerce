@@ -82,6 +82,10 @@
                 <h3 class="profile-view-account-title">PHONE NUMBER</h3>
                 <p class="profile-view-account-field">{{ user.account.phone }}</p>
             </div>
+            <div class="profile-view-account-section">
+                <h3 class="profile-view-account-title">ACCOUNT</h3>
+                <p class="profile-view-account-field">{{ user.account.account_type_default }}</p>
+            </div>
             <p class="profile-view-edit-account">
                 <button onclick="openEditAccountBlock()">EDIT ACCOUNT</a></button>
             </p>
@@ -100,20 +104,24 @@
                 <p class="profile-view-address-field">{{ user.account.address.city }}</p>
             </div>
             <div class="profile-view-address-section">
+                <h3 class="profile-view-address-title">STATE</h3>
+                <p class="profile-view-address-field">{{ user.account.address.state }}</p>
+            </div>
+            <div class="profile-view-address-section">
                 <h3 class="profile-view-address-field">COUNTRY</h3>
                 <p class="profile-view-address-field">{{ user.account.address.country }}</p>
             </div>
             <p class="profile-view-change-address">
-                <button onclick="openChangeAddressBlock()">CHANGE ADDRESS</a></button>
+                <button onclick="openEditAddressBlock()">EDIT ADDRESS</a></button>
             </p>
         </div>
     </div>
     <h1 class="profile-view-title">Shipping address</h1>
     <div class="profile-view-shipping-address-container">
-        {% for address in shipping_addresses %}
+        {% for address in shipping_address_data %}
         <div class="profile-view-shipping-address">
             <div class="profile-view-shipping-address-section">
-                <h3 class="profile-view-shipping-address-title">STREET</h3>
+                <h3 class="profile-view-shipping-address-title">STREET {{ address.id }}</h3>
                 <p class="profile-view-shipping-address-field">{{ address.street }}</p>
             </div>
             <div class="profile-view-shipping-address-section">
@@ -125,11 +133,15 @@
                 <p class="profile-view-shipping-address-field">{{ address.city }}</p>
             </div>
             <div class="profile-view-shipping-address-section">
+                <h3 class="profile-view-shipping-address-field">STATE</h3>
+                <p class="profile-view-shipping-address-field">{{ address.state }}</p>
+            </div>
+            <div class="profile-view-shipping-address-section">
                 <h3 class="profile-view-shipping-address-field">COUNTRY</h3>
                 <p class="profile-view-shipping-address-field">{{ address.country }}</p>
             </div>
             <div class="profile-view-shipping-address-edit">
-                <span><a href="{% url 'account:edit-shipping-address' request.user.username address.id 'edit' %}">EDIT</a></span>
+                <button onclick="openEditShippingAddressBlock('{{ address.id }}')">EDIT</a></span>
                 <span>
                     <form method="post" action="{% url 'account:edit-shipping-address' request.user.username address.id 'delete' %}">
                         {% csrf_token %}
@@ -142,7 +154,7 @@
         {% endfor %}
         <div class="profile-view-shipping-address-add">
             <div class="profile-view-shipping-address-icon">
-                <a href="{% url 'account:edit-shipping-address' request.user.username 'edit' %}"><i class="fas fa-plus"></i></a>
+                <i onclick="openAddShippingAddressBlock()" class="fas fa-plus"></i></a>
             </div>
         </div>
     </div>
@@ -210,47 +222,118 @@
         <div class="edit-account-form">
             <form method="post" action="{% url 'account:edit-account' request.user.username %}">
                 {% for field in account_form %}
-                {% for error in field.errors %}
-                    <div class="edit-account-error-message">{{ error }}</div>
-                {% endfor %}
-                <div class="edit-account-box {% if field.errors %}has-error{% endif %}">
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {{ field }}
-                    <span class="edit-account-help-text">{{ field.help_text }}</span>
-                </div>
-                {% endfor %}
-                {%csrf_token%}
+                    {% for error in field.errors %}
+                        <div class="edit-account-error-message">{{ error }}</div>
+                    {% endfor %}
+                    <div class="edit-account-box {% if field.errors %}has-error{% endif %}">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        <span class="edit-account-help-text">{{ field.help_text }}</span>
+                    </div>
+                    {% endfor %}
+                    {%csrf_token%}
                 <button class="edit-account-button" type="submit">Save Changes</button>
             </form>
         </div>
     </div>
 </div>
 
-<!-- change address block -->
-<div id="changeAddressBlock" class="change-address-block-display">
+<!-- edit address block -->
+<div id="editAddressBlock" class="edit-address-block-display">
     <h1>Edit your address</h1>
-    <div id="changeAddressBlockContent" class="change-address-block-content">
-        <span class="closet2" onclick="closeChangeAddressBlock()">&times;</span>
-        <div class="change-address-form">
+    <div id="editAddressBlockContent" class="edit-address-block-content">
+        <span class="closet2" onclick="closeEditAddressBlock()">&times;</span>
+        <div class="edit-address-form">
             <form method="post" action="{% url 'account:edit-address' request.user.username %}">
                 {% for field in address_form %}
-                {% for error in field.errors %}
-                    <div class="change-address-error-message">{{ error }}</div>
-                {% endfor %}
-                <div class="change-address-box {% if field.errors %}has-error{% endif %}">
-                    <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
-                    {{ field }}
-                    <span class="change-address-help-text">{{ field.help_text }}</span>
-                </div>
-                {% endfor %}
-                {%csrf_token%}
-                <button class="change-address-button" type="submit">Save Changes</button>
+                    {% for error in field.errors %}
+                        <div class="edit-address-error-message">{{ error }}</div>
+                    {% endfor %}
+                    <div class="edit-address-box {% if field.errors %}has-error{% endif %}">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                        {{ field }}
+                        <span class="edit-address-help-text">{{ field.help_text }}</span>
+                    </div>
+                    {% endfor %}
+                    {%csrf_token%}
+                <button class="edit-address-button" type="submit">Save Changes</button>
             </form>
         </div>
     </div>
 </div>
 
-<!-- overlay -->
+<!-- add shipping address block -->
+<div id="addShippingAddressBlock" class="add-shipping-address-block-display">
+    <h1>Add shipping address</h1>
+    <div id="addShippingAddressBlockContent" class="add-shipping-address-block-content">
+        <span class="closet3" onclick="closeAddShippingAddressBlock()">&times;</span>
+        <div class="add-shipping-address-form">
+            <form method="post" action="{% url 'account:edit-shipping-address' request.user.username 'add'%}">
+                {% for field in shipping_address_form %}
+                    {% for error in field.errors %}
+                        <div class="add-shipping-address-error-message">{{ error }}</div>
+                    {% endfor %}
+                    <div class="add-shipping-address-box {% if field.errors %}has-error{% endif %}">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                        {{ field }}
+                        <span class="change-password-help-text">{{ field.help_text }}</span>
+                    </div>
+                {% endfor %}
+                {% csrf_token %}
+                <button type="submit">Saved</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- edit shipping address block - create each form for each instance of shipping address -->
+{% for address in shipping_address_data %}
+<div id="editShippingAddressBlock-{{ address.id }}" class="edit-shipping-address-block-display">
+    <h1>Edit shipping address {{ address.id }}</h1>
+    <div id="editShippingAddressBlockContent" class="edit-shipping-address-block-content">
+        <span class="closet4" onclick="closeEditShippingAddressBlock('{{ address.id }}')">&times;</span>
+        <div class="edit-shipping-address-form">
+            <form method="post" action="{% url 'account:edit-shipping-address' request.user.username address.id 'edit'%}">
+                <div class="edit-shipping-address-form-box">
+                    <div class="edit-shipping-address-form-field street {% if shipping_address_form.street.errors %}has-error{% endif %}">
+                        <div class="edit-shipping-address-form-field-box">
+                            <h5>{{ shipping_address_form.street.label }}</h5>
+                            <input type="text" name="{{ shipping_address_form.street.name }}" value="{{ address.street }}">
+                        </div>
+                    </div>
+                    <div class="edit-shipping-address-form-field zip_code {% if shipping_address_form.zip_code.errors %}has-error{% endif %}">
+                        <div class="edit-shipping-address-form-field-box">
+                            <h5>{{ shipping_address_form.zip_code.label }}</h5>
+                            <input type="text" name="{{ shipping_address_form.zip_code.name }}" value="{{ address.zip_code }}">
+                        </div>
+                    </div>
+                    <div class="edit-shipping-address-form-field city {% if shipping_address_form.city.errors %}has-error{% endif %}">
+                        <div class="edit-shipping-address-form-field-box">
+                            <h5>{{ shipping_address_form.city.label }}</h5>
+                            <input type="text" name="{{ shipping_address_form.city.name }}" value="{{ address.city }}">
+                        </div>
+                    </div>
+                    <div class="edit-shipping-address-form-field state {% if shipping_address_form.state.errors %}has-error{% endif %}">
+                        <div class="edit-shipping-address-form-field-box">
+                            <h5>{{ shipping_address_form.state.label }}</h5>
+                            <input type="text" name="{{ shipping_address_form.state.name }}" value="{{ address.state }}">
+                        </div>
+                    </div>
+                    <div class="edit-shipping-address-form-field country {% if shipping_address_form.country.errors %}has-error{% endif %}">
+                        <div class="edit-shipping-address-form-field-box">
+                            <h5>{{ shipping_address_form.country.label }}</h5>
+                            <input type="text" name="{{ shipping_address_form.country.name }}" value="{{ address.country }}">
+                        </div>
+                    </div>
+                    {%csrf_token%}
+                    <button type="submit">Saved</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
 <div id="overlay" class="block-overlay"></div>
 
 {%endblock content%}

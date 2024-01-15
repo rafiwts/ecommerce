@@ -151,91 +151,6 @@ def reset_password_confirmation(request, uidb64, token):
     )
 
 
-class ShippingAddressView(View):
-    # TODO: improve the styles
-    template_name = "account/edit-shipping-address.html"
-
-    def get_current_user(self, username):
-        return User.objects.prefetch_related("account__shipping_addresses").get(
-            username=username
-        )
-
-    def get_model_or_none(self, address_id):
-        try:
-            shipping_address = UserShippingAddress.objects.get(id=address_id)
-        except UserShippingAddress.DoesNotExist:
-            shipping_address = None
-
-        return shipping_address
-
-    def get_shipping_address_form(self, instance=None, data=None):
-        return UserShippingAddressForm(instance=instance, data=data)
-
-    def get(self, request, *args, **kwargs):
-        # address_id is None for adding address
-        address_id = kwargs.get("address_id", None)
-
-        if address_id:
-            shipping_address = self.get_model_or_none(address_id)
-            shipping_address_form = self.get_shipping_address_form(
-                instance=shipping_address
-            )
-            return render(
-                request,
-                self.template_name,
-                {
-                    "shipping_address_form": shipping_address_form,
-                    "shipping_address": shipping_address,
-                },
-            )
-        else:
-            shipping_address_form = self.get_shipping_address_form()
-            return render(
-                request,
-                self.template_name,
-                {"shipping_address_form": shipping_address_form},
-            )
-
-    def post(self, request, *args, **kwargs):
-        # address_id is None for adding address
-        address_id = kwargs.get("address_id", None)
-        action = kwargs["action"]
-        username = kwargs["username"]
-
-        shipping_address = self.get_model_or_none(address_id)
-        current_user = self.get_current_user(username)
-
-        if action == "add" and not shipping_address:
-            shipping_address_form = self.get_shipping_address_form(data=request.POST)
-            if shipping_address_form.is_valid():
-                shipping_address = shipping_address_form.save(commit=False)
-                shipping_address.save()
-                current_user.account.shipping_addresses.add(shipping_address)
-                messages.info(request, "The shipping address has been added")
-                return redirect("account:profile-view", username=username)
-        elif action == "edit":
-            shipping_address_form = self.get_shipping_address_form(
-                instance=shipping_address, data=request.POST
-            )
-            if shipping_address_form.is_valid():
-                shipping_address_form.save()
-                messages.info(request, "The shipping address has been edited")
-                return redirect("account:profile-view", username=username)
-        else:
-            shipping_address.delete()
-            messages.info(request, "The shipping address has been deleted")
-            return redirect("account:profile-view", username=username)
-
-        return render(
-            request,
-            self.template_name,
-            {
-                "shipping_address_form": shipping_address_form,
-                "shipping_address": shipping_address,
-            },
-        )
-
-
 class ProfileView(View):
     template_name = "account/profile-view.html"
 
@@ -244,8 +159,9 @@ class ProfileView(View):
             "account__address", "account__shipping_addresses"
         ).get(username=username)
 
-    def get_shipping_address(self, user):
-        return user.account.shipping_addresses.all()
+    def get_shipping_address_data(self, user):
+        shipping_addresses = user.account.shipping_addresses.all()
+        return shipping_addresses
 
     def get_image_form(self, user):
         return ImageForm(instance=user.account)
@@ -257,24 +173,29 @@ class ProfileView(View):
         return AccountForm(instance=user.account)
 
     def get_address_form(self, user):
-        return UserAddressForm(instance=user.account)
+        return UserAddressForm(instance=user.account.address)
+
+    def get_shipping_address_form(self, user):
+        return UserShippingAddressForm(instance=user.account)
 
     def get_context_data(self, **kwargs):
         username = kwargs["username"]
         user = self.get_user(username)
-        shipping_address = self.get_shipping_address(user)
+        shipping_address_data = self.get_shipping_address_data(user)
         image_form = self.get_image_form(user)
         password_form = self.get_password_form()
         account_form = self.get_account_form(user)
         address_form = self.get_address_form(user)
+        shipping_address_form = self.get_shipping_address_form(user)
 
         return {
             "user": user,
             "image_form": image_form,
-            "shipping_addresses": shipping_address,
+            "shipping_address_data": shipping_address_data,
             "password_form": password_form,
             "account_form": account_form,
             "address_form": address_form,
+            "shipping_address_form": shipping_address_form,
         }
 
     def get(self, request, *args, **kwargs):
@@ -360,3 +281,51 @@ class EditAddress(ProfileView, View):
             return redirect("account:profile-view", username=user)
         else:
             return super().get(request, *args, **kwargs)
+
+
+class ShippingAddressView(ProfileView, View):
+    # FIXME: change the logic for seperate update, delete and create views
+    def get_model_or_none(self, address_id):
+        try:
+            shipping_address = UserShippingAddress.objects.get(id=address_id)
+        except UserShippingAddress.DoesNotExist:
+            shipping_address = None
+
+        return shipping_address
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["shipping_address_form"] = self.shipping_address_form
+        return context
+
+    def post(self, request, *args, **kwargs):
+        # address_id is None for adding address
+        address_id = kwargs.get("address_id", None)
+        action = kwargs["action"]
+        username = kwargs["username"]
+
+        shipping_address = self.get_model_or_none(address_id)
+        current_user = self.get_user(username)
+
+        if action == "add" and not shipping_address:
+            self.shipping_address_form = UserShippingAddressForm(data=request.POST)
+            if self.shipping_address_form.is_valid():
+                shipping_address = self.shipping_address_form.save(commit=False)
+                shipping_address.save()
+                current_user.account.shipping_addresses.add(shipping_address)
+                messages.info(request, "The shipping address has been added")
+                return redirect("account:profile-view", username=username)
+        elif action == "edit":
+            self.shipping_address_form = UserShippingAddressForm(
+                instance=shipping_address, data=request.POST
+            )
+            if self.shipping_address_form.is_valid():
+                self.shipping_address_form.save()
+                messages.info(request, "The shipping address has been edited")
+                return redirect("account:profile-view", username=username)
+        else:
+            shipping_address.delete()
+            messages.info(request, "The shipping address has been deleted")
+            return redirect("account:profile-view", username=username)
+
+        return super().get(request, *args, **kwargs)
