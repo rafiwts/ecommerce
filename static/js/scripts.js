@@ -128,81 +128,32 @@ function closeImageBlock() {
 }
 
 /* TODO: make it function and then adjust the logic */
-function openPasswordBlock() {
-    let block = document.getElementById("changePasswordBlock");
+function toggleBlock(blockId, displayStyle) {
+    let block = document.getElementById(blockId);
+    let overlay = document.getElementById('overlay');
+
+    block.style.display = displayStyle;
+    overlay.style.display = displayStyle === 'flex' ? 'block' : 'none';
+}
+
+function openBlock(blockId) {
+    toggleBlock(blockId, 'flex');
+}
+
+function closeBlock(blockId) {
+    toggleBlock(blockId, 'none');
+}
+
+function openEditShippingAddressBlock(blockID) {
+    let block = document.getElementById(blockID);
     let overlay = document.getElementById('overlay');
 
     block.style.display = "flex";
     overlay.style.display = "block";
 }
 
-function closePasswordBlock() {
-    let block = document.getElementById("changePasswordBlock");
-    let overlay = document.getElementById('overlay');
-
-    block.style.display = "none";
-    overlay.style.display = "none";
-}
-
-function openEditAccountBlock() {
-    let block = document.getElementById("editAccountBlock");
-    let overlay = document.getElementById('overlay');
-
-    block.style.display = "flex";
-    overlay.style.display = "block";
-}
-
-function closeEditAccountBlock() {
-    let block = document.getElementById("editAccountBlock");
-    let overlay = document.getElementById('overlay');
-
-    block.style.display = "none";
-    overlay.style.display = "none";
-}
-
-
-function openEditAddressBlock() {
-    let block = document.getElementById("editAddressBlock");
-    let overlay = document.getElementById('overlay');
-
-    block.style.display = "flex";
-    overlay.style.display = "block";
-}
-
-function closeEditAddressBlock() {
-    let block = document.getElementById("editAddressBlock");
-    let overlay = document.getElementById('overlay');
-
-    block.style.display = "none";
-    overlay.style.display = "none";
-}
-
-function openAddShippingAddressBlock() {
-    let block = document.getElementById("addShippingAddressBlock");
-    let overlay = document.getElementById('overlay');
-
-    block.style.display = "flex";
-    overlay.style.display = "block";
-}
-
-function closeAddShippingAddressBlock() {
-    let block = document.getElementById("addShippingAddressBlock");
-    let overlay = document.getElementById('overlay');
-
-    block.style.display = "none";
-    overlay.style.display = "none";
-}
-
-function openEditShippingAddressBlock(addressID) {
-    let block = document.getElementById(`editShippingAddressBlock-${addressID}`);
-    let overlay = document.getElementById('overlay');
-
-    block.style.display = "flex";
-    overlay.style.display = "block";
-}
-
-function closeEditShippingAddressBlock(addressID) {
-    let block = document.getElementById(`editShippingAddressBlock-${addressID}`);
+function closeEditShippingAddressBlock(blockID) {
+    let block = document.getElementById(blockID);
     let overlay = document.getElementById('overlay');
 
     block.style.display = "none";
