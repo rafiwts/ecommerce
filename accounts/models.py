@@ -2,6 +2,7 @@ import os
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 from phonenumber_field.modelfields import PhoneNumberField
 
 from .handlers import image_directory_path
@@ -157,6 +158,9 @@ class UserShippingAddress(Adress):
         blank=True,
         related_name="shipping_addresses",
     )
+
+    def get_absolute_url(self):
+        return reverse("account:profile-view", args=[self.user.username])
 
     class Meta:
         db_table = "shipping_addresses"

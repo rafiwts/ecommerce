@@ -31,7 +31,7 @@
                 {% endif %}
                 </p>
                 <p class="profile-view-main-change-password">
-                    <button onclick="openPasswordBlock()">CHANGE PASSWORD</a></button>
+                    <button onclick="(() => openBlock('changePasswordBlock'))()">CHANGE PASSWORD</a></button>
                 </p>
             </div>
             <div class="profile-view-main-left-image">
@@ -43,7 +43,7 @@
                     {% endif %}
                 </div>
                 <div class="profile-view-main-left-image-edit">
-                    <img src="{% static 'images/edit-image-icon.svg' %}" onclick="openImageBlock()">
+                    <img src="{% static 'images/edit-image-icon.svg' %}" onclick="(() => openBlock('changePasswordBlock'))()">
                 </div>
             </div>
         </div>
@@ -87,7 +87,7 @@
                 <p class="profile-view-account-field">{{ user.account.account_type_default }}</p>
             </div>
             <p class="profile-view-edit-account">
-                <button onclick="openEditAccountBlock()">EDIT ACCOUNT</a></button>
+                <button onclick="(() => openBlock('editAccountBlock'))()">EDIT ACCOUNT</a></button>
             </p>
         </div>
         <div class="profile-view-home-address">
@@ -112,7 +112,7 @@
                 <p class="profile-view-address-field">{{ user.account.address.country }}</p>
             </div>
             <p class="profile-view-change-address">
-                <button onclick="openEditAddressBlock()">EDIT ADDRESS</a></button>
+                <button onclick="(() => openBlock('editAddressBlock'))()">EDIT ADDRESS</a></button>
             </p>
         </div>
     </div>
@@ -141,9 +141,9 @@
                 <p class="profile-view-shipping-address-field">{{ address.country }}</p>
             </div>
             <div class="profile-view-shipping-address-edit">
-                <button onclick="openEditShippingAddressBlock('{{ address.id }}')">EDIT</a></span>
+                <button onclick="openEditShippingAddressBlock('editShippingAddressBlock-{{ address.id }}')">EDIT</a></span>
                 <span>
-                    <form method="post" action="{% url 'account:edit-shipping-address' request.user.username address.id 'delete' %}">
+                    <form method="post" action="{% url 'account:delete-shipping-address' request.user.username address.id %}">
                         {% csrf_token %}
                         <input type="hidden" name="action" value="delete">
                         <button type="submit" onclick="return confirm('Are you sure you want to delete this address?')">DELETE</button>
@@ -154,7 +154,7 @@
         {% endfor %}
         <div class="profile-view-shipping-address-add">
             <div class="profile-view-shipping-address-icon">
-                <i onclick="openAddShippingAddressBlock()" class="fas fa-plus"></i></a>
+                <i onclick="(() => openBlock('addShippingAddressBlock'))()" class="fas fa-plus"></i></a>
             </div>
         </div>
     </div>
@@ -164,7 +164,7 @@
 <div id="editImageBlock" class="edit-image-block-display">
     <h2>Change profile image</h2>
     <div id="editImageBlockContent" class="edit-image-block-content">
-        <span class="close" onclick="closeImageBlock()">&times;</span>
+        <span class="close" onclick="(() => closeBlock('changePasswordBlock'))()">&times;</span>
         <div class="profile-view-image-edit">
             {% if user.account.image %}
             <img src="{{ user.account.image.url }}" alt="Profile image">
@@ -174,7 +174,7 @@
             <div id="uploadFilePreview" class="upload-file-preview"></div>
         </div>
         <div class="edit-image-form">
-            <form id="uploadImageForm" class="edit-image-form" method="post" enctype="multipart/form-data" >
+            <form id="uploadImageForm" class="edit-image-form" action="{% url 'account:change-profile-image'%}" method="post" enctype="multipart/form-data" >
                 <div class="image-form-field">
                     <div class="image-form-field-box">
                         <label for="uploadProfileImage" id="uploadFileLabel" class="file-input-label">
@@ -194,7 +194,7 @@
 <div id="changePasswordBlock" class="change-password-block-display">
     <h2>Change password</h2>
     <div id="changePasswordBlockContent" class="change-password-block-content">
-        <span class="closet" onclick="closePasswordBlock()">&times;</span>
+        <span class="closet" onclick="(() => closeBlock('changePasswordBlock'))()">&times;</span>
         <div class="change-password-form">
             <form method="post" action="{% url 'account:change-password' request.user.username %}">
                 {% for field in password_form %}
@@ -218,7 +218,7 @@
 <div id="editAccountBlock" class="edit-account-block-display">
     <h1>Edit your account</h1>
     <div id="editAccountBlockContent" class="edit-account-block-content">
-        <span class="closet1" onclick="closeEditAccountBlock()">&times;</span>
+        <span class="closet1" onclick="(() => closeBlock('editAccountBlock'))()">&times;</span>
         <div class="edit-account-form">
             <form method="post" action="{% url 'account:edit-account' request.user.username %}">
                 {% for field in account_form %}
@@ -242,7 +242,7 @@
 <div id="editAddressBlock" class="edit-address-block-display">
     <h1>Edit your address</h1>
     <div id="editAddressBlockContent" class="edit-address-block-content">
-        <span class="closet2" onclick="closeEditAddressBlock()">&times;</span>
+        <span class="closet2" onclick="(() => closeBlock('editAddressBlock'))()">&times;</span>
         <div class="edit-address-form">
             <form method="post" action="{% url 'account:edit-address' request.user.username %}">
                 {% for field in address_form %}
@@ -266,9 +266,9 @@
 <div id="addShippingAddressBlock" class="add-shipping-address-block-display">
     <h1>Add shipping address</h1>
     <div id="addShippingAddressBlockContent" class="add-shipping-address-block-content">
-        <span class="closet3" onclick="closeAddShippingAddressBlock()">&times;</span>
+        <span class="closet3" onclick="(() => closeBlock('addShippingAddressBlock'))()">&times;</span>
         <div class="add-shipping-address-form">
-            <form method="post" action="{% url 'account:edit-shipping-address' request.user.username 'add'%}">
+            <form method="post" action="{% url 'account:shipping-address-add' request.user.username %}">
                 {% for field in shipping_address_form %}
                     {% for error in field.errors %}
                         <div class="add-shipping-address-error-message">{{ error }}</div>
@@ -291,9 +291,9 @@
 <div id="editShippingAddressBlock-{{ address.id }}" class="edit-shipping-address-block-display">
     <h1>Edit shipping address {{ address.id }}</h1>
     <div id="editShippingAddressBlockContent" class="edit-shipping-address-block-content">
-        <span class="closet4" onclick="closeEditShippingAddressBlock('{{ address.id }}')">&times;</span>
+        <span class="closet4" onclick="closeEditShippingAddressBlock('editShippingAddressBlock-{{ address.id }}')">&times;</span>
         <div class="edit-shipping-address-form">
-            <form method="post" action="{% url 'account:edit-shipping-address' request.user.username address.id 'edit'%}">
+            <form method="post" action="{% url 'account:update-shipping-address' request.user.username address.id %}">
                 <div class="edit-shipping-address-form-box">
                     <div class="edit-shipping-address-form-field street {% if shipping_address_form.street.errors %}has-error{% endif %}">
                         <div class="edit-shipping-address-form-field-box">

@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.views import View
+from django.views.generic import CreateView, DeleteView, UpdateView
 
 from .forms import (
     AccountForm,
@@ -179,7 +180,7 @@ class ProfileView(View):
         return UserShippingAddressForm(instance=user.account)
 
     def get_context_data(self, **kwargs):
-        username = kwargs["username"]
+        username = self.request.user
         user = self.get_user(username)
         shipping_address_data = self.get_shipping_address_data(user)
         image_form = self.get_image_form(user)
@@ -202,12 +203,22 @@ class ProfileView(View):
         context = self.get_context_data(**kwargs)
         return render(request, self.template_name, context)
 
+
+class ChangeProfileImage(ProfileView, View):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["password_form"] = self.password_form
+        return context
+
     def post(self, request, *args, **kwargs):
         user = request.user
-        image_form = ImageForm(request.POST, instance=user.account, files=request.FILES)
+        print(user)
+        self.image_form = ImageForm(
+            request.POST, instance=user.account, files=request.FILES
+        )
 
-        if image_form.is_valid():
-            image_form.save()
+        if self.image_form.is_valid():
+            self.image_form.save()
             upload_image_handler(request, user)
             return redirect("account:profile-view", username=user)
         else:
@@ -220,7 +231,7 @@ class ChangePassword(ProfileView, View):
     # once there is an error the form should be overridden to display errors
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["password_form"] = self.password_form
+        context["image_form"] = self.image_form
         return context
 
     def post(self, request, *args, **kwargs):
@@ -283,49 +294,66 @@ class EditAddress(ProfileView, View):
             return super().get(request, *args, **kwargs)
 
 
-class ShippingAddressView(ProfileView, View):
-    # FIXME: change the logic for seperate update, delete and create views
-    def get_model_or_none(self, address_id):
-        try:
-            shipping_address = UserShippingAddress.objects.get(id=address_id)
-        except UserShippingAddress.DoesNotExist:
-            shipping_address = None
-
-        return shipping_address
+class BaseShippingAddressView(ProfileView):
+    model = UserShippingAddress
+    form_class = UserShippingAddressForm
+    error_info = "Something went wrong! The shipping address could not be saved"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["shipping_address_form"] = self.shipping_address_form
+        context["shipping_address_form"] = self.form
         return context
 
-    def post(self, request, *args, **kwargs):
-        # address_id is None for adding address
-        address_id = kwargs.get("address_id", None)
-        action = kwargs["action"]
-        username = kwargs["username"]
+    def form_invalid(self, form, *args, **kwargs):
+        self.form = form
+        print(form)
+        messages.info(self.request, self.error_info)
+        return super().get(self.request, *args, **kwargs)
 
-        shipping_address = self.get_model_or_none(address_id)
-        current_user = self.get_user(username)
+    def get_success_url(self):
+        return reverse("account:profile-view", args=[self.request.user.username])
 
-        if action == "add" and not shipping_address:
-            self.shipping_address_form = UserShippingAddressForm(data=request.POST)
-            if self.shipping_address_form.is_valid():
-                shipping_address = self.shipping_address_form.save(commit=False)
-                shipping_address.save()
-                current_user.account.shipping_addresses.add(shipping_address)
-                messages.info(request, "The shipping address has been added")
-                return redirect("account:profile-view", username=username)
-        elif action == "edit":
-            self.shipping_address_form = UserShippingAddressForm(
-                instance=shipping_address, data=request.POST
-            )
-            if self.shipping_address_form.is_valid():
-                self.shipping_address_form.save()
-                messages.info(request, "The shipping address has been edited")
-                return redirect("account:profile-view", username=username)
-        else:
-            shipping_address.delete()
-            messages.info(request, "The shipping address has been deleted")
-            return redirect("account:profile-view", username=username)
 
-        return super().get(request, *args, **kwargs)
+class ShippingAddressCreateView(BaseShippingAddressView, CreateView):
+    success_info = "The shipping address has been added"
+
+    def form_valid(self, form):
+        self.form = form
+        current_user = self.get_user(self.request.user)
+        shipping_address = form.save(commit=False)
+        shipping_address.save()
+        current_user.account.shipping_addresses.add(shipping_address)
+        messages.info(self.request, self.success_info)
+        return super().form_valid(form)
+
+
+class ShippingAddressUpdateView(BaseShippingAddressView, UpdateView):
+    success_info = "The shipping address has been updated"
+
+    def get_object(self, queryset=None):
+        address_id = self.kwargs.get("address_id")
+        return get_object_or_404(UserShippingAddress, id=address_id)
+
+    def form_valid(self, form):
+        self.form = form
+        form.save()
+        messages.info(self.request, self.success_info)
+        return super().form_valid(form)
+
+
+# FIXME: order of inheritance has been switched cause otherwise form_invalid is called
+class ShippingAddressDeleteView(DeleteView, BaseShippingAddressView):
+    model = UserShippingAddress
+    success_info = "The shipping address has been updated"
+
+    def get_object(self, queryset=None):
+        address_id = self.kwargs.get("address_id")
+        return get_object_or_404(UserShippingAddress, id=address_id)
+
+    def form_valid(self, form):
+        shipping_address = self.get_object()
+        shipping_address.delete()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("account:profile-view", args=[self.request.user.username])
