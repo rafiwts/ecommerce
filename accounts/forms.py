@@ -152,7 +152,7 @@ class AccountForm(forms.ModelForm):
     first_name = forms.CharField(
         max_length=50,
         label="First name",
-        required=True,
+        required=False,
         widget=forms.TextInput(
             attrs={
                 "class": "account-password-field",
@@ -164,7 +164,7 @@ class AccountForm(forms.ModelForm):
     last_name = forms.CharField(
         max_length=50,
         label="Surname",
-        required=True,
+        required=False,
         widget=forms.TextInput(
             attrs={
                 "class": "account-password-field",
@@ -221,13 +221,15 @@ class BaseAddressForm(forms.ModelForm):
     street = forms.CharField(
         max_length=50,
         label="Street",
+        required=False,
         widget=forms.TextInput(
             attrs={"class": "edit-address-field", "id": "street", "autocomplete": "on"}
         ),
     )
     zip_code = forms.CharField(
-        max_length=50,
+        max_length=10,
         label="Zip code",
+        required=False,
         widget=forms.TextInput(
             attrs={
                 "class": "edit-address-field",
@@ -237,15 +239,17 @@ class BaseAddressForm(forms.ModelForm):
         ),
     )
     city = forms.CharField(
-        max_length=100,
+        max_length=58,
         label="City",
+        required=False,
         widget=forms.TextInput(
             attrs={"class": "edit-address-field", "id": "city", "autocomplete": "on"}
         ),
     )
     state = forms.CharField(
-        max_length=50,
+        max_length=30,
         label="Stage",
+        required=False,
         help_text="The name of the province in which you live",
         widget=forms.TextInput(
             attrs={"class": "edit-address-field", "id": "state", "autocomplete": "on"}
@@ -254,6 +258,7 @@ class BaseAddressForm(forms.ModelForm):
     country = forms.CharField(
         max_length=50,
         label="Country",
+        required=False,
         widget=forms.TextInput(
             attrs={"class": "edit-address-field", "id": "country", "autocomplete": "on"}
         ),
@@ -289,7 +294,7 @@ class ChangePasswordForm(forms.Form):
     )
     new_password = forms.CharField(
         label="New password",
-        validators=[password_validation],
+        required=False,
         widget=forms.PasswordInput(
             attrs={
                 "class": "change-password-field",
@@ -300,6 +305,7 @@ class ChangePasswordForm(forms.Form):
     )
     confirm_password = forms.CharField(
         label="Confirm password",
+        required=False,
         help_text=(
             "Password must contain at least 8 characters "
             "with one uppercase and one digit"

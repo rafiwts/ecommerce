@@ -205,11 +205,6 @@ class ProfileView(View):
 
 
 class ChangeProfileImage(ProfileView, View):
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["password_form"] = self.password_form
-        return context
-
     def post(self, request, *args, **kwargs):
         user = request.user
         print(user)
@@ -226,30 +221,22 @@ class ChangeProfileImage(ProfileView, View):
             return self.get(request, *args, **kwargs)
 
 
-# FIXME: after invalid form the block disappears - it shouldn't go away
 class ChangePassword(ProfileView, View):
-    # once there is an error the form should be overridden to display errors
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["image_form"] = self.image_form
-        return context
-
     def post(self, request, *args, **kwargs):
         user = request.user
         self.password_form = ChangePasswordForm(data=request.POST)
         if self.password_form.is_valid():
             cleaned_data = self.password_form.cleaned_data
+
             if not user.check_password(cleaned_data["old_password"]):
-                messages.error(request, "Invalid current password.")
-            elif cleaned_data["new_password"] != cleaned_data["confirm_password"]:
-                messages.error(request, "Passwords do not match.")
+                # FIXME: this can only be validated via server not client
+                messages.error(request, "Invalid current password. Try again!")
             else:
                 user.set_password(cleaned_data["new_password"])
-                request.save()
-
+                user.save()
                 update_session_auth_hash(request, user)
 
-                messages.success(request, "Password has been changed")
+                messages.info(request, "Password has been changed")
 
             return redirect("account:profile-view", username=user)
         else:
@@ -275,12 +262,6 @@ class EditAccount(ProfileView, View):
 
 
 class EditAddress(ProfileView, View):
-    # once there is an error the form should be overridden to display errors
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["address_form"] = self.address_form
-        return context
-
     def post(self, request, *args, **kwargs):
         user = request.user
         self.address_form = UserAddressForm(

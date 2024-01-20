@@ -37,13 +37,13 @@
             <div class="profile-view-main-left-image">
                 <div class="profile-view-main-left-image-show">
                     {% if user.account.image %}
-                    <img id="profileImage" src="{{ user.account.image.url }}" alt="Profile image" onclick="openImageBlock()">
+                    <img id="profileImage" src="{{ user.account.image.url }}" alt="Profile image" onclick="openBlock('editImageBlock')">
                     {% else %}
-                    <img id="profileImage" src="{% static 'images/no-image-account.webp' %}" alt="Profile image" onclick="openImageBlock()">
+                    <img id="profileImage" src="{% static 'images/no-image-account.webp' %}" alt="Profile image" onclick="openBlock('editImageBlock')">
                     {% endif %}
                 </div>
                 <div class="profile-view-main-left-image-edit">
-                    <img src="{% static 'images/edit-image-icon.svg' %}" onclick="(() => openBlock('changePasswordBlock'))()">
+                    <img src="{% static 'images/edit-image-icon.svg' %}" onclick="(() => openBlock('editImageBlock'))()">
                 </div>
             </div>
         </div>
@@ -164,7 +164,7 @@
 <div id="editImageBlock" class="edit-image-block-display">
     <h2>Change profile image</h2>
     <div id="editImageBlockContent" class="edit-image-block-content">
-        <span class="close" onclick="(() => closeBlock('changePasswordBlock'))()">&times;</span>
+        <span class="close" onclick="(() => closeBlock('editImageBlock'))()">&times;</span>
         <div class="profile-view-image-edit">
             {% if user.account.image %}
             <img src="{{ user.account.image.url }}" alt="Profile image">
@@ -195,8 +195,9 @@
     <h2>Change password</h2>
     <div id="changePasswordBlockContent" class="change-password-block-content">
         <span class="closet" onclick="(() => closeBlock('changePasswordBlock'))()">&times;</span>
+        <div id="password-validation-msg" style="color: red;"></div>
         <div class="change-password-form">
-            <form method="post" action="{% url 'account:change-password' request.user.username %}">
+            <form id="passwordForm" method="post" action="{% url 'account:change-password' request.user.username %}">
                 {% for field in password_form %}
                     {% for error in field.errors %}
                         <div class="change-password-error-message">{{ error }}</div>
@@ -243,8 +244,9 @@
     <h1>Edit your address</h1>
     <div id="editAddressBlockContent" class="edit-address-block-content">
         <span class="closet2" onclick="(() => closeBlock('editAddressBlock'))()">&times;</span>
+        <div id="edit-address-validation-msg" style="color: red;"></div>
         <div class="edit-address-form">
-            <form method="post" action="{% url 'account:edit-address' request.user.username %}">
+            <form id="editAddressForm" method="post" action="{% url 'account:edit-address' request.user.username %}">
                 {% for field in address_form %}
                     {% for error in field.errors %}
                         <div class="edit-address-error-message">{{ error }}</div>

@@ -127,7 +127,6 @@ function closeImageBlock() {
     overlay.style.display = "none";
 }
 
-/* TODO: make it function and then adjust the logic */
 function toggleBlock(blockId, displayStyle) {
     let block = document.getElementById(blockId);
     let overlay = document.getElementById('overlay');
@@ -203,3 +202,103 @@ document.getElementById("uploadProfileImage").addEventListener("change", functio
         reader.readAsDataURL(fileInput.files[0]);
     }
     });
+
+// change password client validation
+document.getElementById("passwordForm").addEventListener("submit", function(event) {
+    const oldPasswordInput = document.getElementById("old_password");
+    const newPasswordInput = document.getElementById("new_password");
+    const confirmPasswordInput = document.getElementById("confirm_password");
+    const validationMsg = document.getElementById("password-validation-msg");
+
+    console.log(newPasswordInput.value)
+    console.log(confirmPasswordInput.value)
+
+    //TODO: temporary resolution for displaying validation errors
+    validationMsg.innerHTML = '';
+
+    let formFields = [oldPasswordInput, newPasswordInput, confirmPasswordInput];
+    for (let i = 0; i < formFields.length; i++) {
+        if (!formFields[i].value.trim()) {
+            validationMsg.innerHTML = "All fields must have input.";
+            event.preventDefault();
+            return;
+        }
+    }
+
+    //TODO: temporary resolution for displaying errors - change to a given box
+    if (!/[A-Z]/.test(newPasswordInput.value) && !/\d/.test(newPasswordInput.value)) {
+        validationMsg.innerHTML = "New password must contain at least one uppercase letter and one digit.";
+        event.preventDefault();
+        return;
+    }
+
+    if (!/[A-Z]/.test(newPasswordInput.value)) {
+        validationMsg.innerHTML = "New password must contain at least one uppercase letter.";
+        event.preventDefault();
+        return;
+    }
+
+    if (!/\d/.test(newPasswordInput.value)) {
+        validationMsg.innerHTML = "New password must contain at least one digit.";
+        event.preventDefault();
+        return;
+    }
+
+    // Check if passwords match
+    if (newPasswordInput.value !== confirmPasswordInput.value) {
+        validationMsg.innerHTML = "Passwords do not match.";
+        event.preventDefault();
+        return;
+    }
+});
+
+// edit address  client validation
+document.getElementById("editAddressForm").addEventListener("submit", function(event) {
+    const streetInput = document.getElementById("street");
+    const zipCodeInput = document.getElementById("zip_code");
+    const cityInput = document.getElementById("city");
+    const stateInput = document.getElementById("state");
+    const countryInput = document.getElementById("country");
+    const validationMsg = document.getElementById("edit-address-validation-msg");
+
+    //TODO: temporary resolution for displaying validation errors
+    let formFields = [streetInput, zipCodeInput, cityInput, stateInput, countryInput];
+    for (let i = 0; i < formFields.length; i++) {
+        if (!formFields[i].value.trim()) {
+            validationMsg.innerHTML = "All fields must have input.";
+            event.preventDefault();
+            return;
+        }
+    }
+
+    //TODO: temporary resolution for displaying errors - change to a given box
+    if(streetInput.value.length >= 50) {
+        validationMsg.innerHTML = "Thie field has too many characters";
+        event.preventDefault();
+        return;
+    }
+
+    if(zipCodeInput.value.length >= 10) {
+        validationMsg.innerHTML = "Thie field has too many characters";
+        event.preventDefault();
+        return;
+    }
+
+    if(cityInput.value.length >= 58) {
+        validationMsg.innerHTML = "Thie field has too many characters";
+        event.preventDefault();
+        return;
+    }
+
+    if(stateInput.value.length >= 30) {
+        validationMsg.innerHTML = "Thie field has too many characters";
+        event.preventDefault();
+        return;
+    }
+
+    if(countryInput.value.length >= 50) {
+        validationMsg.innerHTML = "Thie field has too many characters";
+        event.preventDefault();
+        return;
+    }
+});
