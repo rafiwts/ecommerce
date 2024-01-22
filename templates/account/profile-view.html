@@ -195,20 +195,34 @@
     <h2>Change password</h2>
     <div id="changePasswordBlockContent" class="change-password-block-content">
         <span class="closet" onclick="(() => closeBlock('changePasswordBlock'))()">&times;</span>
-        <div id="password-validation-msg" style="color: red;"></div>
         <div class="change-password-form">
             <form id="passwordForm" method="post" action="{% url 'account:change-password' request.user.username %}">
-                {% for field in password_form %}
-                    {% for error in field.errors %}
-                        <div class="change-password-error-message">{{ error }}</div>
-                    {% endfor %}
-                    <div class="change-password-box {% if field.errors %}has-error{% endif %}">
-                        <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
-                        {{ field }}
-                        <span class="change-password-help-text">{{ field.help_text }}</span>
+                <div class="change-password-form-box">
+                    <div class="change-oassword-form-field old-password">
+                        <div class="change-password-form-field-box old-password">
+                            <h5>{{ password_form.old_password.label }}</h5>
+                            {{ password_form.old_password }}
+                        </div>
+                        <div id="passwordFormErrorOldPassword" class="change-password-form-field-box old-password error"></div>
                     </div>
-                {% endfor %}
-                {% csrf_token %}
+                    <div class="change-oassword-form-field new-password">
+                        <div class="change-password-form-field-box new-password">
+                            <h5>{{ password_form.new_password.label }}</h5>
+                            {{ password_form.new_password }}
+                        </div>
+                        <div id="passwordFormErrorNewPassword" class="change-password-form-field-box new-password error"></div>
+                    </div>
+                    <div class="change-oassword-form-field confirm-password">
+                        <div class="change-password-form-field-box confirm-password">
+                            <h5>{{ password_form.confirm_password.label }}</h5>
+                            {{ password_form.confirm_password }}
+                        </div>
+                        <i class="fas fa-info-circle"></i>
+                        <div class="register-tooltip pass">{{ password_form.confirm_password.help_text }}</div>
+                        <div id="passwordFormErrorConfirmPassword" class="change-password-form-field-box confirm-password error"></div>
+                    </div>
+                </div>
+                {%csrf_token%}
                 <button class="change-password-button" type="submit">Change Password</button>
             </form>
         </div>
@@ -222,17 +236,37 @@
         <span class="closet1" onclick="(() => closeBlock('editAccountBlock'))()">&times;</span>
         <div class="edit-account-form">
             <form method="post" action="{% url 'account:edit-account' request.user.username %}">
-                {% for field in account_form %}
-                    {% for error in field.errors %}
-                        <div class="edit-account-error-message">{{ error }}</div>
-                    {% endfor %}
-                    <div class="edit-account-box {% if field.errors %}has-error{% endif %}">
-                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                        {{ field }}
-                        <span class="edit-account-help-text">{{ field.help_text }}</span>
+                <div class="edit-account-form-box">
+                    <div class="edit-account-form-field first_name">
+                        <div class="edit-account-form-field-box first_name">
+                            <h5>{{ account_form.first_name.label }}</h5>
+                            {{ account_form.first_name }}
+                        </div>
+                        <div id="editAccountErrorFirstName" class="edit-account-form-field-box first_name error"></div>
                     </div>
-                    {% endfor %}
-                    {%csrf_token%}
+                    <div class="edit-account-form-field last_name">
+                        <div class="edit-account-form-field-box last_name">
+                            <h5>{{ account_form.last_name.label }}</h5>
+                            {{ account_form.last_name }}
+                        </div>
+                        <div id="editAccountErrorLastName" class="edit-account-form-field-box last_name error"></div>
+                    </div>
+                    <div class="edit-account-form-field date_of_birth">
+                        <div class="edit-account-form-field-box date_of_birth">
+                            <h5>{{ account_form.date_of_birth.label }}</h5>
+                            {{ account_form.date_of_birth }}
+                        </div>
+                        <div id="editAccountErrorBirth" class="edit-account-form-field-box date_of_birth error"></div>
+                    </div>
+                    <div class="edit-account-form-field phone">
+                        <div class="edit-account-form-field-box phone">
+                            <h5>{{ account_form.phone.label }}</h5>
+                            {{ account_form.phone }}
+                        </div>
+                        <div id="editAccountErrorPhone" class="edit-account-form-field-box phone error"></div>
+                    </div>
+                </div>
+                {%csrf_token%}
                 <button class="edit-account-button" type="submit">Save Changes</button>
             </form>
         </div>
@@ -247,17 +281,46 @@
         <div id="edit-address-validation-msg" style="color: red;"></div>
         <div class="edit-address-form">
             <form id="editAddressForm" method="post" action="{% url 'account:edit-address' request.user.username %}">
-                {% for field in address_form %}
-                    {% for error in field.errors %}
-                        <div class="edit-address-error-message">{{ error }}</div>
-                    {% endfor %}
-                    <div class="edit-address-box {% if field.errors %}has-error{% endif %}">
-                        <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
-                        {{ field }}
-                        <span class="edit-address-help-text">{{ field.help_text }}</span>
+                <div class="edit-address-form-box">
+                    <div class="edit-address-form-field street">
+                        <div class="edit-address-form-field-box street">
+                            <h5>{{ address_form.street.label }}</h5>
+                            {{ address_form.street }}
+                        </div>
+                        <div id="editAddressErrorStreet" class="edit-address-form-field-box street error"></div>
                     </div>
-                    {% endfor %}
-                    {%csrf_token%}
+                    <div class="edit-address-form-field zip_code">
+                        <div class="edit-address-form-field-box zip_code">
+                            <h5>{{ address_form.zip_code.label }}</h5>
+                            {{ address_form.zip_code }}
+                        </div>
+                        <div id="editAddressErrorZipCode" class="edit-address-form-field-box zip_code error"></div>
+                    </div>
+                    <div class="edit-address-form-field city">
+                        <div class="edit-address-form-field-box city">
+                            <h5>{{ address_form.city.label }}</h5>
+                            {{ address_form.city }}
+                        </div>
+                        <div id="editAddressErrorCity" class="edit-address-form-field-box city error"></div>
+                    </div>
+                    <div class="edit-address-form-field state">
+                        <div class="edit-address-form-field-box state">
+                            <h5>{{ address_form.state.label }}</h5>
+                            {{ address_form.state }}
+                        </div>
+                        <i class="fas fa-info-circle"></i>
+                        <div class="register-tooltip state">{{ address_form.state.help_text }}</div>
+                        <div id="editAddressErrorState" class="edit-address-form-field-box state error"></div>
+                    </div>
+                    <div class="edit-address-form-field country">
+                        <div class="edit-address-form-field-box country">
+                            <h5>{{ address_form.country.label }}</h5>
+                            {{ address_form.country }}
+                        </div>
+                        <div id="editAddressErrorCountry" class="edit-address-form-field-box country error"></div>
+                    </div>
+                </div>
+                {%csrf_token%}
                 <button class="edit-address-button" type="submit">Save Changes</button>
             </form>
         </div>

@@ -207,7 +207,6 @@ class ProfileView(View):
 class ChangeProfileImage(ProfileView, View):
     def post(self, request, *args, **kwargs):
         user = request.user
-        print(user)
         self.image_form = ImageForm(
             request.POST, instance=user.account, files=request.FILES
         )

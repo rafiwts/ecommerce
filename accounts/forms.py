@@ -227,7 +227,7 @@ class BaseAddressForm(forms.ModelForm):
         ),
     )
     zip_code = forms.CharField(
-        max_length=10,
+        max_length=50,
         label="Zip code",
         required=False,
         widget=forms.TextInput(
@@ -239,7 +239,7 @@ class BaseAddressForm(forms.ModelForm):
         ),
     )
     city = forms.CharField(
-        max_length=58,
+        max_length=50,
         label="City",
         required=False,
         widget=forms.TextInput(
@@ -247,7 +247,7 @@ class BaseAddressForm(forms.ModelForm):
         ),
     )
     state = forms.CharField(
-        max_length=30,
+        max_length=50,
         label="Stage",
         required=False,
         help_text="The name of the province in which you live",

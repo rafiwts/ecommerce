@@ -205,48 +205,54 @@ document.getElementById("uploadProfileImage").addEventListener("change", functio
 
 // change password client validation
 document.getElementById("passwordForm").addEventListener("submit", function(event) {
-    const oldPasswordInput = document.getElementById("old_password");
     const newPasswordInput = document.getElementById("new_password");
     const confirmPasswordInput = document.getElementById("confirm_password");
-    const validationMsg = document.getElementById("password-validation-msg");
+    const newPasswordInputError = document.getElementById("passwordFormErrorNewPassword");
+    const confirmPasswordInputError = document.getElementById("passwordFormErrorConfirmPassword");
 
-    console.log(newPasswordInput.value)
-    console.log(confirmPasswordInput.value)
+    newPasswordInputError.innerHTML = "";
+    confirmPasswordInputError.innerHTML = "";
 
-    //TODO: temporary resolution for displaying validation errors
-    validationMsg.innerHTML = '';
-
-    let formFields = [oldPasswordInput, newPasswordInput, confirmPasswordInput];
+    let formFields = [newPasswordInput, confirmPasswordInput];
     for (let i = 0; i < formFields.length; i++) {
         if (!formFields[i].value.trim()) {
-            validationMsg.innerHTML = "All fields must have input.";
+            switch (formFields[i].id) {
+                case "new_password":
+                    newPasswordInputError.innerHTML = "New password is required.";
+                    break;
+                case "confirm_password":
+                    confirmPasswordInputError.innerHTML = "The confirmation of the password is required.";
+                    break;
+            }
+
             event.preventDefault();
             return;
         }
     }
 
-    //TODO: temporary resolution for displaying errors - change to a given box
+    //TODO: add css and class name to display an error
     if (!/[A-Z]/.test(newPasswordInput.value) && !/\d/.test(newPasswordInput.value)) {
-        validationMsg.innerHTML = "New password must contain at least one uppercase letter and one digit.";
+        newPasswordInputError.innerHTML = "New password must contain at least one uppercase letter and one digit.";
         event.preventDefault();
         return;
     }
 
     if (!/[A-Z]/.test(newPasswordInput.value)) {
-        validationMsg.innerHTML = "New password must contain at least one uppercase letter.";
+        newPasswordInputError.innerHTML = "New password must contain at least one uppercase letter.";
         event.preventDefault();
         return;
     }
 
     if (!/\d/.test(newPasswordInput.value)) {
-        validationMsg.innerHTML = "New password must contain at least one digit.";
+        newPasswordInputError.innerHTML = "New password must contain at least one digit.";
         event.preventDefault();
         return;
     }
 
     // Check if passwords match
     if (newPasswordInput.value !== confirmPasswordInput.value) {
-        validationMsg.innerHTML = "Passwords do not match.";
+        newPasswordInputError.innerHTML = "Passwords do not match.";
+        confirmPasswordInputError.innerHTML = "Passwords do not match.";
         event.preventDefault();
         return;
     }
@@ -259,45 +265,71 @@ document.getElementById("editAddressForm").addEventListener("submit", function(e
     const cityInput = document.getElementById("city");
     const stateInput = document.getElementById("state");
     const countryInput = document.getElementById("country");
-    const validationMsg = document.getElementById("edit-address-validation-msg");
+    const streetInputError = document.getElementById("editAddressErrorStreet");
+    const zipCodeInputError = document.getElementById("editAddressErrorZipCode");
+    const cityInputError = document.getElementById("editAddressErrorCity");
+    const stateInputError = document.getElementById("editAddressErrorState");
+    const countryInputError = document.getElementById("editAddressErrorCountry");
 
-    //TODO: temporary resolution for displaying validation errors
+    streetInputError.innerHTML = "";
+    zipCodeInputError.innerHTML = "";
+    cityInputError.innerHTML = "";
+    stateInputError.innerHTML = "";
+    countryInputError.innerHTML = "";
+
     let formFields = [streetInput, zipCodeInput, cityInput, stateInput, countryInput];
     for (let i = 0; i < formFields.length; i++) {
         if (!formFields[i].value.trim()) {
-            validationMsg.innerHTML = "All fields must have input.";
+            switch (formFields[i].id) {
+                case "street":
+                    streetInputError.innerHTML = "Street is required.";
+                    break;
+                case "zip_code":
+                    zipCodeInputError.innerHTML = "Zip code is required.";
+                    break;
+                case "city":
+                    cityInputError.innerHTML = "City is required.";
+                    break;
+                case "state":
+                    stateInputError.innerHTML = "State is required.";
+                    break;
+                case "country":
+                    countryInputError.innerHTML = "Country is required.";
+                    break;
+            }
+
             event.preventDefault();
             return;
         }
     }
 
-    //TODO: temporary resolution for displaying errors - change to a given box
-    if(streetInput.value.length >= 50) {
-        validationMsg.innerHTML = "Thie field has too many characters";
+    //TODO: add css and class name to display an error
+    if(streetInput.value.length > 50) {
+        streetInputError.innerHTML = "The 'street' field has too many characters.";
         event.preventDefault();
         return;
     }
 
-    if(zipCodeInput.value.length >= 10) {
-        validationMsg.innerHTML = "Thie field has too many characters";
+    if(zipCodeInput.value.length > 10) {
+        zipCodeInputError.innerHTML = "Zip code is too long.";
         event.preventDefault();
         return;
     }
 
-    if(cityInput.value.length >= 58) {
-        validationMsg.innerHTML = "Thie field has too many characters";
+    if(cityInput.value.length > 58) {
+        cityInputError.innerHTML = "The 'city' field has too many characters.";
         event.preventDefault();
         return;
     }
 
-    if(stateInput.value.length >= 30) {
-        validationMsg.innerHTML = "Thie field has too many characters";
+    if(stateInput.value.length > 40) {
+        stateInputError.innerHTML = "The 'state' field has too many characters.";
         event.preventDefault();
         return;
     }
 
-    if(countryInput.value.length >= 50) {
-        validationMsg.innerHTML = "Thie field has too many characters";
+    if(countryInput.value.length > 50) {
+        countryInputError.innerHTML = "Thie 'country' field has too many characters.";
         event.preventDefault();
         return;
     }
