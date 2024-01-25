@@ -162,164 +162,6 @@
     padding-bottom: 15px;
 }
 
-/* code for the rest of the profile view site */
-
-.edit-image-block-display {
-    display: none;
-    position: fixed;
-    flex-direction: column;
-    align-items: center;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #e4e4e4;
-    border: 1px solid rgb(222, 222, 222);
-    height: 600px;
-    max-width: 850px;
-    z-index: 1;
-}
-
-.change-password-block-display,
-.edit-account-block-display,
-.edit-address-block-display,
-.add-shipping-address-block-display,
-.edit-shipping-address-block-display {
-    display: none;
-    position: fixed;
-    flex-direction: column;
-    align-items: center;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #e4e4e4;
-    border: 1px solid rgb(222, 222, 222);
-    height: 600px;
-    max-width: 850px;
-    z-index: 1;
-}
-
-.block-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.75);
-}
-
-.close {
-    position: absolute;
-    display: inline-block;
-    font-size: 30px;
-    top: 0px;
-    right: 6px;
-    cursor: pointer;
-}
-
-.edit-image-block-display h2,
-.change-password-block-display h2,
-.edit-account-block-display h2,
-.edit-address-block-display h2,
-.add-shipping-address-block-display h2,
-.edit-shipping-address-block-display h2 {
-    margin: 60px 0px 0px 0px;
-}
-
-.profile-view-image-edit {
-    position: relative;
-}
-
-.profile-view-image-edit img {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-}
-
-.edit-image-block-content,
-.change-password-block-content,
-.edit-account-block-content,
-.edit-address-block-content,
-.add-shipping-address-block-content,
-.edit-shipping-address-block-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-}
-
-.image-form-field {
-    width: 100%;
-    margin: 0 20px;
-}
-
-.edit-image-form,
-.change-password-form,
-.edit-account-form,
-.edit-address-form
-.add-shipping-address-form,
-.edit-shipping-address-form {
-    display: flex;
-    align-items: center;
-    width: 100%;
-}
-
-.upload-profile-image {
-    display: none
-}
-
-.profile-image-btn,
-.file-input-label {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 50px;
-    background-color: #fff5f5;
-    color: #a41d1d;
-    font-size: 1.2rem;
-    font-weight: bold;
-    border-radius: 2px;
-    border: 1px solid rgb(99, 99, 99);
-    cursor: pointer;
-}
-
-.profile-image-btn {
-    background-color: rgb(173, 78, 78);
-    color: #fff;
-    width: 100%;
-    outline: none;
-    margin-top: 0.2rem;
-}
-
-.file-input-label:hover {
-    color: white;
-    background-color: #edc7c7;
-}
-
-.profile-image-btn:hover {
-    color: rgb(173, 78, 78);
-    background-color: #edc7c7;
-}
-
-
-.upload-file-preview img {
-    position: absolute;
-    top: 0px;
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-}
-
-.profile-view-info-container,
-.profile-view-error-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 15px 0;
-}
-
 .profile-view-info-message,
 .profile-view-error-message {
     text-align: center;
@@ -438,4 +280,298 @@
 .profile-view-shipping-address-section,
 .profile-view-shipping-address-edit {
     margin-left: 20px;
+}
+
+
+.profile-view-info-container,
+.profile-view-error-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0;
+}
+
+/* code for the form blocks */
+.edit-image-block-display,
+.edit-account-block-display,
+.change-password-block-display,
+.edit-address-block-display,
+.add-shipping-address-block-display,
+.edit-shipping-address-block-display {
+    display: none;
+    position: fixed;
+    flex-direction: column;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #e4e4e4;
+    border: 1px solid rgb(222, 222, 222);
+    height: 600px;
+    max-width: 850px;
+    z-index: 1;
+}
+
+.block-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+}
+
+.close {
+    position: absolute;
+    display: inline-block;
+    font-size: 30px;
+    top: 0px;
+    right: 6px;
+    cursor: pointer;
+}
+
+.edit-image-block-display h2,
+.edit-account-block-display h2,
+.edit-address-block-display h2,
+.add-shipping-address-block-display h2,
+.edit-shipping-address-block-display h2 {
+    margin: 60px 0px 0px 0px;
+    font-size: 30px;
+}
+
+.profile-view-image-edit {
+    position: relative;
+}
+
+.profile-view-image-edit img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+
+.edit-image-block-content,
+.edit-account-block-content,
+.edit-address-block-content,
+.add-shipping-address-block-content,
+.edit-shipping-address-block-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.image-form-field {
+    width: 100%;
+    margin: 0 20px;
+}
+
+.edit-image-form,
+.edit-account-form,
+.edit-address-form
+.add-shipping-address-form,
+.edit-shipping-address-form {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.upload-profile-image {
+    display: none
+}
+
+.profile-image-btn,
+.file-input-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    background-color: #fff5f5;
+    color: #a41d1d;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 2px;
+    border: 1px solid rgb(99, 99, 99);
+    cursor: pointer;
+}
+
+.profile-image-btn {
+    background-color: rgb(173, 78, 78);
+    color: #fff;
+    width: 100%;
+    outline: none;
+    margin-top: 0.2rem;
+}
+
+.file-input-label:hover {
+    color: white;
+    background-color: #edc7c7;
+}
+
+.profile-image-btn:hover {
+    color: rgb(173, 78, 78);
+    background-color: #edc7c7;
+}
+
+
+.upload-file-preview img {
+    position: absolute;
+    top: 0px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+
+.change-password-block-display {
+    justify-content: space-evenly;
+    width: 500px;
+    height: 650px;
+}
+
+.change-password-block-display h2 {
+    font-size: 30px;
+    color: #ba2727;
+}
+
+.change-password-block-display h5 {
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: rgb(172, 119, 119);
+}
+
+.change-password-form {
+    display: flex;
+    text-align: center;
+}
+
+.change-password-field {
+    border: solid 1px black;
+    border-radius: 10px;
+    padding-left: 60px;
+    background-color: #ffffff;
+    height: 60px;
+}
+
+.change-password-field.error {
+    border: solid 2px rgb(169, 29, 29);
+    background-color: #e9b1b1;
+}
+
+.change-password-form-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.change-password-form-field {
+    position: relative;
+    margin-top: 40px;
+    max-width: 400px;
+}
+
+.change-password-form-field.old-password {
+    margin-top: 0px;
+}
+
+.change-password-icon {
+    position: absolute;
+    left: 20px;
+
+}
+
+.change-password-info-icon {
+    position: absolute;
+    top: 0px;
+    right: -5px;
+}
+
+.fas.fa-info-circle.password {
+    position: absolute;
+    top: 25px;
+    right: 15px;
+    color: #2c2e9e;
+}
+
+.fas.fa-info-circle.password:hover {
+    cursor: pointer;
+    color: gray;
+}
+
+.change-password-icon,
+.change-password-info-icon {
+    text-align: center;
+    line-height: 60px;
+}
+
+.change-password-tooltip {
+    position: absolute;
+    width: 280px;
+    bottom: 25px;
+    right: -290px;
+    color: white;
+    background-color: rgb(88, 74, 170);
+    padding-top: 8px;
+    padding-bottom: 8px;
+    text-align: center;
+    border-radius: 20px;
+    box-shadow: 1px 1px 8px 2px rgb(133, 133, 133);
+    opacity: 0;
+}
+
+.fas.fa-info-circle.password:hover + .change-password-tooltip {
+    opacity: 1;
+}
+
+.fas.fa-eye {
+    color: #646160;
+}
+
+.change-password-btn {
+    width: 320px;
+    height: 60px;
+    margin-top: 40px;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(233, 233, 233);
+    background-color: rgb(173, 78, 78);
+    cursor: pointer;
+    border-radius: 50px;
+    border: solid 2px black;
+}
+
+.change-password-btn:hover {
+    color: #b76161;
+    background-color: rgb(245, 231, 231);
+}
+
+.password-error-info {
+    position: relative;
+    display: none;
+    padding: 20px 35px 20px 10px;
+    background-color: #f6b5b5;
+    border: 2px solid rgb(169, 29, 29);
+    border-radius: 20px;
+}
+
+.password-error-info ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+.close-error-window {
+    position: absolute;
+    font-size: 20px;
+    font-weight: bold;
+    top: 6px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.change-password-form-field-box.error {
+    width: 320px;
+    padding-top: 10px;
+    text-align: left;
+    color: red;
 }

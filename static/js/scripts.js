@@ -100,7 +100,7 @@ function showPassword(passwordInputID, icon) {
         icon.style.color = "#cf3b3b";
     } else{
         userPassword.type = 'password';
-        icon.style.color = "#c7b9b3";
+        icon.style.color = "#646160";
     }
 }
 
@@ -159,6 +159,12 @@ function closeEditShippingAddressBlock(blockID) {
     overlay.style.display = "none";
 }
 
+function closeErrorBlock(blockId) {
+    let block = document.getElementById(blockId);
+
+    block.style.display = "none";
+}
+
 
 window.onclick = function(event) {
     let block = document.getElementById("editImageBlock");
@@ -205,13 +211,19 @@ document.getElementById("uploadProfileImage").addEventListener("change", functio
 
 // change password client validation
 document.getElementById("passwordForm").addEventListener("submit", function(event) {
-    const newPasswordInput = document.getElementById("new_password");
-    const confirmPasswordInput = document.getElementById("confirm_password");
+    const newPasswordInput = document.getElementById("newPassword");
+    const confirmPasswordInput = document.getElementById("confirmPassword");
     const newPasswordInputError = document.getElementById("passwordFormErrorNewPassword");
     const confirmPasswordInputError = document.getElementById("passwordFormErrorConfirmPassword");
+    const errorBlock = document.getElementById("passwordErrorInfo")
 
+    // remove all error messages upon resubmitting
     newPasswordInputError.innerHTML = "";
     confirmPasswordInputError.innerHTML = "";
+
+    // remove all error syles upon resubmitting
+    newPasswordInput.classList.remove("error");
+    confirmPasswordInput.classList.remove("error");
 
     let formFields = [newPasswordInput, confirmPasswordInput];
     for (let i = 0; i < formFields.length; i++) {
@@ -232,18 +244,24 @@ document.getElementById("passwordForm").addEventListener("submit", function(even
 
     //TODO: add css and class name to display an error
     if (!/[A-Z]/.test(newPasswordInput.value) && !/\d/.test(newPasswordInput.value)) {
+        newPasswordInput.classList.add("error")
+        errorBlock.style.display = "block"
         newPasswordInputError.innerHTML = "New password must contain at least one uppercase letter and one digit.";
         event.preventDefault();
         return;
     }
 
     if (!/[A-Z]/.test(newPasswordInput.value)) {
+        newPasswordInput.classList.add("error")
+        errorBlock.style.display = "block"
         newPasswordInputError.innerHTML = "New password must contain at least one uppercase letter.";
         event.preventDefault();
         return;
     }
 
     if (!/\d/.test(newPasswordInput.value)) {
+        newPasswordInput.classList.add("error")
+        errorBlock.style.display = "block"
         newPasswordInputError.innerHTML = "New password must contain at least one digit.";
         event.preventDefault();
         return;
@@ -251,9 +269,11 @@ document.getElementById("passwordForm").addEventListener("submit", function(even
 
     // Check if passwords match
     if (newPasswordInput.value !== confirmPasswordInput.value) {
-        newPasswordInputError.innerHTML = "Passwords do not match.";
+        let focusedElement = document.activeElement;
+        confirmPasswordInput.classList.add("error")
         confirmPasswordInputError.innerHTML = "Passwords do not match.";
         event.preventDefault();
+        focusedElement.blur();
         return;
     }
 });

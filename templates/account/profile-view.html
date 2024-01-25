@@ -193,37 +193,54 @@
 <!-- change password block -->
 <div id="changePasswordBlock" class="change-password-block-display">
     <h2>Change password</h2>
+    <div id="passwordErrorInfo" class="password-error-info">
+        <span class="close-error-window" onclick="closeErrorBlock('passwordErrorInfo')">&times;</span>
+        <p>Make sure that your new password consists of:</p>
+            <ul>
+                <li>at least one uppercase letter and one digit.</li>
+                <li>at least one uppercase one digit.</li>
+            </ul>
+    </div>
     <div id="changePasswordBlockContent" class="change-password-block-content">
-        <span class="closet" onclick="(() => closeBlock('changePasswordBlock'))()">&times;</span>
+        <span class="close" onclick="(() => closeBlock('changePasswordBlock'))()">&times;</span>
         <div class="change-password-form">
             <form id="passwordForm" method="post" action="{% url 'account:change-password' request.user.username %}">
                 <div class="change-password-form-box">
-                    <div class="change-oassword-form-field old-password">
+                    <div class="change-password-form-field old-password">
+                        <div class="change-password-icon">
+                            <i class="fas fa-eye old-password" onclick="showPassword('oldPassword', '.fas.fa-eye.old-password')"></i>
+                          </div>
                         <div class="change-password-form-field-box old-password">
-                            <h5>{{ password_form.old_password.label }}</h5>
+                            <!-- <h5>{{ password_form.old_password.label }}</h5> -->
                             {{ password_form.old_password }}
                         </div>
-                        <div id="passwordFormErrorOldPassword" class="change-password-form-field-box old-password error"></div>
                     </div>
-                    <div class="change-oassword-form-field new-password">
+                    <div id="passwordFormErrorOldPassword" class="change-password-form-field-box old-password error"></div>
+                    <div class="change-password-form-field new-password">
+                        <div class="change-password-icon">
+                            <i class="fas fa-eye new-password" onclick="showPassword('newPassword', '.fas.fa-eye.new-password')"></i>
+                          </div>
                         <div class="change-password-form-field-box new-password">
-                            <h5>{{ password_form.new_password.label }}</h5>
+                            <!-- <h5>{{ password_form.new_password.label }}</h5> -->
                             {{ password_form.new_password }}
                         </div>
-                        <div id="passwordFormErrorNewPassword" class="change-password-form-field-box new-password error"></div>
                     </div>
-                    <div class="change-oassword-form-field confirm-password">
+                    <div id="passwordFormErrorNewPassword" class="change-password-form-field-box new-password error"></div>
+                    <div class="change-password-form-field confirm-password">
+                        <div class="change-password-icon">
+                            <i class="fas fa-eye confirm-password" onclick="showPassword('confirmPassword', '.fas.fa-eye.confirm-password')"></i>
+                          </div>
                         <div class="change-password-form-field-box confirm-password">
-                            <h5>{{ password_form.confirm_password.label }}</h5>
+                            <!-- <h5>{{ password_form.confirm_password.label }}</h5> -->
                             {{ password_form.confirm_password }}
                         </div>
-                        <i class="fas fa-info-circle"></i>
-                        <div class="register-tooltip pass">{{ password_form.confirm_password.help_text }}</div>
-                        <div id="passwordFormErrorConfirmPassword" class="change-password-form-field-box confirm-password error"></div>
+                        <i class="fas fa-info-circle password"></i>
+                        <div class="change-password-tooltip">{{ password_form.confirm_password.help_text }}</div>
                     </div>
+                    <div id="passwordFormErrorConfirmPassword" class="change-password-form-field-box confirm-password error"></div>
                 </div>
                 {%csrf_token%}
-                <button class="change-password-button" type="submit">Change Password</button>
+                <button class="change-password-btn" type="submit">Change Password</button>
             </form>
         </div>
     </div>
