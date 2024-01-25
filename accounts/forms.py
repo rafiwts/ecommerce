@@ -287,8 +287,9 @@ class ChangePasswordForm(forms.Form):
         widget=forms.PasswordInput(
             attrs={
                 "class": "change-password-field",
-                "id": "old_password",
+                "id": "oldPassword",
                 "autocomplete": "off",
+                "placeholder": "Old password",
             }
         ),
     )
@@ -298,8 +299,9 @@ class ChangePasswordForm(forms.Form):
         widget=forms.PasswordInput(
             attrs={
                 "class": "change-password-field",
-                "id": "new_password",
+                "id": "newPassword",
                 "autocomplete": "off",
+                "placeholder": "New password",
             }
         ),
     )
@@ -313,8 +315,9 @@ class ChangePasswordForm(forms.Form):
         widget=forms.PasswordInput(
             attrs={
                 "class": "change-password-field",
-                "id": "confirm_password",
+                "id": "confirmPassword",
                 "autocomplete": "off",
+                "placeholder": "Confirm password",
             }
         ),
     )

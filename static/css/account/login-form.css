@@ -233,6 +233,11 @@
     color: rgb(131, 0, 0);
 }
 
+.fas.fa-eye,
+.far.fa-user-circle {
+    color: #646160;
+}
+
 @media screen and (max-width: 1050px) {
     .login-form-container {
         grid-gap: 5rem;

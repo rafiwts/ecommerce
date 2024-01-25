@@ -74,6 +74,12 @@
     color: #999;
 }
 
+.fas.fa-eye,
+.far.fa-user-circle,
+.far.fa-envelope {
+    color: #646160;
+}
+
 .register-icon i {
     transition: .5s;
 }
