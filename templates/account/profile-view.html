@@ -292,10 +292,18 @@
 
 <!-- edit address block -->
 <div id="editAddressBlock" class="edit-address-block-display">
-    <h1>Edit your address</h1>
+    <div class="edit-address-title">
+        <h2>Edit your address</h2>
+    </div>
+    <div id="editAddressInfo" class="edit-address-info">
+        <p>Make sure that your new password consists of:</p>
+            <ul>
+                <li>at least one uppercase letter and one digit.</li>
+                <li>at least one uppercase one digit.</li>
+            </ul>
+    </div>
     <div id="editAddressBlockContent" class="edit-address-block-content">
-        <span class="closet2" onclick="(() => closeBlock('editAddressBlock'))()">&times;</span>
-        <div id="edit-address-validation-msg" style="color: red;"></div>
+        <span class="close" onclick="(() => closeBlock('editAddressBlock'))()">&times;</span>
         <div class="edit-address-form">
             <form id="editAddressForm" method="post" action="{% url 'account:edit-address' request.user.username %}">
                 <div class="edit-address-form-box">
@@ -306,19 +314,21 @@
                         </div>
                         <div id="editAddressErrorStreet" class="edit-address-form-field-box street error"></div>
                     </div>
-                    <div class="edit-address-form-field zip_code">
-                        <div class="edit-address-form-field-box zip_code">
-                            <h5>{{ address_form.zip_code.label }}</h5>
-                            {{ address_form.zip_code }}
+                    <div class="zip-code-street-block">
+                        <div class="edit-address-form-field zip_code">
+                            <div class="edit-address-form-field-box zip_code">
+                                <h5>{{ address_form.zip_code.label }}</h5>
+                                {{ address_form.zip_code }}
+                            </div>
+                            <div id="editAddressErrorZipCode" class="edit-address-form-field-box zip_code error"></div>
                         </div>
-                        <div id="editAddressErrorZipCode" class="edit-address-form-field-box zip_code error"></div>
-                    </div>
-                    <div class="edit-address-form-field city">
-                        <div class="edit-address-form-field-box city">
-                            <h5>{{ address_form.city.label }}</h5>
-                            {{ address_form.city }}
+                        <div class="edit-address-form-field city">
+                            <div class="edit-address-form-field-box city">
+                                <h5>{{ address_form.city.label }}</h5>
+                                {{ address_form.city }}
+                            </div>
+                            <div id="editAddressErrorCity" class="edit-address-form-field-box city error"></div>
                         </div>
-                        <div id="editAddressErrorCity" class="edit-address-form-field-box city error"></div>
                     </div>
                     <div class="edit-address-form-field state">
                         <div class="edit-address-form-field-box state">
@@ -338,7 +348,7 @@
                     </div>
                 </div>
                 {%csrf_token%}
-                <button class="edit-address-button" type="submit">Save Changes</button>
+                <div class="edit-address-btn-block"><button class="edit-address-btn" type="submit">Save Changes</button></div>
             </form>
         </div>
     </div>

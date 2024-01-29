@@ -233,7 +233,7 @@ class BaseAddressForm(forms.ModelForm):
         widget=forms.TextInput(
             attrs={
                 "class": "edit-address-field",
-                "id": "zip_code",
+                "id": "zipCode",
                 "autocomplete": "on",
             }
         ),
@@ -248,7 +248,7 @@ class BaseAddressForm(forms.ModelForm):
     )
     state = forms.CharField(
         max_length=50,
-        label="Stage",
+        label="State",
         required=False,
         help_text="The name of the province in which you live",
         widget=forms.TextInput(
