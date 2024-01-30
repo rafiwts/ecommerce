@@ -281,7 +281,7 @@ document.getElementById("passwordForm").addEventListener("submit", function(even
 // edit address  client validation
 document.getElementById("editAddressForm").addEventListener("submit", function(event) {
     const streetInput = document.getElementById("street");
-    const zipCodeInput = document.getElementById("zip_code");
+    const zipCodeInput = document.getElementById("zipCode");
     const cityInput = document.getElementById("city");
     const stateInput = document.getElementById("state");
     const countryInput = document.getElementById("country");
@@ -297,23 +297,34 @@ document.getElementById("editAddressForm").addEventListener("submit", function(e
     stateInputError.innerHTML = "";
     countryInputError.innerHTML = "";
 
+    streetInput.classList.remove("error");
+    zipCodeInput.classList.remove("error");
+    cityInput.classList.remove("error");
+    stateInput.classList.remove("error");
+    countryInput.classList.remove("error");
+
     let formFields = [streetInput, zipCodeInput, cityInput, stateInput, countryInput];
     for (let i = 0; i < formFields.length; i++) {
         if (!formFields[i].value.trim()) {
             switch (formFields[i].id) {
                 case "street":
+                    streetInput.classList.add("error")
                     streetInputError.innerHTML = "Street is required.";
                     break;
-                case "zip_code":
+                case "zipCode":
+                    zipCodeInput.classList.add("error")
                     zipCodeInputError.innerHTML = "Zip code is required.";
                     break;
                 case "city":
+                    cityInput.classList.add("error")
                     cityInputError.innerHTML = "City is required.";
                     break;
                 case "state":
+                    stateInput.classList.add("error")
                     stateInputError.innerHTML = "State is required.";
                     break;
                 case "country":
+                    countryInput.classList.add("error")
                     countryInputError.innerHTML = "Country is required.";
                     break;
             }
@@ -325,30 +336,35 @@ document.getElementById("editAddressForm").addEventListener("submit", function(e
 
     //TODO: add css and class name to display an error
     if(streetInput.value.length > 50) {
+        streetInput.classList.add("error")
         streetInputError.innerHTML = "The 'street' field has too many characters.";
         event.preventDefault();
         return;
     }
 
     if(zipCodeInput.value.length > 10) {
+        zipCodeInput.classList.add("error")
         zipCodeInputError.innerHTML = "Zip code is too long.";
         event.preventDefault();
         return;
     }
 
     if(cityInput.value.length > 58) {
+        cityInput.classList.add("error")
         cityInputError.innerHTML = "The 'city' field has too many characters.";
         event.preventDefault();
         return;
     }
 
     if(stateInput.value.length > 40) {
+        stateInput.classList.add("error")
         stateInputError.innerHTML = "The 'state' field has too many characters.";
         event.preventDefault();
         return;
     }
 
     if(countryInput.value.length > 50) {
+        countryInput.classList.add("error")
         countryInputError.innerHTML = "Thie 'country' field has too many characters.";
         event.preventDefault();
         return;

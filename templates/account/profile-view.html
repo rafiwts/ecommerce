@@ -248,9 +248,9 @@
 
 <!-- edit account block -->
 <div id="editAccountBlock" class="edit-account-block-display">
-    <h1>Edit your account</h1>
+    <h2>Edit your account</h2>
     <div id="editAccountBlockContent" class="edit-account-block-content">
-        <span class="closet1" onclick="(() => closeBlock('editAccountBlock'))()">&times;</span>
+        <span class="close" onclick="(() => closeBlock('editAccountBlock'))()">&times;</span>
         <div class="edit-account-form">
             <form method="post" action="{% url 'account:edit-account' request.user.username %}">
                 <div class="edit-account-form-box">
@@ -292,15 +292,10 @@
 
 <!-- edit address block -->
 <div id="editAddressBlock" class="edit-address-block-display">
-    <div class="edit-address-title">
-        <h2>Edit your address</h2>
-    </div>
+    <h2>Edit your address</h2>
     <div id="editAddressInfo" class="edit-address-info">
-        <p>Make sure that your new password consists of:</p>
-            <ul>
-                <li>at least one uppercase letter and one digit.</li>
-                <li>at least one uppercase one digit.</li>
-            </ul>
+        <img class="warning-sign" src="{% static 'images/warning-sign.svg' %}">
+        <p>Remember to insert your current data</p>
     </div>
     <div id="editAddressBlockContent" class="edit-address-block-content">
         <span class="close" onclick="(() => closeBlock('editAddressBlock'))()">&times;</span>
@@ -335,8 +330,8 @@
                             <h5>{{ address_form.state.label }}</h5>
                             {{ address_form.state }}
                         </div>
-                        <i class="fas fa-info-circle"></i>
-                        <div class="register-tooltip state">{{ address_form.state.help_text }}</div>
+                        <i class="fas fa-info-circle edit-address"></i>
+                        <div class="edit-address-tooltip">{{ address_form.state.help_text }}</div>
                         <div id="editAddressErrorState" class="edit-address-form-field-box state error"></div>
                     </div>
                     <div class="edit-address-form-field country">

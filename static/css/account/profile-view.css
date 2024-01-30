@@ -455,8 +455,7 @@
     height: 60px;
 }
 
-.change-password-field.error,
-.edit-address-field.error {
+.change-password-field.error {
     border: solid 2px rgb(169, 29, 29);
     background-color: #e9b1b1;
 }
@@ -508,7 +507,8 @@
     line-height: 60px;
 }
 
-.change-password-tooltip {
+.change-password-tooltip,
+.edit-address-tooltip {
     position: absolute;
     width: 280px;
     bottom: 25px;
@@ -579,54 +579,119 @@
     color: red;
 }
 
-.edit-address-title {
-    display: inline-block;
-    text-align: left;
+.edit-address-block-display {
+    background-color: rgb(239, 239, 239);
 }
 
 .edit-address-block-display h2 {
-    text-align: left;
-    padding: 24px;
+    padding: 30px 24px;
     font-size: 30px;
     color: #ba2727;
-}
-
-.edit-address-info {
-    padding: 30px;
 }
 
 .edit-address-field {
     height: 20px;
     width: 100%;
+    background-color:rgb(239, 239, 239);
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 6px 0px 6px 10px;
 }
 
-.edit-address-field {
-    height: 30px;
-    border: none;
+.edit-address-form-field {
+    position: relative;
+    padding-bottom: 25px;
+}
+
+.edit-address-form-field h5 {
+    position: absolute;
+    top: -8px;
+    left: 20px;
+    background-color: rgb(239, 239, 239);
+    color: #b73838;
+    padding: 2px;
+}
+
+.edit-address-info {
+    display: flex;
+    column-gap: 30px;
+    align-items: center;
+    border: 1px solid rgb(195, 195, 195);
+    border-left: 4px solid #fac314;
+    border-radius: 2px;
+    padding: 30px 20px;
+}
+
+.edit-address-field.error {
+    border: solid 2px rgb(255, 0, 0);
 }
 
 .edit-address-form-field.country {
     margin-bottom: 20px;
 }
 
-.edit-address-form-field {
-    padding-bottom: 25px;
+.edit-address-form-field.state {
+    position: relative;
+}
+
+.edit-address-form-field-box {
+    color: red;
 }
 
 .zip-code-street-block {
     display: flex;
     column-gap: 10px;
-    width: 460px;
+    width: 470px;
+}
+
+.fas.fa-info-circle.edit-address {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+    color: #2c2e9e;
+}
+
+.fas.fa-info-circle.edit-address:hover {
+    cursor: pointer;
+    color: gray;
+}
+
+.edit-address-tooltip {
+    height: 20px;
+    top: -15px;
+    right: -285px;
+}
+
+.fas.fa-info-circle.edit-address:hover + .edit-address-tooltip {
+    opacity: 1;
 }
 
 .edit-address-btn-block {
-    padding: 35px 50px 35px 50px;
+    padding: 45px 20px 0px 50px;
     text-align: right;
-    border-top: 1px solid black;
+    border-top: 1px solid rgb(186, 186, 186);
+}
+
+.edit-address-btn {
+    color: rgb(233, 233, 233);
+    background-color: rgb(173, 78, 78);
+    font-weight: bold;
+    cursor: pointer;
+    padding: 18px 10px;
+    border: none;
+}
+
+.edit-address-btn:hover {
+    background-color: rgb(172, 102, 102);
 }
 
 #street,
 #state,
 #country {
     width: 460px;
+}
+
+#zipCode,
+#city {
+    width: 218px;
 }
