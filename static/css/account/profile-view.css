@@ -332,7 +332,6 @@
 }
 
 .edit-image-block-display h2,
-.edit-account-block-display h2,
 .add-shipping-address-block-display h2,
 .edit-shipping-address-block-display h2 {
     margin: 60px 0px 0px 0px;
@@ -368,7 +367,6 @@
 }
 
 .edit-image-form,
-.edit-account-form,
 .edit-address-form
 .add-shipping-address-form,
 .edit-shipping-address-form {
@@ -423,6 +421,7 @@
     border-radius: 50%;
 }
 
+/* change password block */
 .change-password-block-display,
 .edit-address-block-display {
     justify-content: space-around;
@@ -579,7 +578,9 @@
     color: red;
 }
 
-.edit-address-block-display {
+/* edit address block */
+.edit-address-block-display,
+.edit-account-block-display {
     background-color: rgb(239, 239, 239);
 }
 
@@ -603,7 +604,8 @@
     padding-bottom: 25px;
 }
 
-.edit-address-form-field h5 {
+.edit-address-form-field h5,
+.edit-account-form-field h5 {
     position: absolute;
     top: -8px;
     left: 20px;
@@ -612,7 +614,8 @@
     padding: 2px;
 }
 
-.edit-address-info {
+.edit-address-info,
+.edit-account-info {
     display: flex;
     column-gap: 30px;
     align-items: center;
@@ -694,4 +697,80 @@
 #zipCode,
 #city {
     width: 218px;
+}
+
+/* edit account block */
+.edit-account-block-display {
+    width: 800px;
+    height: 550px;
+}
+
+.edit-account-block-display h2 {
+    font-size: 25px;
+    color: #ba2727;
+    padding: 30px 0px
+}
+
+.edit-account-field,
+#id_phone_1 {
+    height: 21px;
+    background-color:rgb(239, 239, 239);
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 6px 0px 6px 10px;
+}
+
+#id_phone_0 {
+    background-color:rgb(239, 239, 239);
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 6px 0px 6px 10px;
+}
+
+.edit-account-form-field-box {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.edit-account-form-field-box.phone {
+    display: flex;
+    column-gap: 1px;
+}
+
+.full-name-block {
+    display: flex;
+    column-gap: 10px;
+}
+
+.edit-account-btn-block {
+    padding: 40px 20px 0px 50px;
+    text-align: center;
+    border-top: 1px solid rgb(186, 186, 186);
+}
+
+.edit-account-btn {
+    color: rgb(233, 233, 233);
+    background-color: rgb(173, 78, 78);
+    width: 250px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 18px 10px;
+    border: none;
+}
+
+.edit-account-btn:hover {
+    background-color:  rgb(172, 102, 102);
+ }
+
+.edit-account-field.error {
+    border: solid 2px rgb(255, 0, 0);
+}
+
+.edit-account-form-field-box.error {
+    color: red;
+    text-align: center;
+}
+
+.edit-account-form-field-box.phone.error {
+    justify-content: center;
 }

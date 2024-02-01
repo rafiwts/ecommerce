@@ -334,7 +334,6 @@ document.getElementById("editAddressForm").addEventListener("submit", function(e
         }
     }
 
-    //TODO: add css and class name to display an error
     if(streetInput.value.length > 50) {
         streetInput.classList.add("error")
         streetInputError.innerHTML = "The 'street' field has too many characters.";
@@ -369,4 +368,54 @@ document.getElementById("editAddressForm").addEventListener("submit", function(e
         event.preventDefault();
         return;
     }
+});
+
+// edit address client validation
+document.getElementById("editAccountForm").addEventListener("submit", function(event) {
+    const firstNameInput = document.getElementById("firstName");
+    const lastNameInput = document.getElementById("lastName");
+    const birthDateInput = document.getElementById("dateOfBirth");
+    const phoneNumberInput = document.getElementById("id_phone_1");
+    const firstNameInputError = document.getElementById("editAccountErrorFirstName");
+    const surnameInputError = document.getElementById("editAccountErrorLastName");
+    const birthDateInputError = document.getElementById("editAccountErrorBirth");
+    const phoneNumberInputError = document.getElementById("editAccountErrorPhone");
+
+    firstNameInputError.innerHTML = "";
+    surnameInputError.innerHTML = "";
+    birthDateInputError.innerHTML = "";
+    phoneNumberInputError.innerHTML = "";
+
+    firstNameInput.classList.remove("error");
+    lastNameInput.classList.remove("error");
+    birthDateInput.classList.remove("error");
+    phoneNumberInput.classList.remove("error");
+
+    let formFields = [firstNameInput, lastNameInput, birthDateInput, phoneNumberInput];
+    for (let i = 0; i < formFields.length; i++) {
+        if (!formFields[i].value.trim()) {
+            switch (formFields[i].id) {
+                case "firstName":
+                    firstNameInput.classList.add("error")
+                    firstNameInputError.innerHTML = "First name is required.";
+                    break;
+                case "lastName":
+                    lastNameInput.classList.add("error")
+                    surnameInputError.innerHTML = "Last name is required.";
+                    break;
+                case "dateOfBirth":
+                    birthDateInput.classList.add("error")
+                    birthDateInputError.innerHTML = "Date of birth is required.";
+                    break;
+                case "id_phone_1":
+                    phoneNumberInput.classList.add("error")
+                    phoneNumberInputError.innerHTML = "Phone is required.";
+                    break;
+            }
+
+            event.preventDefault();
+            return;
+        }
+    }
+    // TODO: add a logic that check the validity of a phone number
 });

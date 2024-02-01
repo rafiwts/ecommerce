@@ -155,8 +155,8 @@ class AccountForm(forms.ModelForm):
         required=False,
         widget=forms.TextInput(
             attrs={
-                "class": "account-password-field",
-                "id": "first_name",
+                "class": "edit-account-field",
+                "id": "firstName",
                 "autocomplete": "on",
             }
         ),
@@ -167,8 +167,8 @@ class AccountForm(forms.ModelForm):
         required=False,
         widget=forms.TextInput(
             attrs={
-                "class": "account-password-field",
-                "id": "last_name",
+                "class": "edit-account-field",
+                "id": "lastName",
                 "autocomplete": "on",
             }
         ),
@@ -180,8 +180,8 @@ class AccountForm(forms.ModelForm):
         widget=forms.DateInput(
             attrs={
                 "type": "date",
-                "class": "account-password-field",
-                "id": "date_of_birth",
+                "class": "edit-account-field",
+                "id": "dateOfBirth",
                 "autocomplete": "off",
             }
         ),

@@ -249,24 +249,30 @@
 <!-- edit account block -->
 <div id="editAccountBlock" class="edit-account-block-display">
     <h2>Edit your account</h2>
+    <div id="editAccountInfo" class="edit-account-info">
+        <img class="warning-sign" src="{% static 'images/warning-sign.svg' %}">
+        <p>Remember to always insert your valid personal data</p>
+    </div>
     <div id="editAccountBlockContent" class="edit-account-block-content">
         <span class="close" onclick="(() => closeBlock('editAccountBlock'))()">&times;</span>
         <div class="edit-account-form">
-            <form method="post" action="{% url 'account:edit-account' request.user.username %}">
+            <form id="editAccountForm" method="post" action="{% url 'account:edit-account' request.user.username %}">
                 <div class="edit-account-form-box">
-                    <div class="edit-account-form-field first_name">
-                        <div class="edit-account-form-field-box first_name">
-                            <h5>{{ account_form.first_name.label }}</h5>
-                            {{ account_form.first_name }}
+                    <div class="full-name-block">
+                        <div class="edit-account-form-field first_name">
+                            <div class="edit-account-form-field-box first_name">
+                                <h5>{{ account_form.first_name.label }}</h5>
+                                {{ account_form.first_name }}
+                            </div>
+                            <div id="editAccountErrorFirstName" class="edit-account-form-field-box first_name error"></div>
                         </div>
-                        <div id="editAccountErrorFirstName" class="edit-account-form-field-box first_name error"></div>
-                    </div>
-                    <div class="edit-account-form-field last_name">
-                        <div class="edit-account-form-field-box last_name">
-                            <h5>{{ account_form.last_name.label }}</h5>
-                            {{ account_form.last_name }}
+                        <div class="edit-account-form-field last_name">
+                            <div class="edit-account-form-field-box last_name">
+                                <h5>{{ account_form.last_name.label }}</h5>
+                                {{ account_form.last_name }}
+                            </div>
+                            <div id="editAccountErrorLastName" class="edit-account-form-field-box last_name error"></div>
                         </div>
-                        <div id="editAccountErrorLastName" class="edit-account-form-field-box last_name error"></div>
                     </div>
                     <div class="edit-account-form-field date_of_birth">
                         <div class="edit-account-form-field-box date_of_birth">
@@ -284,7 +290,7 @@
                     </div>
                 </div>
                 {%csrf_token%}
-                <button class="edit-account-button" type="submit">Save Changes</button>
+                <div class="edit-account-btn-block"><button class="edit-account-btn" type="submit">Save Changes</button></div>
             </form>
         </div>
     </div>
