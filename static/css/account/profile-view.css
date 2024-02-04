@@ -332,8 +332,7 @@
 }
 
 .edit-image-block-display h2,
-.add-shipping-address-block-display h2,
-.edit-shipping-address-block-display h2 {
+.add-shipping-address-block-display h2 {
     margin: 60px 0px 0px 0px;
     font-size: 30px;
 }
@@ -368,8 +367,7 @@
 
 .edit-image-form,
 .edit-address-form
-.add-shipping-address-form,
-.edit-shipping-address-form {
+.add-shipping-address-form {
     display: flex;
     align-items: center;
     width: 100%;
@@ -507,7 +505,8 @@
 }
 
 .change-password-tooltip,
-.edit-address-tooltip {
+.edit-address-tooltip,
+.edit-shipping-address-tooltip {
     position: absolute;
     width: 280px;
     bottom: 25px;
@@ -579,18 +578,33 @@
 }
 
 /* edit address block */
+.edit-shipping-address-block-display {
+    justify-content: space-around;
+    width: 700px;
+    height: 800px;
+}
+
+.edit-shipping-address-form {
+    display: flex;
+    align-items: center;
+}
+
 .edit-address-block-display,
-.edit-account-block-display {
+.edit-account-block-display,
+.edit-shipping-address-block-display {
     background-color: rgb(239, 239, 239);
 }
 
-.edit-address-block-display h2 {
+.edit-address-block-display h2,
+.edit-shipping-address-block-display h2
+ {
     padding: 30px 24px;
     font-size: 30px;
     color: #ba2727;
 }
 
-.edit-address-field {
+.edit-address-field,
+.edit-shipping-address-form-field-box input {
     height: 20px;
     width: 100%;
     background-color:rgb(239, 239, 239);
@@ -599,13 +613,19 @@
     padding: 6px 0px 6px 10px;
 }
 
-.edit-address-form-field {
+.edit-address-form-field,
+.edit-shipping-address-form-field {
     position: relative;
     padding-bottom: 25px;
 }
 
+.edit-shipping-address-form-field.country {
+    padding-bottom: 40px;
+}
+
 .edit-address-form-field h5,
-.edit-account-form-field h5 {
+.edit-account-form-field h5,
+.edit-shipping-address-form-field-box h5 {
     position: absolute;
     top: -8px;
     left: 20px;
@@ -615,7 +635,8 @@
 }
 
 .edit-address-info,
-.edit-account-info {
+.edit-account-info,
+.edit-shipping-address-info {
     display: flex;
     column-gap: 30px;
     align-items: center;
@@ -623,6 +644,10 @@
     border-left: 4px solid #fac314;
     border-radius: 2px;
     padding: 30px 20px;
+}
+
+.edit-shipping-address-info {
+    width: 500px;
 }
 
 .edit-address-field.error {
@@ -641,41 +666,61 @@
     color: red;
 }
 
-.zip-code-street-block {
+.zip-code-street-block-address {
     display: flex;
     column-gap: 10px;
     width: 470px;
 }
 
-.fas.fa-info-circle.edit-address {
+.zip-code-street-block-shipping-address {
+    display: flex;
+    column-gap: 20px;
+}
+
+.fas.fa-info-circle.edit-address,
+.fas.fa-info-circle.edit-shipping-address {
     position: absolute;
     top: 12px;
     right: 15px;
     color: #2c2e9e;
 }
 
-.fas.fa-info-circle.edit-address:hover {
+.fas.fa-info-circle.edit-shipping-address {
+    right: 10px;
+}
+
+
+.fas.fa-info-circle.edit-address:hover,
+.fas.fa-info-circle.edit-shipping-address:hover {
     cursor: pointer;
     color: gray;
 }
 
-.edit-address-tooltip {
+.edit-address-tooltip,
+.edit-shipping-address-tooltip {
     height: 20px;
     top: -15px;
     right: -285px;
 }
 
-.fas.fa-info-circle.edit-address:hover + .edit-address-tooltip {
+.edit-shipping-address-tooltip {
+    right: -290px;
+}
+
+.fas.fa-info-circle.edit-address:hover + .edit-address-tooltip,
+.fas.fa-info-circle.edit-shipping-address:hover + .edit-shipping-address-tooltip {
     opacity: 1;
 }
 
-.edit-address-btn-block {
-    padding: 45px 20px 0px 50px;
+.edit-address-btn-block,
+.edit-shipping-address-btn-block {
+    padding: 45px 0px 0px 50px;
     text-align: right;
     border-top: 1px solid rgb(186, 186, 186);
 }
 
-.edit-address-btn {
+.edit-address-btn,
+.edit-shipping-address-btn {
     color: rgb(233, 233, 233);
     background-color: rgb(173, 78, 78);
     font-weight: bold;
@@ -684,7 +729,8 @@
     border: none;
 }
 
-.edit-address-btn:hover {
+.edit-address-btn:hover,
+.edit-shipping-address-btn:hover {
     background-color: rgb(172, 102, 102);
 }
 

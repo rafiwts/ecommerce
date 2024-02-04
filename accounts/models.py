@@ -151,6 +151,13 @@ class Adress(models.Model):
 
 
 class UserShippingAddress(Adress):
+    first_name = models.CharField(
+        max_length=50, null=True, blank=True, verbose_name="Name"
+    )
+    last_name = models.CharField(
+        max_length=50, null=True, blank=True, verbose_name="Surname"
+    )
+    company = models.CharField(max_length=50, null=True, blank=True)
     account = models.ForeignKey(
         "Account",
         on_delete=models.CASCADE,

@@ -275,9 +275,22 @@ class UserAddressForm(BaseAddressForm):
 
 
 class UserShippingAddressForm(BaseAddressForm):
+    company = forms.CharField(
+        label="Company name", required=False, help_text="Company name is optional"
+    )
+
     class Meta(BaseAddressForm.Meta):
         model = UserShippingAddress
-        fields = ["street", "zip_code", "city", "state", "country"]
+        fields = [
+            "first_name",
+            "last_name",
+            "company",
+            "street",
+            "zip_code",
+            "city",
+            "state",
+            "country",
+        ]
 
 
 class ChangePasswordForm(forms.Form):
