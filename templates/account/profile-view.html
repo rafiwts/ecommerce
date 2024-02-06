@@ -121,7 +121,19 @@
         {% for address in shipping_address_data %}
         <div class="profile-view-shipping-address">
             <div class="profile-view-shipping-address-section">
-                <h3 class="profile-view-shipping-address-title">STREET {{ address.id }}</h3>
+                <h3 class="profile-view-shipping-address-title">FIRST NAME</h3>
+                <p class="profile-view-shipping-address-field">{% if address.first_name %}{{ address.first_name }}{%else%}{%endif%}</p>
+            </div>
+            <div class="profile-view-shipping-address-section">
+                <h3 class="profile-view-shipping-address-title">LAST NAME</h3>
+                <p class="profile-view-shipping-address-field">{% if address.last_name %}{{ address.last_name }}{%else%}{%endif%}</p>
+            </div>
+            <div class="profile-view-shipping-address-section">
+                <h3 class="profile-view-shipping-address-title">COMPANY</h3>
+                <p class="profile-view-shipping-address-field">{{ address.company }}</p>
+            </div>
+            <div class="profile-view-shipping-address-section">
+                <h3 class="profile-view-shipping-address-title">STREET</h3>
                 <p class="profile-view-shipping-address-field">{{ address.street }}</p>
             </div>
             <div class="profile-view-shipping-address-section">
@@ -357,23 +369,73 @@
 
 <!-- add shipping address block -->
 <div id="addShippingAddressBlock" class="add-shipping-address-block-display">
-    <h1>Add shipping address</h1>
+    <h2>Add shipping address</h2>
+    <div id="editShippingAddressInfo" class="add-shipping-address-info">
+        <img class="warning-sign" src="{% static 'images/warning-sign.svg' %}">
+        <p>This address will be only used for a delivery. Please make sure that all data are correct.</p>
+    </div>
     <div id="addShippingAddressBlockContent" class="add-shipping-address-block-content">
-        <span class="closet3" onclick="(() => closeBlock('addShippingAddressBlock'))()">&times;</span>
+        <span class="close" onclick="(() => closeBlock('addShippingAddressBlock'))()">&times;</span>
         <div class="add-shipping-address-form">
             <form method="post" action="{% url 'account:shipping-address-add' request.user.username %}">
-                {% for field in shipping_address_form %}
-                    {% for error in field.errors %}
-                        <div class="add-shipping-address-error-message">{{ error }}</div>
-                    {% endfor %}
-                    <div class="add-shipping-address-box {% if field.errors %}has-error{% endif %}">
-                        <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
-                        {{ field }}
-                        <span class="change-password-help-text">{{ field.help_text }}</span>
+                <div class="add-shipping-address-form-box">
+                    <div class="add-shipping-address-form-field first-name">
+                        <div class="add-shipping-address-form-field-box">
+                            <h5>{{ shipping_address_form.first_name.label }}</h5>
+                            {{ shipping_address_form.first_name }}
+                        </div>
                     </div>
-                {% endfor %}
-                {% csrf_token %}
-                <button type="submit">Saved</button>
+                    <div class="add-shipping-address-form-field last-name">
+                        <div class="add-shipping-address-form-field-box">
+                            <h5>{{ shipping_address_form.last_name.label }}</h5>
+                            {{ shipping_address_form.last_name }}
+                        </div>
+                    </div>
+                    <div class="add-shipping-address-form-field company">
+                        <div class="add-shipping-address-form-field-box">
+                            <h5>{{ shipping_address_form.company.label }}</h5>
+                            {{ shipping_address_form.company }}
+                            <i class="fas fa-info-circle add-shipping-address"></i>
+                            <div class="add-shipping-address-tooltip">{{ shipping_address_form.company.help_text }}</div>
+                        </div>
+                    </div>
+                    <div class="zip-code-street-block-shipping-address">
+                        <div class="add-shipping-address-form-field street">
+                            <div class="add-shipping-address-form-field-box">
+                                <h5>{{ shipping_address_form.street.label }}</h5>
+                                {{ shipping_address_form.street }}
+                            </div>
+                        </div>
+                        <div class="add-shipping-address-form-field zip_code">
+                            <div class="add-shipping-address-form-field-box">
+                                <h5>{{ shipping_address_form.zip_code.label }}</h5>
+                                {{ shipping_address_form.zip_code }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="add-shipping-address-form-field city">
+                        <div class="add-shipping-address-form-field-box">
+                            <h5>{{ shipping_address_form.city.label }}</h5>
+                            {{ shipping_address_form.city }}
+                        </div>
+                    </div>
+                    <div class="add-shipping-address-form-field state">
+                        <div class="add-shipping-address-form-field-box">
+                            <h5>{{ shipping_address_form.state.label }}</h5>
+                            {{ shipping_address_form.state }}
+                            <i class="fas fa-info-circle add-shipping-address"></i>
+                            <div class="add-shipping-address-tooltip">{{ shipping_address_form.state.help_text }}</div>
+                        </div>
+                    </div>
+                    <div class="add-shipping-address-form-field country">
+                        <div class="add-shipping-address-form-field-box">
+                            <h5>{{ shipping_address_form.country.label }}</h5>
+                            {{ shipping_address_form.country }}
+                        </div>
+                    </div>
+                    {%csrf_token%}
+                    <div class="add-shipping-address-btn-block"><button class="add-shipping-address-btn" type="submit">Save Changes</button></div>
+                </div>
             </form>
         </div>
     </div>
@@ -382,7 +444,7 @@
 <!-- edit shipping address block - create each form for each instance of shipping address -->
 {% for address in shipping_address_data %}
 <div id="editShippingAddressBlock-{{ address.id }}" class="edit-shipping-address-block-display">
-    <h2>Edit shipping address {{ address.id }}</h2>
+    <h2>Edit shipping address</h2>
     <div id="editShippingAddressInfo" class="edit-shipping-address-info">
         <img class="warning-sign" src="{% static 'images/warning-sign.svg' %}">
         <p>This address will be only used for a delivery. Please make sure that all data are correct.</p>
@@ -392,19 +454,19 @@
         <div class="edit-shipping-address-form">
             <form method="post" action="{% url 'account:update-shipping-address' request.user.username address.id %}">
                 <div class="edit-shipping-address-form-box">
-                    <div class="edit-shipping-address-form-field first-name {% if shipping_address_form.first_name.errors %}has-error{% endif %}">
+                    <div class="edit-shipping-address-form-field first-name">
                         <div class="edit-shipping-address-form-field-box">
                             <h5>{{ shipping_address_form.first_name.label }}</h5>
                             <input type="text" name="{{ shipping_address_form.first_name.name }}" value="{% if address.first_name %}{{ address.first_name }}{% else %}{{ '' }}{% endif %}">
                         </div>
                     </div>
-                    <div class="edit-shipping-address-form-field last-name {% if shipping_address_form.last_name.errors %}has-error{% endif %}">
+                    <div class="edit-shipping-address-form-field last-name">
                         <div class="edit-shipping-address-form-field-box">
                             <h5>{{ shipping_address_form.last_name.label }}</h5>
                             <input type="text" name="{{ shipping_address_form.last_name.name }}" value="{% if address.last_name %}{{ address.last_name }}{% else %}{{ '' }}{% endif %}">
                         </div>
                     </div>
-                    <div class="edit-shipping-address-form-field company {% if shipping_address_form.company.errors %}has-error{% endif %}">
+                    <div class="edit-shipping-address-form-field company">
                         <div class="edit-shipping-address-form-field-box">
                             <h5>{{ shipping_address_form.company.label }}</h5>
                             <input type="text" name="{{ shipping_address_form.company.name }}" value="{% if address.company %}{{ address.company }}{% else %}{{ '' }}{% endif %}">
@@ -413,26 +475,26 @@
                         </div>
                     </div>
                     <div class="zip-code-street-block-shipping-address">
-                        <div class="edit-shipping-address-form-field street {% if shipping_address_form.street.errors %}has-error{% endif %}">
+                        <div class="edit-shipping-address-form-field street">
                             <div class="edit-shipping-address-form-field-box">
                                 <h5>{{ shipping_address_form.street.label }}</h5>
                                 <input type="text" name="{{ shipping_address_form.street.name }}" value="{{ address.street }}">
                             </div>
                         </div>
-                        <div class="edit-shipping-address-form-field zip_code {% if shipping_address_form.zip_code.errors %}has-error{% endif %}">
+                        <div class="edit-shipping-address-form-field zip_code">
                             <div class="edit-shipping-address-form-field-box">
                                 <h5>{{ shipping_address_form.zip_code.label }}</h5>
                                 <input type="text" name="{{ shipping_address_form.zip_code.name }}" value="{{ address.zip_code }}">
                             </div>
                         </div>
                     </div>
-                    <div class="edit-shipping-address-form-field city {% if shipping_address_form.city.errors %}has-error{% endif %}">
+                    <div class="edit-shipping-address-form-field city">
                         <div class="edit-shipping-address-form-field-box">
                             <h5>{{ shipping_address_form.city.label }}</h5>
                             <input type="text" name="{{ shipping_address_form.city.name }}" value="{{ address.city }}">
                         </div>
                     </div>
-                    <div class="edit-shipping-address-form-field state {% if shipping_address_form.state.errors %}has-error{% endif %}">
+                    <div class="edit-shipping-address-form-field state">
                         <div class="edit-shipping-address-form-field-box">
                             <h5>{{ shipping_address_form.state.label }}</h5>
                             <input type="text" name="{{ shipping_address_form.state.name }}" value="{{ address.state }}">
@@ -440,7 +502,7 @@
                             <div class="edit-shipping-address-tooltip">{{ shipping_address_form.state.help_text }}</div>
                         </div>
                     </div>
-                    <div class="edit-shipping-address-form-field country {% if shipping_address_form.country.errors %}has-error{% endif %}">
+                    <div class="edit-shipping-address-form-field country">
                         <div class="edit-shipping-address-form-field-box">
                             <h5>{{ shipping_address_form.country.label }}</h5>
                             <input type="text" name="{{ shipping_address_form.country.name }}" value="{{ address.country }}">

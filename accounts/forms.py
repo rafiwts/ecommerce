@@ -279,6 +279,41 @@ class UserShippingAddressForm(BaseAddressForm):
         label="Company name", required=False, help_text="Company name is optional"
     )
 
+    # replace id for shipping address
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["street"].widget = forms.TextInput(
+            attrs={
+                "class": "edit-address-field",
+                "id": "streetAdd",
+                "autocomplete": "on",
+            }
+        )
+        self.fields["zip_code"].widget = forms.TextInput(
+            attrs={
+                "class": "edit-address-field",
+                "id": "zipCodeAdd",
+                "autocomplete": "on",
+            }
+        )
+        self.fields["city"].widget = forms.TextInput(
+            attrs={"class": "edit-address-field", "id": "cityAdd", "autocomplete": "on"}
+        )
+        self.fields["state"].widget = forms.TextInput(
+            attrs={
+                "class": "edit-address-field",
+                "id": "stateAdd",
+                "autocomplete": "on",
+            }
+        )
+        self.fields["country"].widget = forms.TextInput(
+            attrs={
+                "class": "edit-address-field",
+                "id": "countryAdd",
+                "autocomplete": "on",
+            }
+        )
+
     class Meta(BaseAddressForm.Meta):
         model = UserShippingAddress
         fields = [
