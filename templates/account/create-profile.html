@@ -1,5 +1,11 @@
 {%extends "base.html"%}
 
+{%load static%}
+
+{% block extra_styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/account/create-profile.css' %}">
+{% endblock %}
+
 {%block content%}
 {% for message in messages %}
     <div class="create-profile-{{ message.tags }}">
@@ -7,22 +13,52 @@
     </div>
 {% endfor %}
 
-<h1>Create your profile</h1>
-<p>You can edit your account using the following form:</p>
-<div class="create-profile-form">
-  <form method="post" enctype="multipart/form-data">
-    {% for field in profile_form %}
-      {% for error in field.errors %}
-        <div class="create-profile-error-message">{{ error }}</div>
-      {% endfor %}
-      <div class="create-profile-box {% if field.errors %}has-error{% endif %}">
-        <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
-        {{ field }}
-        <span class="create-profile-help-text">{{ field.help_text }}</span>
-      </div>
-    {% endfor %}
-    {%csrf_token%}
-    <button class="create-profile-button" type="submit">Save Changes</button>
-  </form>
+<div class="create-profile-block-display">
+  <div class="create-profile-block-container">
+    <div class="create-profile-title-section">
+        <div class="create-profile-text">
+          <h1>Create your profile</h1>
+          <p>Please create the profile before we complete your signing up</p>
+        </div>
+        <div class="create-profile-background-img">
+          <img class="background-img" src="{% static 'images/create-profile-image.jpg' %}" alt="create-profile-image">
+          <div class="profile-img-container">
+            <img class="profile-img" src="{% static 'images/circle-icon-profile.svg.jpg' %}" alt="create-profile-image">
+          </div>
+        </div>
+    </div>
+    <div class="create-profile-form">
+      <form method="post" enctype="multipart/form-data">
+        <div class="create-profile-form-box">
+          <div class="full-name-container">
+            <div class="create-profile-form-field first_name">
+              <div class="create-profile-form-field-box first_name">
+                {{ profile_form.first_name }}
+              </div>
+            </div>
+            <div class="create-profile-form-field last_name">
+              <div class="create-profile-form-field-box last_name">
+                {{ profile_form.last_name }}
+              </div>
+            </div>
+          </div>
+          <div class="create-profile-form-field date_of_birth">
+            <div class="create-profile-form-field-box date_of_birth">
+              <h5>{{ profile_form.date_of_birth.label }}</h5>
+              {{ profile_form.date_of_birth }}
+            </div>
+          </div>
+          <div class="create-profile-form-field phone">
+            <div class="create-profile-form-field-box phone">
+              <h5>{{ profile_form.phone.label }}</h5>
+              {{ profile_form.phone }}
+            </div>
+          </div>
+        </div>
+        {%csrf_token%}
+        <div class="create-profile-btn-block"><button class="create-profile-btn" type="submit">Create profile</button></div>
+      </form>
+    </div>
+  </div>
 </div>
 {%endblock content%}

@@ -1,0 +1,104 @@
+.create-profile-block-display {
+    display: flex;
+    justify-content: center;
+    height: 72vh;
+    padding-top: 40px;
+}
+
+.create-profile-block-container {
+    width: 550px;
+    border: 1px solid black;
+    border-radius: 20px;
+    box-shadow: 6px 6px 18px 4px rgb(92, 92, 92);
+}
+
+.create-profile-text {
+    padding: 15px 0px;
+}
+
+.create-profile-text h1,
+.create-profile-text p {
+    text-align: center;
+    padding: 4px 0px;
+}
+
+.create-profile-text h1 {
+    color: rgb(159, 39, 39);
+}
+
+.create-profile-text p {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.create-profile-background-img {
+    position: relative;
+}
+
+.background-img {
+    height: 200px;
+    width: 550px;
+    object-fit: fill;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+}
+
+.profile-img {
+    position: absolute;
+    top: 28px;
+    left: 200px;
+    width: 150px;
+    height: 150px;
+}
+
+.create-profile-form {
+    padding: 20px 40px 40px 20px;
+}
+
+.full-name-container {
+    display: flex;
+    column-gap: 40px;
+}
+
+.create-profile-form h5 {
+    text-align: center;
+    font-size: 14px;
+    color: rgb(159, 39, 39);
+}
+.create-profile-form input {
+    width: 100%;
+    height: 30px;
+    padding: 0px 10px;
+    border-radius: 6px;
+}
+
+#id_phone_0 {
+    width: 100px;
+    height: 30px;
+    border-radius: 6px;
+}
+
+.create-profile-field {
+    margin-bottom: 15px;
+}
+
+.create-profile-btn-block {
+    margin-top: 25px;
+    width: 100%;
+    text-align: right;
+}
+
+.create-profile-btn {
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: rgb(128, 42, 42);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.create-profile-btn:hover {
+    background-color: rgb(170, 110, 110);
+}
