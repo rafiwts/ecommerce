@@ -9,8 +9,9 @@ from django.views import View
 from django.views.generic import CreateView, DeleteView, UpdateView
 
 from .forms import (
-    AccountForm,
     ChangePasswordForm,
+    CreateProfileForm,
+    EditAccoutForm,
     ImageForm,
     LoginForm,
     ResetPasswordForm,
@@ -83,7 +84,7 @@ def register(request):
 @login_required
 def create_profile(request):
     if request.method == "POST":
-        profile_form = AccountForm(
+        profile_form = CreateProfileForm(
             data=request.POST, instance=request.user.account, files=request.FILES
         )
         if profile_form.is_valid():
@@ -93,7 +94,7 @@ def create_profile(request):
         else:
             messages.error(request, "Invaild data")
     else:
-        profile_form = AccountForm(instance=request.user.account)
+        profile_form = CreateProfileForm(instance=request.user.account)
 
     return render(
         request, "account/create-profile.html", {"profile_form": profile_form}
@@ -171,7 +172,7 @@ class ProfileView(View):
         return ChangePasswordForm()
 
     def get_account_form(self, user):
-        return AccountForm(instance=user.account)
+        return EditAccoutForm(instance=user.account)
 
     def get_address_form(self, user):
         return UserAddressForm(instance=user.account.address)
@@ -251,7 +252,7 @@ class EditAccount(ProfileView, View):
 
     def post(self, request, *args, **kwargs):
         user = request.user
-        self.account_form = AccountForm(instance=user.account, data=request.POST)
+        self.account_form = EditAccoutForm(instance=user.account, data=request.POST)
         if self.account_form.is_valid():
             self.account_form.save()
             messages.success(request, "Data has been saved")

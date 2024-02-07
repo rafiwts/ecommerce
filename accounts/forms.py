@@ -148,7 +148,7 @@ country_choices = [
 sorted_country_choices = sorted(country_choices, key=lambda x: x[1])
 
 
-class AccountForm(forms.ModelForm):
+class BaseAccountForm(forms.ModelForm):
     first_name = forms.CharField(
         max_length=50,
         label="First name",
@@ -194,6 +194,45 @@ class AccountForm(forms.ModelForm):
             initial="PL", country_choices=sorted_country_choices
         ),
     )
+
+    class Meta:
+        abstract = True
+
+
+class EditAccoutForm(BaseAccountForm):
+    class Meta:
+        model = Account
+        fields = ["first_name", "last_name", "date_of_birth", "phone"]
+
+
+class CreateProfileForm(BaseAccountForm):
+    # replace id for creating profile
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["first_name"].widget = forms.TextInput(
+            attrs={
+                "class": "create-profile-field",
+                "id": "firstNameProfile",
+                "autocomplete": "on",
+                "placeholder": "First name...",
+            }
+        )
+        self.fields["last_name"].widget = forms.TextInput(
+            attrs={
+                "class": "create-profile-field",
+                "id": "lastNameProfile",
+                "autocomplete": "on",
+                "placeholder": "Last name...",
+            }
+        )
+        self.fields["date_of_birth"].widget = forms.TextInput(
+            attrs={
+                "type": "date",
+                "class": "create-profile-field",
+                "id": "birthDateProfile",
+                "autocomplete": "off",
+            }
+        )
 
     class Meta:
         model = Account
