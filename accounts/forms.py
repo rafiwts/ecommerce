@@ -225,7 +225,7 @@ class CreateProfileForm(BaseAccountForm):
                 "placeholder": "Last name...",
             }
         )
-        self.fields["date_of_birth"].widget = forms.TextInput(
+        self.fields["date_of_birth"].widget = forms.DateInput(
             attrs={
                 "type": "date",
                 "class": "create-profile-field",

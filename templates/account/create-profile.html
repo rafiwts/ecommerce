@@ -8,9 +8,11 @@
 
 {%block content%}
 {% for message in messages %}
+  <div class="create-profile-{{ message.tags }}-container">
     <div class="create-profile-{{ message.tags }}">
         {{ message }}
     </div>
+  </div>
 {% endfor %}
 
 <div class="create-profile-block-display">
@@ -32,14 +34,20 @@
         <div class="create-profile-form-box">
           <div class="full-name-container">
             <div class="create-profile-form-field first_name">
-              <div class="create-profile-form-field-box first_name">
+              <div class="create-profile-form-field-box first_name {% if profile_form.first_name.errors %}error{% endif %}">
                 {{ profile_form.first_name }}
               </div>
+              {% if profile_form.first_name.errors %}
+                <div class="create-profile-field-error-message">{{ profile_form.first_name.errors|striptags }}</div>
+              {% endif %}
             </div>
             <div class="create-profile-form-field last_name">
-              <div class="create-profile-form-field-box last_name">
+              <div class="create-profile-form-field-box last_name {% if profile_form.last_name.errors %}error{% endif %}">
                 {{ profile_form.last_name }}
               </div>
+              {% if profile_form.last_name.errors %}
+                <div class="create-profile-field-error-message">{{ profile_form.last_name.errors|striptags }}</div>
+              {% endif %}
             </div>
           </div>
           <div class="create-profile-form-field date_of_birth">
@@ -49,10 +57,13 @@
             </div>
           </div>
           <div class="create-profile-form-field phone">
-            <div class="create-profile-form-field-box phone">
+            <div class="create-profile-form-field-box phone {% if profile_form.phone.errors %}error{% endif %}">
               <h5>{{ profile_form.phone.label }}</h5>
               {{ profile_form.phone }}
             </div>
+            {% if profile_form.phone.errors %}
+              <div class="create-profile-field-error-message">{{ profile_form.phone.errors|striptags }}</div>
+            {% endif %}
           </div>
         </div>
         {%csrf_token%}
