@@ -26,6 +26,7 @@ from .models import User, UserShippingAddress
 def login_view(request):
     if request.method == "POST":
         login_form = LoginForm(request.POST)
+        password_form = ResetPasswordForm(request.POST)
         if login_form.is_valid():
             cleaned_data = login_form.cleaned_data
             user = authenticate(
@@ -40,13 +41,28 @@ def login_view(request):
                         request, "The account is inactive. Please contact our support!"
                     )
             else:
-                messages.error(request, "Invalid credentials. Try again!")
+                messages.warning(request, "Invalid credentials. Try again!")
+        elif password_form.is_valid():
+            email = password_form.cleaned_data["email"]
+            user = User.objects.filter(email=email).first()
 
-            login_form = LoginForm()
+            if user:
+                reset_password_email_handler(request, user, email)
+                return redirect("account:login")
+            else:
+                messages.error(request, "User with this email address not found!")
+
+        login_form = LoginForm()
+        password_form = ResetPasswordForm()
     else:
         login_form = LoginForm()
+        password_form = ResetPasswordForm()
 
-    return render(request, "account/login.html", {"login_form": login_form})
+    return render(
+        request,
+        "account/login.html",
+        {"login_form": login_form, "password_form": password_form},
+    )
 
 
 @login_required
@@ -90,6 +106,7 @@ def create_profile(request):
         if profile_form.is_valid():
             profile_form.save()
             logout(request)
+            messages.info(request, "The user has been created! You can login in now!")
             return redirect(reverse("account:login"))
         else:
             messages.error(request, "Invaild data")

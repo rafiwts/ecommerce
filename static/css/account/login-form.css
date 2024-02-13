@@ -1,3 +1,27 @@
+
+.login-error,
+.login-warning,
+.login-info {
+    display: flex;
+    column-gap: 10px;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(214, 181, 181);
+    border: 2px solid rgb(158, 0, 0);
+    color: rgb(158, 0, 0);
+    font-size: 14px;
+    padding: 1rem;
+    margin-bottom: 6px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 1px rgb(121, 121, 121);
+}
+
+.login-info {
+    background-color: rgb(190, 214, 181);
+    border: 2px solid rgb(42, 129, 42);
+    color: rgb(30, 95, 0);
+}
+
 .login-form-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -201,41 +225,13 @@
     flex: 1;
 }
 
-.login-error {
-    display: flex;
-    align-items: center;
-    background: rgb(202, 126, 126);
-    border: solid 2px;
-    border-color: #8b0c0c;
-    height: 50px;
-    margin-bottom: 20px;
-    box-shadow: 3px 3px 3px #030101;
-}
-
-.login-error-message {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    font-weight: bold;
-    color: white;
-    padding-left: 5px;
-    height: 100%;
-}
-
-.login-error-image {
-    display: flex;
-    align-items: center;
-    padding: 0px 1.5rem;
-}
-
-.login-error-image i {
-    font-size: 24px;
-    color: rgb(131, 0, 0);
-}
-
 .fas.fa-eye,
 .far.fa-user-circle {
     color: #646160;
+}
+
+.reset-password-block {
+    display: none;
 }
 
 @media screen and (max-width: 1050px) {

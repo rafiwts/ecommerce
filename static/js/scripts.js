@@ -419,3 +419,16 @@ document.getElementById("editAccountForm").addEventListener("submit", function(e
     }
     // TODO: add a logic that check the validity of a phone number
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    var resetPasswordLink = document.getElementById("resetPasswordLink");
+    if (resetPasswordLink) {
+        resetPasswordLink.addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent default link behavior
+            console.log("duppa");
+            // Add your code to open the reset password window here
+        });
+    } else {
+        console.error("Failed to find reset password link element");
+    }
+});

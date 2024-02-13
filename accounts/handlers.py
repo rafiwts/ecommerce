@@ -44,9 +44,9 @@ def reset_password_email_handler(request, user, email):
 
     try:
         send_mail(subject, message, company_email, [email])
-        messages.success(request, "Password reset email sent. Check your inbox.")
+        messages.info(request, "Password reset email sent. Check your inbox.")
     except Exception:
-        messages.success(
+        messages.error(
             request, "Internal error. The message has not been sent. Try again."
         )
 
