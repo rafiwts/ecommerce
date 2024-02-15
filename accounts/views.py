@@ -23,37 +23,40 @@ from .handlers import reset_password_email_handler, upload_image_handler
 from .models import User, UserShippingAddress
 
 
+def handle_login(request, login_form):
+    cleaned_data = login_form.cleaned_data
+    user = authenticate(
+        username=cleaned_data["username"], password=cleaned_data["password"]
+    )
+    if user and user.is_active:
+        login(request, user)
+        return redirect(reverse("home"))
+    elif user and not user.is_active:
+        messages.error(request, "The account is inactive. Please contact our support!")
+    else:
+        messages.warning(request, "Invalid credentials. Try again!")
+
+
+def handle_reset_password(request, password_form):
+    email = password_form.cleaned_data["email"]
+    user = User.objects.filter(email=email).first()
+
+    if user:
+        reset_password_email_handler(request, user, email)
+        return redirect("account:login")
+    else:
+        messages.error(request, "User with his email address not found!")
+
+
 def login_view(request):
     if request.method == "POST":
         login_form = LoginForm(request.POST)
         password_form = ResetPasswordForm(request.POST)
         if login_form.is_valid():
-            cleaned_data = login_form.cleaned_data
-            user = authenticate(
-                username=cleaned_data["username"], password=cleaned_data["password"]
-            )
-            if user:
-                if user.is_active:
-                    login(request, user)
-                    return redirect(reverse("home"))
-                else:
-                    messages.error(
-                        request, "The account is inactive. Please contact our support!"
-                    )
-            else:
-                messages.warning(request, "Invalid credentials. Try again!")
+            handle_login(request, login_form)
         elif password_form.is_valid():
-            email = password_form.cleaned_data["email"]
-            user = User.objects.filter(email=email).first()
+            handle_reset_password(request, password_form)
 
-            if user:
-                reset_password_email_handler(request, user, email)
-                return redirect("account:login")
-            else:
-                messages.error(request, "User with this email address not found!")
-
-        login_form = LoginForm()
-        password_form = ResetPasswordForm()
     else:
         login_form = LoginForm()
         password_form = ResetPasswordForm()
