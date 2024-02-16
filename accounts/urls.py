@@ -13,7 +13,6 @@ from .views import (
     login_view,
     logout_view,
     register,
-    reset_password,
     reset_password_confirmation,
 )
 
@@ -26,7 +25,6 @@ urlpatterns = [
         reset_password_confirmation,
         name="reset-password-confirmation",
     ),
-    path("reset-password/", reset_password, name="reset-password"),
     path("login/", login_view, name="login"),
     path("logout/", logout_view, name="logout"),
     path("create-profile/", create_profile, name="create-profile"),

@@ -25,16 +25,18 @@ from .models import User, UserShippingAddress
 
 def handle_login(request, login_form):
     cleaned_data = login_form.cleaned_data
-    user = authenticate(
+    authenticated_user = authenticate(
         username=cleaned_data["username"], password=cleaned_data["password"]
     )
-    if user and user.is_active:
-        login(request, user)
-        return redirect(reverse("home"))
-    elif user and not user.is_active:
+    if authenticated_user and authenticated_user.is_active:
+        login(request, authenticated_user)
+        return True
+    elif authenticated_user and not authenticated_user.is_active:
         messages.error(request, "The account is inactive. Please contact our support!")
+        return False
     else:
         messages.warning(request, "Invalid credentials. Try again!")
+        return False
 
 
 def handle_reset_password(request, password_form):
@@ -53,13 +55,15 @@ def login_view(request):
         login_form = LoginForm(request.POST)
         password_form = ResetPasswordForm(request.POST)
         if login_form.is_valid():
-            handle_login(request, login_form)
+            user_is_authenticated = handle_login(request, login_form)
+            if user_is_authenticated:
+                return redirect("home")
+
         elif password_form.is_valid():
             handle_reset_password(request, password_form)
 
-    else:
-        login_form = LoginForm()
-        password_form = ResetPasswordForm()
+    login_form = LoginForm()
+    password_form = ResetPasswordForm()
 
     return render(
         request,
@@ -156,11 +160,7 @@ def reset_password_confirmation(request, uidb64, token):
                 user.set_password(new_password1)
                 user.save()
 
-                messages.success(
-                    request,
-                    "Password has been changed. You can "
-                    "log in again using a new password",
-                )
+                messages.info(request, "Password has been changed.")
 
                 return redirect("account:login")
     else:

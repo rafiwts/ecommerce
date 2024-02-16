@@ -200,6 +200,14 @@
     display: inline; /* This ensures that the span only takes up as much width as its content */
 }
 
+.forgot-password-btn {
+    text-align: right;
+    text-decoration: underline;
+    color: blue;
+    padding-top: 5px;
+    border: none;
+}
+
 .login-btn {
     display: block;
     width: 100%;
@@ -230,9 +238,83 @@
     color: #646160;
 }
 
-.reset-password-block {
+.reset-password-block-display {
     display: none;
 }
+
+/* reset password display block */
+.close {
+    position: absolute;
+    display: inline-block;
+    font-size: 30px;
+    top: 0px;
+    right: 6px;
+    cursor: pointer;
+}
+
+.reset-password-block-display {
+    display: none;
+    position: fixed;
+    flex-direction: column;
+    align-items: center;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #e4e4e4;
+    border: 1px solid rgb(222, 222, 222);
+    width: 600px;
+    z-index: 1;
+}
+
+.reset-password-block-display h1 {
+    margin: 10px 0px;
+    color: #942525;
+}
+
+.reset-password-block-display p {
+    font-weight: bold;
+    margin-bottom: 10px;
+    padding-left: 10px;
+}
+
+.reset-password-field {
+    width: 340px;
+}
+
+.reset-password-field input {
+    padding: 5px 0px 5px 10px;
+}
+
+.reset-password-btn-block {
+    text-align: center;
+}
+
+.reset-password-btn {
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    background-color: #8c4343;
+    width: 250px;
+    padding: 8px;
+    margin: 20px 0px;
+    border: none;
+    cursor: pointer;
+}
+
+.reset-password-btn:hover {
+    background-color: #b46060;
+}
+
+.block-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+}
+
 
 @media screen and (max-width: 1050px) {
     .login-form-container {

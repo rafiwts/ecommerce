@@ -129,7 +129,7 @@ class ResetPasswordForm(forms.Form):
                 "class": "reset-password-field",
                 "id": "email",
                 "autocomplete": "off",
-                "placeholder": "email",
+                "placeholder": "e-mail",
             }
         ),
     )
