@@ -1,8 +1,10 @@
 import os
+from datetime import datetime, timedelta
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 
 from .handlers import image_directory_path
@@ -116,6 +118,46 @@ class AccountType(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ResetPasswordLink(models.Model):
+    link = models.CharField(max_length=100, unique=True, null=True, blank=True)
+    user = models.ForeignKey(
+        "User",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="links",
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        null=True,
+        blank=True,
+        help_text="When the link was created",
+        verbose_name="created",
+    )
+    expiration_time = models.IntegerField(
+        default=86400, null=True, blank=True, db_column=_("expiration time [s]")
+    )
+    expired = models.BooleanField(default=False)
+
+    def has_expired(self):
+        """
+        checks if reset password link has expired - after changing a password or 1 day
+        """
+        # if password has been changed
+        if self.expired:
+            return self.expired
+
+        current_time = datetime.now()
+        expiry_time = self.created_at + timedelta(seconds=self.expiration_time)
+
+        has_expired = current_time.timestamp() >= expiry_time.timestamp()
+
+        if has_expired:
+            self.expired = True
+
+        return has_expired
 
 
 class Adress(models.Model):

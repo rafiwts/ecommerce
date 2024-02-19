@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.encoding import force_str
@@ -20,7 +21,7 @@ from .forms import (
     UserShippingAddressForm,
 )
 from .handlers import reset_password_email_handler, upload_image_handler
-from .models import User, UserShippingAddress
+from .models import ResetPasswordLink, User, UserShippingAddress
 
 
 def handle_login(request, login_form):
@@ -44,7 +45,13 @@ def handle_reset_password(request, password_form):
     user = User.objects.filter(email=email).first()
 
     if user:
-        reset_password_email_handler(request, user, email)
+        created_link = reset_password_email_handler(request, user, email)
+
+        if created_link:
+            # if link has been created
+            link = ResetPasswordLink(link=created_link, user=user)
+            link.save()
+
         return redirect("account:login")
     else:
         messages.error(request, "User with his email address not found!")
@@ -125,29 +132,21 @@ def create_profile(request):
     )
 
 
-def reset_password(request):
-    if request.method == "POST":
-        password_form = ResetPasswordForm(request.POST)
-        if password_form.is_valid():
-            email = password_form.cleaned_data["email"]
-            user = User.objects.filter(email=email).first()
-
-            if user:
-                reset_password_email_handler(request, user, email)
-                return redirect("account:login")
-            else:
-                messages.error(request, "User with this email address not found")
-    else:
-        password_form = ResetPasswordForm()
-
-    return render(
-        request, "account/reset-password.html", {"password_form": password_form}
-    )
-
-
 def reset_password_confirmation(request, uidb64, token):
+    reset_url = request.build_absolute_uri(
+        reverse(
+            "account:reset-password-confirmation",
+            kwargs={"uidb64": uidb64, "token": token},
+        )
+    )
+    existing_link = ResetPasswordLink.objects.get(link=reset_url)
+
+    if existing_link.has_expired():
+        return HttpResponse("Link does not exist anymore", status=404)
+
     uid = force_str(urlsafe_base64_decode(uidb64))
     user = get_object_or_404(User, pk=uid)
+    # TODO: add validation
     if request.method == "POST":
         password_form = ChangePasswordForm(data=request.POST)
         if password_form.is_valid():
@@ -161,6 +160,8 @@ def reset_password_confirmation(request, uidb64, token):
                 user.save()
 
                 messages.info(request, "Password has been changed.")
+                existing_link.expired = True
+                existing_link.save()
 
                 return redirect("account:login")
     else:
@@ -307,7 +308,6 @@ class BaseShippingAddressView(ProfileView):
 
     def form_invalid(self, form, *args, **kwargs):
         self.form = form
-        print(form)
         messages.info(self.request, self.error_info)
         return super().get(self.request, *args, **kwargs)
 
