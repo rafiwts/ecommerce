@@ -392,6 +392,7 @@ class ChangePasswordForm(forms.Form):
                 "placeholder": "New password",
             }
         ),
+        validators=[password_validation],
     )
     confirm_password = forms.CharField(
         label="Confirm password",
