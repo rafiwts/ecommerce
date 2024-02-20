@@ -22,6 +22,7 @@ pillow = "^10.1.0"
 django-phonenumber-field = "^7.3.0"
 phonenumbers = "^8.13.27"
 django-extensions = "^3.2.3"
+pytest-django = "^4.8.0"
 
 
 [build-system]
