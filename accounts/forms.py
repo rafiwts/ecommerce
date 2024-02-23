@@ -383,7 +383,7 @@ class ChangePasswordForm(forms.Form):
     )
     new_password = forms.CharField(
         label="New password",
-        required=False,
+        required=True,
         widget=forms.PasswordInput(
             attrs={
                 "class": "change-password-field",
@@ -396,7 +396,7 @@ class ChangePasswordForm(forms.Form):
     )
     confirm_password = forms.CharField(
         label="Confirm password",
-        required=False,
+        required=True,
         help_text=(
             "Password must contain at least 8 characters "
             "with one uppercase and one digit"
