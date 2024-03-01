@@ -275,7 +275,7 @@ class EditAccount(ProfileView, View):
     # once there is an error the form should be overridden to display errors
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["account_form"] = self.account_form
+        context["account_form"] = self.get_account_form
         return context
 
     def post(self, request, *args, **kwargs):
@@ -286,7 +286,8 @@ class EditAccount(ProfileView, View):
             messages.success(request, "Data has been saved")
             return redirect("account:profile-view", username=user)
         else:
-            return super().get(request, *args, **kwargs)
+            # Render the response using self.get() to re-render the page with errors
+            return self.get(request, *args, **kwargs)
 
 
 class EditAddress(ProfileView, View):
@@ -310,7 +311,7 @@ class BaseShippingAddressView(ProfileView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["shipping_address_form"] = self.form
+        context["shipping_address_form"] = self.get_shipping_address_form
         return context
 
     def form_invalid(self, form, *args, **kwargs):
