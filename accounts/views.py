@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.encoding import force_str
@@ -178,9 +178,12 @@ class ProfileView(View):
     template_name = "account/profile-view.html"
 
     def get_user(self, username):
-        return User.objects.prefetch_related(
-            "account__address", "account__shipping_addresses"
-        ).get(username=username)
+        try:
+            return User.objects.prefetch_related(
+                "account__address", "account__shipping_addresses"
+            ).get(username=username)
+        except User.DoesNotExist:
+            raise Http404("User does not exist")
 
     def get_shipping_address_data(self, user):
         shipping_addresses = user.account.shipping_addresses.all()
@@ -221,9 +224,13 @@ class ProfileView(View):
             "shipping_address_form": shipping_address_form,
         }
 
-    def get(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        return render(request, self.template_name, context)
+    def get(self, request, username, *args, **kwargs):
+        if request.user.username == username:
+            user = self.get_user(username)
+            context = self.get_context_data(user=user, **kwargs)
+            return render(request, self.template_name, context)
+        else:
+            raise Http404("Something went wrong!")
 
 
 class ChangeProfileImage(ProfileView, View):
