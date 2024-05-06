@@ -87,6 +87,21 @@ def test_login_users_with_username_and_email(
 
 
 @pytest.mark.django_db
+def test_login_with_invalid_credentials(client):
+    mock_username = "MockUsername"
+    mock_password = "MockPassword12!"
+
+    url = reverse("account:login")
+    data = {"username": mock_username, "password": mock_password}
+
+    response = client.post(url, data=data, follow=True)
+
+    # TODO: Try to do it with message in a session
+    assert "Invalid credentials. Try again!" in response.content.decode("utf-8")
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
 def test_logout_user(client, custom_users):
     login_url = reverse("account:login")
     data = {"username": "mako", "password": "Stefan13!"}
