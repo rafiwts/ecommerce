@@ -22,6 +22,18 @@ def custom_users(django_db_setup, django_db_blocker):
 
 
 @pytest.fixture
+def inactive_user(db):
+    inactive_user = User.objects.create_user(
+        username="joanna",
+        email="joanna@gmail.com",
+        password="Joanna13!",
+        is_active=False,
+    )
+
+    return inactive_user
+
+
+@pytest.fixture
 def client(db):
     client = Client()
     return client
