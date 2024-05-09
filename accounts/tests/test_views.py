@@ -1,8 +1,10 @@
+import datetime
 import os
 
 import pytest
 from django.urls import reverse
 from dotenv import load_dotenv
+from freezegun import freeze_time
 
 from accounts.models import ResetPasswordLink, User
 
@@ -155,10 +157,7 @@ def test_logout_user(client, custom_users):
 )
 def test_reset_password_with_correct_email(client, email, custom_users):
     url = reverse("account:login")
-    user = User.objects.get(email=email)
     data = {"email": email}
-
-    initial_link_count = ResetPasswordLink.objects.count()
 
     response = client.post(url, data=data, follow=True)
 
@@ -167,13 +166,81 @@ def test_reset_password_with_correct_email(client, email, custom_users):
     )
     assert response.status_code == 200
 
-    final_link_count = ResetPasswordLink.objects.count()
 
-    assert final_link_count == initial_link_count + 1
-    assert ResetPasswordLink.objects.filter(user_id=user.id).exists()
+@pytest.mark.django_db
+def test_reset_password_with_incorrect_email(client):
+    mock_email = "rafiwts@gmail.com"
+
+    url = reverse("account:login")
+    data = {"email": mock_email}
+
+    response = client.post(url, data=data, follow=True)
+
+    assert "User with his email address not found!" in response.content.decode("utf-8")
+    assert response.status_code == 200
 
 
-# TODO: think about the implementation of tests with correct
-# email check and also with reset password link
-# add creation time and elapse time tests - very important -
-# separate links and email tests
+@pytest.mark.django_db
+@freeze_time("2024-04-08 20:00:00")
+@pytest.mark.parametrize(
+    "email",
+    [
+        ("mako@gmail.com"),
+        ("tako@gmail.com"),
+        ("bako@gmail.com"),
+    ],
+)
+def test_reset_password_link_access(
+    client, email, custom_users, send_password_reset_request
+):
+    # get user with given email
+    user = User.objects.get(email=email)
+
+    # the amount of links before sending a password reset
+    initial_link_count = ResetPasswordLink.objects.count()
+
+    send_password_reset_request(email)
+
+    # verify that a new link has been created
+    assert ResetPasswordLink.objects.count() == initial_link_count + 1
+
+    # verify that the link is associated with the correct user
+    reset_link = ResetPasswordLink.objects.filter(user_id=user.id).first()
+    assert reset_link is not None
+
+
+@pytest.mark.django_db
+@freeze_time("2024-04-08 20:00:00")
+@pytest.mark.parametrize(
+    "email",
+    [
+        ("mako@gmail.com"),
+        ("tako@gmail.com"),
+        ("bako@gmail.com"),
+    ],
+)
+def test_reset_password_link_expiration_time(
+    client, email, custom_users, send_password_reset_request
+):
+    # get user with given email
+    user = User.objects.get(email=email)
+    send_password_reset_request(email)
+
+    reset_link = ResetPasswordLink.objects.filter(user_id=user.id).first()
+
+    # verify that the link can be accessed
+    reset_response = client.get(reset_link.link)
+    assert reset_response.status_code == 200
+    assert reset_link.created_at == datetime.datetime(
+        2024, 4, 8, 20, 0, tzinfo=datetime.timezone.utc
+    )
+
+    # try to access the link after expiration
+    expired_time = reset_link.created_at + datetime.timedelta(seconds=86400)
+    with freeze_time(expired_time):
+        expired_link_response = client.get(reset_link.link)
+
+    assert expired_link_response.status_code == 404
+    assert (
+        expired_link_response.content.decode("utf-8") == "Link does not exist anymore"
+    )
