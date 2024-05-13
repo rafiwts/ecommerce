@@ -181,7 +181,6 @@ def test_reset_password_with_incorrect_email(client):
 
 
 @pytest.mark.django_db
-@freeze_time("2024-04-08 20:00:00")
 @pytest.mark.parametrize(
     "email",
     [
@@ -190,16 +189,14 @@ def test_reset_password_with_incorrect_email(client):
         ("bako@gmail.com"),
     ],
 )
-def test_reset_password_link_access(
-    client, email, custom_users, send_password_reset_request
-):
+def test_reset_password_link_access(client, email, custom_users, send_request):
     # get user with given email
     user = User.objects.get(email=email)
 
     # the amount of links before sending a password reset
     initial_link_count = ResetPasswordLink.objects.count()
 
-    send_password_reset_request(email)
+    send_request(email)
 
     # verify that a new link has been created
     assert ResetPasswordLink.objects.count() == initial_link_count + 1
@@ -219,12 +216,10 @@ def test_reset_password_link_access(
         ("bako@gmail.com"),
     ],
 )
-def test_reset_password_link_expiration_time(
-    client, email, custom_users, send_password_reset_request
-):
+def test_reset_password_link_expiration_time(client, email, custom_users, send_request):
     # get user with given email
     user = User.objects.get(email=email)
-    send_password_reset_request(email)
+    send_request(email)
 
     reset_link = ResetPasswordLink.objects.filter(user_id=user.id).first()
 
@@ -244,3 +239,156 @@ def test_reset_password_link_expiration_time(
     assert (
         expired_link_response.content.decode("utf-8") == "Link does not exist anymore"
     )
+
+
+@pytest.mark.django_db
+def test_reset_password_link_with_correct_credentials(
+    client, custom_user, send_request
+):
+    user = User.objects.get(email=custom_user.email)
+    mock_password = "Nowehasło1!"
+    send_request(custom_user.email)
+
+    reset_link = ResetPasswordLink.objects.filter(user_id=user.id).first()
+
+    # verify that the link can be accessed
+    reset_response = client.post(
+        reset_link.link,
+        data={"new_password": mock_password, "confirm_password": mock_password},
+        follow=True,
+    )
+
+    assert reset_response.status_code == 200
+    assert "Password has been changed." in reset_response.content.decode("utf-8")
+
+    # login with new credentials
+    login_url = reverse("account:login")
+    data = {"username": custom_user.username, "password": mock_password}
+
+    login_response = client.post(login_url, data)
+
+    assert login_response.status_code == 302
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "new_password, confirm_password, error_message",
+    [
+        ("NoDigit", "NoDigit", "New password must contain at least one digit."),
+        (
+            "noupper1",
+            "noupper1",
+            "New password must contain at least one uppercase letter.",
+        ),
+        (
+            "nodigitandupper",
+            "nodigitandupper",
+            "New password must contain at least one uppercase letter and one digit.",
+        ),
+        ("Different1", "Different2", "Passwords do not match."),
+    ],
+)
+def test_reset_password_link_with_incorrect_credentials(
+    client, custom_user, send_request, new_password, confirm_password, error_message
+):
+    user = User.objects.get(email=custom_user.email)
+    send_request(custom_user.email)
+
+    reset_link = ResetPasswordLink.objects.filter(user_id=user.id).first()
+
+    # verify that the link cannot be accessed due to invalid credentials
+    reset_response = client.post(
+        reset_link.link,
+        data={"new_password": new_password, "confirm_password": confirm_password},
+        follow=True,
+    )
+
+    assert reset_response.status_code == 200
+    assert error_message in reset_response.content.decode("utf-8")
+
+
+@pytest.mark.django_db
+def test_register_user_correct_data(client, send_request):
+    user_data = {
+        "username": "makoboss",
+        "email": "makobossss@gmail.com",
+        "password1": "Django12",
+        "password2": "Django12",
+    }
+
+    # create a user
+    send_request(**user_data)
+
+    profile_data = {
+        "first_name": "Maciej",
+        "last_name": "Młynarski",
+        "date_of_birth": datetime.date(1995, 4, 8),
+        "phone_0": "PL",
+        "phone_1": "602421032",
+    }
+
+    # create a profile with profile data
+    url = reverse("account:create-profile")
+    response = client.post(url, data=profile_data, follow=True)
+
+    assert response.status_code == 200
+
+    # get a created user
+    new_user = User.objects.select_related("account").get(
+        username=user_data["username"]
+    )
+
+    assert new_user.is_active == True  # noqa: E712
+    assert new_user.is_authenticated == True  # noqa: E712
+    assert new_user.email == user_data["email"]
+    assert new_user.account.first_name == profile_data["first_name"]
+    assert new_user.account.last_name == profile_data["last_name"]
+    assert profile_data["phone_1"] in str(new_user.account.phone)
+    assert new_user.account.date_of_birth == profile_data["date_of_birth"]
+
+    # login a user
+    url = reverse("account:login")
+    response = client.post(
+        url,
+        data={"username": user_data["username"], "password": user_data["password1"]},
+    )
+
+    assert response.status_code == 302
+
+
+# TODO: add more examples for this test
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "username, email, password1, password2, error_message",
+    [
+        (
+            "lukasz",
+            "wybierz@gmail.com",
+            "Cotam123",
+            "Cotam123",
+            "The username lukasz already exists.",
+        ),
+    ],
+)
+def test_user_existence_when_registering(
+    client,
+    custom_user,
+    send_request,
+    username,
+    email,
+    password1,
+    password2,
+    error_message,
+):
+    data = {
+        "username": username,
+        "email": email,
+        "password1": password1,
+        "password2": password2,
+    }
+
+    url = reverse("account:register")
+
+    response = client.post(url, data=data, follow=True)
+
+    assert error_message in response.content.decode("utf-8")

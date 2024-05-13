@@ -11,6 +11,27 @@ def client(db):
     return client
 
 
+@pytest.fixture
+def custom_user(db):
+    custom_user = User.objects.create_user(
+        username="lukasz", email="lukasz@gmail.com", password="Łukasz13!"
+    )
+
+    return custom_user
+
+
+@pytest.fixture
+def inactive_user(db):
+    inactive_user = User.objects.create_user(
+        username="joanna",
+        email="joanna@gmail.com",
+        password="Joanna13!",
+        is_active=False,
+    )
+
+    return inactive_user
+
+
 @pytest.fixture(scope="session")
 def custom_users(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
@@ -29,24 +50,17 @@ def custom_users(django_db_setup, django_db_blocker):
 
 
 @pytest.fixture
-def inactive_user(db):
-    inactive_user = User.objects.create_user(
-        username="joanna",
-        email="joanna@gmail.com",
-        password="Joanna13!",
-        is_active=False,
-    )
+def send_request(client):
+    def send_request(email_address=None, **kwargs):
+        if email_address is not None:
+            url = reverse("account:login")
+            data = {"email": email_address}
+        else:
+            url = reverse("account:register")
+            data = kwargs
 
-    return inactive_user
-
-
-@pytest.fixture
-def send_password_reset_request(client):
-    def send_request(email):
-        url = reverse("account:login")
-        data = {"email": email}
         response = client.post(url, data=data, follow=True)
-        assert response.status_code == 200
+
         return response
 
     return send_request
