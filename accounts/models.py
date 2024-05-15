@@ -160,7 +160,7 @@ class ResetPasswordLink(models.Model):
         return has_expired
 
 
-class Adress(models.Model):
+class Address(models.Model):
     street = models.CharField(max_length=50)
     zip_code = models.CharField(max_length=15, verbose_name="zip code")
     city = models.CharField(max_length=50)
@@ -192,7 +192,7 @@ class Adress(models.Model):
         abstract = True
 
 
-class UserShippingAddress(Adress):
+class UserShippingAddress(Address):
     first_name = models.CharField(
         max_length=50, null=True, blank=True, verbose_name="Name"
     )
@@ -217,7 +217,7 @@ class UserShippingAddress(Adress):
         ordering = ["-id"]
 
 
-class UserAddress(Adress):
+class UserAddress(Address):
     account = models.OneToOneField(
         "Account",
         on_delete=models.CASCADE,
