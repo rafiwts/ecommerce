@@ -1,8 +1,10 @@
+import datetime
+
 import pytest
 from django.test import Client
 from django.urls import reverse
 
-from accounts.models import User
+from accounts.models import Account, User
 
 
 @pytest.fixture
@@ -16,6 +18,20 @@ def custom_user(db):
     custom_user = User.objects.create_user(
         username="lukasz", email="lukasz@gmail.com", password="Łukasz13!"
     )
+
+    return custom_user
+
+
+@pytest.fixture
+def custom_user_with_profile(db, custom_user):
+    user_profile = Account.objects.get(pk=custom_user.id)
+
+    user_profile.first_name = "Łukasz"
+    user_profile.last_name = "Krupiński"
+    user_profile.date_of_birth = datetime.date(1991, 8, 24)
+    user_profile.phone = "+48601945444"
+
+    user_profile.save()
 
     return custom_user
 

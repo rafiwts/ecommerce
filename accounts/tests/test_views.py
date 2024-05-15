@@ -5,8 +5,15 @@ import pytest
 from django.urls import reverse
 from dotenv import load_dotenv
 from freezegun import freeze_time
+from utils import assert_address_data_saved_and_displayed, login_and_get_response
 
-from accounts.models import ResetPasswordLink, User
+from accounts.models import (
+    Account,
+    ResetPasswordLink,
+    User,
+    UserAddress,
+    UserShippingAddress,
+)
 
 load_dotenv()
 
@@ -368,6 +375,13 @@ def test_register_user_correct_data(client, send_request):
             "Cotam123",
             "The username lukasz already exists.",
         ),
+        (
+            "username",
+            "lukasz@gmail.com",
+            "Cotam123",
+            "Cotam123",
+            "The email lukasz@gmail.com already exists.",
+        ),
     ],
 )
 def test_user_existence_when_registering(
@@ -392,3 +406,116 @@ def test_user_existence_when_registering(
     response = client.post(url, data=data, follow=True)
 
     assert error_message in response.content.decode("utf-8")
+
+
+@pytest.mark.django_db
+def test_profile_view_personal_data_display(client, custom_user_with_profile):
+    updated_user = User.objects.select_related("account").get(
+        username=custom_user_with_profile.username
+    )
+
+    # login and go to edit profile
+    client.login(username=custom_user_with_profile.username, password="Łukasz13!")
+    edit_profile_url = reverse(
+        "account:profile-view", kwargs={"username": custom_user_with_profile.username}
+    )
+    edit_profile_response = client.get(edit_profile_url)
+
+    assert updated_user.username in edit_profile_response.content.decode("utf-8")
+    assert updated_user.email in edit_profile_response.content.decode("utf-8")
+    assert updated_user.account.first_name in edit_profile_response.content.decode(
+        "utf-8"
+    )
+    assert updated_user.account.last_name in edit_profile_response.content.decode(
+        "utf-8"
+    )
+    assert "+48601945444" in edit_profile_response.content.decode("utf-8")
+
+
+@pytest.mark.django_db
+def test_profile_view_personal_data_edit(client, custom_user_with_profile):
+    new_profile_data = {
+        "first_name": "Roman",
+        "last_name": "Adamczyk",
+        "date_of_birth": datetime.date(2000, 2, 2),
+        "phone_0": "PL",
+        "phone_1": "602322032",
+    }
+
+    # login and go to edit profile
+    edit_profile_response = login_and_get_response(
+        client,
+        custom_user_with_profile.username,
+        "Łukasz13!",
+        "account:edit-account",
+        data=new_profile_data,
+        follow=True,
+    )
+    updated_profile = Account.objects.get(user_id=custom_user_with_profile.id)
+
+    # check if data has been saved to a database
+    assert new_profile_data["first_name"] == updated_profile.first_name
+    assert new_profile_data["last_name"] == updated_profile.last_name
+    assert new_profile_data["date_of_birth"] == updated_profile.date_of_birth
+    assert "+48602322032" == updated_profile.phone
+
+    # check if data display on page
+    assert new_profile_data["first_name"] in edit_profile_response.content.decode(
+        "utf-8"
+    )
+    assert new_profile_data["last_name"] in edit_profile_response.content.decode(
+        "utf-8"
+    )
+    assert "Feb. 2, 2000" in edit_profile_response.content.decode("utf-8")
+    assert "+48602322032" in edit_profile_response.content.decode("utf-8")
+
+
+address_data = {
+    "street": "Modra 42/5",
+    "zip_code": "54-151",
+    "city": "Wrocław",
+    "state": "dolnośląskie",
+    "country": "Polska",
+}
+
+
+@pytest.mark.django_db
+def test_profile_view_home_address_edit(client, custom_user):
+    # login and go to edit address
+    edit_address_response = login_and_get_response(
+        client,
+        custom_user.username,
+        "Łukasz13!",
+        "account:edit-address",
+        data=address_data,
+        follow=True,
+    )
+
+    assert_address_data_saved_and_displayed(
+        client, custom_user, address_data, UserAddress, edit_address_response
+    )
+
+
+@pytest.mark.django_db
+def test_profile_view_shipping_address_add(client, custom_user):
+    shipping_address_data = address_data
+    shipping_address_data["first_name"] = "Marek"
+    shipping_address_data["last_name"] = "Podolski"
+
+    # login and go to edit shipping address
+    edit_shipping_address_response = login_and_get_response(
+        client,
+        custom_user.username,
+        "Łukasz13!",
+        "account:shipping-address-add",
+        data=shipping_address_data,
+        follow=True,
+    )
+
+    assert_address_data_saved_and_displayed(
+        client,
+        custom_user,
+        shipping_address_data,
+        UserShippingAddress,
+        edit_shipping_address_response,
+    )
