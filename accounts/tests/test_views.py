@@ -19,44 +19,45 @@ load_dotenv()
 
 
 @pytest.mark.django_db
-class TestView:
-    @pytest.mark.parametrize(
-        "template_name",
-        {
-            "home",
-            "account:register",
-            "account:login",
-        },
-    )
-    def test_views_with_no_login_required(self, client, template_name):
-        url = reverse(template_name)
-        response = client.get(url)
+@pytest.mark.parametrize(
+    "template_name",
+    {
+        "home",
+        "account:register",
+        "account:login",
+    },
+)
+def test_views_with_no_login_required(client, template_name):
+    url = reverse(template_name)
+    response = client.get(url)
 
-        assert response.status_code == 200
+    assert response.status_code == 200
 
-    @pytest.mark.parametrize(
-        "template_name, login_user, password",
-        {
-            ("account:profile-view", "mako", "Stefan13!"),
-            ("account:edit-account", "tako", "August13!"),
-            ("account:edit-address", "bako", "Zygmunt13!"),
-            (
-                "account:change-password",
-                "rafiwts",
-                os.environ.get("SUPERUSER_PASSWORD"),
-            ),
-            ("account:shipping-address-add", "tako", "August13!"),
-        },
-    )
-    def test_views_with_login_required(
-        self, client, template_name, login_user, password, custom_users
-    ):
-        client.login(username=login_user, password=password)
-        url = reverse(template_name, kwargs={"username": login_user})
 
-        response = client.get(url)
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "template_name, login_user, password",
+    {
+        ("account:profile-view", "mako", "Stefan13!"),
+        ("account:edit-account", "tako", "August13!"),
+        ("account:edit-address", "bako", "Zygmunt13!"),
+        (
+            "account:change-password",
+            "rafiwts",
+            os.environ.get("SUPERUSER_PASSWORD"),
+        ),
+        ("account:shipping-address-add", "tako", "August13!"),
+    },
+)
+def test_views_with_login_required(
+    client, template_name, login_user, password, custom_users
+):
+    client.login(username=login_user, password=password)
+    url = reverse(template_name, kwargs={"username": login_user})
 
-        assert response.status_code == 200
+    response = client.get(url)
+
+    assert response.status_code == 200
 
 
 @pytest.mark.django_db
@@ -139,7 +140,7 @@ def test_login_with_inactive_user(client, inactive_user):
 
 
 @pytest.mark.django_db
-def test_logout_user(client, custom_users):
+def test_logout_user(client):
     login_url = reverse("account:login")
     data = {"username": "mako", "password": "Stefan13!"}
 
@@ -162,7 +163,7 @@ def test_logout_user(client, custom_users):
         ("bako@gmail.com"),
     ],
 )
-def test_reset_password_with_correct_email(client, email, custom_users):
+def test_reset_password_with_correct_email(client, email):
     url = reverse("account:login")
     data = {"email": email}
 
@@ -196,7 +197,7 @@ def test_reset_password_with_incorrect_email(client):
         ("bako@gmail.com"),
     ],
 )
-def test_reset_password_link_access(client, email, custom_users, send_request):
+def test_reset_password_link_access(client, email, send_request):
     # get user with given email
     user = User.objects.get(email=email)
 
@@ -223,7 +224,7 @@ def test_reset_password_link_access(client, email, custom_users, send_request):
         ("bako@gmail.com"),
     ],
 )
-def test_reset_password_link_expiration_time(client, email, custom_users, send_request):
+def test_reset_password_link_expiration_time(client, email, send_request):
     # get user with given email
     user = User.objects.get(email=email)
     send_request(email)
@@ -497,13 +498,13 @@ def test_profile_view_home_address_edit(client, custom_user):
 
 
 @pytest.mark.django_db
-def test_profile_view_shipping_address_add(client, custom_user):
+def test_profile_view_new_shipping_address_add(client, custom_user):
     shipping_address_data = address_data
     shipping_address_data["first_name"] = "Marek"
     shipping_address_data["last_name"] = "Podolski"
 
     # login and go to edit shipping address
-    edit_shipping_address_response = login_and_get_response(
+    add_shipping_address_response = login_and_get_response(
         client,
         custom_user.username,
         "Łukasz13!",
@@ -517,5 +518,66 @@ def test_profile_view_shipping_address_add(client, custom_user):
         custom_user,
         shipping_address_data,
         UserShippingAddress,
-        edit_shipping_address_response,
+        add_shipping_address_response,
     )
+
+
+@pytest.mark.django_db
+def test_profile_view_shipping_address_delete(client, create_shipping_addresses):
+    user = User.objects.get(id=2)
+
+    assert UserShippingAddress.objects.count() == 2
+
+    client.login(username=user.username, password="Łukasz13!")
+    url = reverse(
+        "account:delete-shipping-address",
+        kwargs={"username": user.username, "address_id": 2},
+    )
+    client.post(url, follow=True)
+
+    assert UserShippingAddress.objects.count() == 1
+
+
+shipping_address_data = [
+    {
+        "street": "Brajana 21/1",
+        "zip_code": "54-321",
+        "city": "Brzeg",
+        "state": "dolnośląskie",
+        "country": "Polska",
+        "first_name": "Piotr",
+        "last_name": "Grzegorzek",
+    },
+    {
+        "street": "Małpia 2/28",
+        "zip_code": "05-233",
+        "city": "Sosnowiec",
+        "state": "śląskie",
+        "country": "Polska",
+        "first_name": "Tomek",
+        "last_name": "Borek",
+    },
+]
+
+
+@pytest.mark.django_db
+def test_profile_view_shipping_address_edit(client, create_shipping_addresses):
+    user = User.objects.get(id=2)
+
+    client.login(username=user.username, password="Łukasz13!")
+
+    for index, address_data in enumerate(shipping_address_data, start=1):
+        url = reverse(
+            "account:update-shipping-address",
+            kwargs={"username": user.username, "address_id": index},
+        )
+        response = client.post(url, data=address_data, follow=True)
+        updated_shipping_address = UserShippingAddress.objects.get(id=index)
+
+        # Check if database was updated
+        for key, value in address_data.items():
+            assert getattr(updated_shipping_address, key) == value
+
+        # Check if new address is displayed
+        for key, value in address_data.items():
+            assert value in response.content.decode("utf-8")
