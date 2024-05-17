@@ -13,7 +13,7 @@ def client(db):
     return client
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="class")
 def custom_users(django_db_blocker):
     with django_db_blocker.unblock():
         users = [
