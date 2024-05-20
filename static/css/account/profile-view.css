@@ -655,11 +655,6 @@
     padding: 30px 20px;
 }
 
-.edit-shipping-address-info,
-.add-shipping-address-info {
-    width: 500px;
-}
-
 .edit-address-field.error {
     border: solid 2px rgb(255, 0, 0);
 }
@@ -838,4 +833,77 @@
 
 .edit-account-form-field-box.phone.error {
     justify-content: center;
+}
+
+@media (max-width: 450px) {
+    .profile-view {
+        min-width: 450px;
+    }
+
+    .profile-view-shipping-address-container {
+        display: flex;
+        grid-template-columns: 1fr;
+        flex-direction: column;
+        padding-left: 40px;
+    }
+
+    .profile-view-shipping-address {
+        padding-left: 20px;
+    }
+}
+
+@media (max-width: 750px) {
+    .profile-view-main-container {
+    display: flex;
+    flex-direction: column;
+    }
+
+    .profile-view-main-left {
+        margin: 0px;
+    }
+
+    .profile-view-main-left-account {
+        margin: 30px 0px 20px 0px;
+    }
+
+    .profile-view-main-right-products p {
+        margin: 30px 0px;
+    }
+
+    .proile-view-main-right-counter {
+        padding-bottom: 30px;
+    }
+
+    .profile-view-shipping-address-container {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .add-shipping-address-block-display,
+    .edit-shipping-address-block-display,
+    .edit-account-block-display {
+        max-width: 400px;
+        padding: 0px 50px 0px 50px;
+    }
+
+    .edit-account-form-box {
+        display: flex;
+        flex-direction: column;
+        max-width: 350px;
+    }
+
+    .edit-account-form-box input {
+        width: 100%;
+        padding-left: 10px;
+        max-width: 340px;
+    }
+
+    .full-name-block {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 1160px) {
+    .profile-view-title {
+        text-align: center;
+   }
 }

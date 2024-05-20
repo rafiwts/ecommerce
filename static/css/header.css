@@ -55,6 +55,10 @@
     margin-left: auto;
 }
 
+.tabs button {
+    padding: 0px 5px 0px 5px;
+}
+
 .icon-section {
     display: flex;
     flex-direction: row;
@@ -286,23 +290,45 @@
 .show-languages,
 .show-currencies {display: block;}
 
-@media (max-width: 600px) {
-    .header-container {
-        height: 200px;
+@media (max-width: 425px) {
+    .separator.favourites,
+    .separator.other {
+        display: None;
     }
 
-    .header {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-        height: 100%;
+    .header,
+    .header-container,
+    .help-bar,
+    .help-bar-container {
+        width: 425px;
     }
 
 }
 
+@media (max-width: 660px) {
+    .separator.phone {
+        display: None;
+    }
+}
+
+
+@media (max-width: 860px) {
+    .middle-help-bar,
+    .logo-section {
+        display: None;
+    }
+
+    .header {
+        gap: 30px;
+    }
+
+    .tab-bar {
+        height: 80px;
+    }
+}
+
 @media (max-width: 1160px) {
     .category-dropbtn {
- display: None;
+        display: None;
     }
 }

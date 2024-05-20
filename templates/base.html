@@ -14,10 +14,10 @@
             <div class="help-bar">
                 <div class="left-help-bar">
                     {% if request.user.is_authenticated %}
-                    <span class="separator"><a href="{% url 'account:logout' %}" title="Log out">Log out</a></span>
-                    <span class="separator"><a href="{% url 'account:profile-view' request.user.username %}" title="Account">Account</a></span>
-                    <span class="separator"><a href="#" title="Favourites">Favourites</a></span>
-                    <span class="separator"><a href="#" title="Other">Other</a></span>
+                    <span class="separator logout"><a href="{% url 'account:logout' %}" title="Log out">Log out</a></span>
+                    <span class="separator profile"><a href="{% url 'account:profile-view' request.user.username %}" title="Account">Account</a></span>
+                    <span class="separator favourites"><a href="#" title="Favourites">Favourites</a></span>
+                    <span class="separator other"><a href="#" title="Other">Other</a></span>
                     {% else %}
                     <span class="separator"><a href="{% url 'account:login' %}" title="Sign in">Sign in</a>
                         or <a href="{% url 'account:register' %}" title="Register">Register</a>
@@ -28,8 +28,8 @@
                     <p><u>ecommerce website</u></p>
                 </div>
                 <div class="right-help-bar">
-                    <span class="separator">Need help? Call us <a href="#" title="Contact Center">+48604320200</a></span>
-                    <span class="separator">
+                    <span class="separator phone">Need help? Call us <a href="#" title="Contact Center">+48604320200</a></span>
+                    <span class="separator language">
                         <button class="language-dropbtn" id="language-dropbtn" onclick="dropdownLanguage()">
                             Language <img class="language-arrow" src="{% static 'images/arrow.svg' %}">
                         </button>
@@ -39,7 +39,7 @@
                             <a href="#">Language 3</a>
                         </div>
                     </span>
-                    <span class="separator">
+                    <span class="separator currency">
                         <button class="currency-dropbtn" id="currency-dropbtn" onclick="dropdownCurrency()">
                             Currency <img class="currency-arrow" src="{% static 'images/arrow.svg' %}">
                         </button>
