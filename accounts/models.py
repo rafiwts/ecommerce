@@ -41,8 +41,8 @@ class Account(models.Model):
         "AccountType", on_delete=models.SET_NULL, null=True, blank=True
     )
     client_id = models.IntegerField(null=True, blank=True, verbose_name="Client ID")
-    first_name = models.CharField(max_length=100, null=False, verbose_name="name")
-    last_name = models.CharField(max_length=100, null=False, verbose_name="surname")
+    first_name = models.CharField(max_length=100, verbose_name="name")
+    last_name = models.CharField(max_length=100, verbose_name="surname")
     date_of_birth = models.DateField(null=True, blank=True, verbose_name="Birth date")
     image = models.ImageField(
         upload_to=image_directory_path,
@@ -106,6 +106,7 @@ class Account(models.Model):
     class Meta:
         db_table = "accounts"
         ordering = ["-created_at", "last_name"]
+        indexes = [models.Index(fields=["client_id"]), models.Index(fields=["user"])]
 
 
 # TODO: think what you can add to account type

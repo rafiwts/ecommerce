@@ -15,7 +15,7 @@ from django.utils.http import urlsafe_base64_encode
 def image_directory_path(instance, filename):
     now = datetime.now()
     full_name = f"{instance.first_name} {instance.last_name}"
-    return f"{instance.id}-{full_name}-{now}-{filename}"
+    return f"account/{instance.id}-{full_name}-{now}-{filename}"
 
 
 def generate_client_id_handler():
