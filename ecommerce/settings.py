@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "accounts",
-    "shop",
     "products",
     "phonenumber_field",
     "django_extensions",
