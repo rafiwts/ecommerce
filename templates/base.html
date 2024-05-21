@@ -99,14 +99,14 @@
         <div class="tabs-container">
             <div class="tab-bar">
                 <ul class="tabs">
-                    <button onclick="window.location.href='{% url 'shop:shop' %}'" {%block active_shop%}{%endblock active_shop%}>Shop</button>
-                    <button onclick="window.location.href='{% url 'shop:sale' %}'" {%block active_sale%}{%endblock active_sale%}>For Sale</a></button>
+                    <button onclick="window.location.href='{% url 'home' %}'" {%block active_shop%}{%endblock active_shop%}>Shop</button>
+                    <button onclick="window.location.href='{% url 'home' %}'" {%block active_sale%}{%endblock active_sale%}>For Sale</a></button>
                     <button>To be added</button>
                     <button>To be added</button>
                     <button>To be added</button>
-                    <button onclick="window.location.href='{% url 'shop:vendor' %}'" {%block active_vendor%}{%endblock active_vendor%}>Vendors</a></button>
-                    <button onclick="window.location.href='{% url 'shop:info' %}'" {%block active_info%}{%endblock active_info%}>About us</a></button>
-                    <button onclick="window.location.href='{% url 'shop:contact' %}'" {%block active_contact%}{%endblock active_contact%}>Contact us</a></button>
+                    <button onclick="window.location.href='{% url 'home' %}'" {%block active_vendor%}{%endblock active_vendor%}>Vendors</a></button>
+                    <button onclick="window.location.href='{% url 'home' %}'" {%block active_info%}{%endblock active_info%}>About us</a></button>
+                    <button onclick="window.location.href='{% url 'home' %}'" {%block active_contact%}{%endblock active_contact%}>Contact us</a></button>
                     <!-- Add more tabs as needed -->
                 </ul>
             </div>
