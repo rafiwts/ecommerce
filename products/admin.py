@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, Product
+from .models import Category, ChildSubcategory, Product, Subcategory
 
 
 @admin.register(Product)
@@ -10,14 +10,14 @@ class ProductAdmin(admin.ModelAdmin):
         "product_id",
         "name",
         "slug",
-        "category",
+        "child_subcategory",
         "user",
         "image",
         "price",
         "in_stock",
         "stock",
     ]
-    list_filter = ["user", "category", "price", "in_stock"]
+    list_filter = ["user", "child_subcategory", "price", "in_stock"]
     fieldsets = [
         (
             None,
@@ -26,7 +26,7 @@ class ProductAdmin(admin.ModelAdmin):
                     "user",
                     "name",
                     "slug",
-                    "category",
+                    "child_subcategory",
                     "price",
                     "in_stock",
                     "stock",
@@ -38,6 +38,42 @@ class ProductAdmin(admin.ModelAdmin):
     ]
     search_fields = ["user", "name", "product_id"]
     ordering = ["id", "product_id", "price", "in_stock", "stock"]
+    prepopulated_fields = {"slug": ("name",)}
+
+
+@admin.register(ChildSubcategory)
+class ChildSubcategoryAdmin(admin.ModelAdmin):
+    list_display = ["id", "name", "slug", "subcategory"]
+    fieldsets = [
+        (
+            None,
+            {
+                "fields": [
+                    "name",
+                    "slug",
+                    "subcategory",
+                ]
+            },
+        )
+    ]
+    prepopulated_fields = {"slug": ("name",)}
+
+
+@admin.register(Subcategory)
+class SubcategoryAdmin(admin.ModelAdmin):
+    list_display = ["id", "name", "slug", "category"]
+    fieldsets = [
+        (
+            None,
+            {
+                "fields": [
+                    "name",
+                    "slug",
+                    "category",
+                ]
+            },
+        )
+    ]
     prepopulated_fields = {"slug": ("name",)}
 
 
