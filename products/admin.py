@@ -13,11 +13,16 @@ class ProductAdmin(admin.ModelAdmin):
         "child_subcategory",
         "user",
         "image",
-        "price",
+        "formatted_price",
         "in_stock",
         "stock",
     ]
-    list_filter = ["user", "child_subcategory", "price", "in_stock"]
+    list_filter = [
+        "user",
+        "child_subcategory__subcategory__category",
+        "price",
+        "in_stock",
+    ]
     fieldsets = [
         (
             None,
@@ -36,45 +41,53 @@ class ProductAdmin(admin.ModelAdmin):
             },
         )
     ]
-    search_fields = ["user", "name", "product_id"]
-    ordering = ["id", "product_id", "price", "in_stock", "stock"]
+    search_fields = ["user__username", "name", "product_id"]
+    ordering = ["id", "product_id", "in_stock", "stock"]
     prepopulated_fields = {"slug": ("name",)}
+    list_select_related = ["user", "child_subcategory"]
+
+    def formatted_price(self, obj):
+        return f"$ {obj.price:.2f}"
+
+    formatted_price.short_description = "Price"
 
 
 @admin.register(ChildSubcategory)
 class ChildSubcategoryAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "slug", "subcategory"]
+    list_display = ["id", "name", "subcategory", "slug"]
     fieldsets = [
         (
             None,
             {
                 "fields": [
                     "name",
-                    "slug",
                     "subcategory",
+                    "slug",
                 ]
             },
         )
     ]
     prepopulated_fields = {"slug": ("name",)}
+    list_select_related = ["subcategory"]
 
 
 @admin.register(Subcategory)
 class SubcategoryAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "slug", "category"]
+    list_display = ["id", "name", "category", "slug"]
     fieldsets = [
         (
             None,
             {
                 "fields": [
                     "name",
-                    "slug",
                     "category",
+                    "slug",
                 ]
             },
         )
     ]
     prepopulated_fields = {"slug": ("name",)}
+    list_select_related = ["category"]
 
 
 @admin.register(Category)
