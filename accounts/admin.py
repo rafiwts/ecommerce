@@ -26,6 +26,7 @@ class UserAdmin(admin.ModelAdmin):
     ]
     search_fields = ["email", "id", "username"]
     ordering = ["-is_superuser", "-is_staff", "username"]
+    list_select_related = ["account"]
 
 
 @admin.register(Account)
@@ -41,6 +42,7 @@ class AccountAdmin(admin.ModelAdmin):
         "account",
     )
     ordering = ["last_name", "first_name"]
+    list_select_related = ["account", "user", "address"]
 
     @admin.display(description="Full name")
     def get_full_name(self, obj):
@@ -60,6 +62,7 @@ class AccountAdmin(admin.ModelAdmin):
 class AccountTypeAdmin(admin.ModelAdmin):
     list_display = ("id", "name", "discount_value")
     ordering = ["discount_value"]
+    list_select_related = ["account"]
 
 
 class BaseAddressAdmin(admin.ModelAdmin):
@@ -75,6 +78,7 @@ class BaseAddressAdmin(admin.ModelAdmin):
     list_filter = ["country", "city"]
     search_fields = ["country", "city", "street"]
     ordering = ["country", "city", "street", "zip_code"]
+    list_select_related = ["account"]
 
 
 @admin.register(UserAddress)
