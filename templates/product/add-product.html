@@ -1,5 +1,54 @@
-<form action="/product/add-product/" method="post">
+{%extends "base.html"%}
+
+{%load static%}
+
+{%block content%}
+<br>
+<br>
+<form action="/product/add-product/" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ product_form }}
-    <input type="submit" value="Submit">
+    <div class="add-product-form-box">
+        <div class="add-product-form-field image">
+            {{ product_form.image.label }}: {{ product_form.image }}
+        </div>
+        <div class="add-product-form-field name">
+            {{ product_form.name.label }}: {{ product_form.name }}
+        </div>
+        <div class="add-product-form-field description">
+            {{ product_form.description.label }}: {{ product_form.description }}
+        </div>
+        <div class="add-product-form-field category">
+            <label for="category">Category:</label>
+            <select name="category" class="product-category" id="selectProductCategory">
+                <option value="">Select a category</option>
+                {% for category in product_form.fields.category.queryset %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="add-product-form-field subcategory">
+            <label for="subcategory">Subcategory:</label>
+            <select name="subcategory" class="product-subcategory" id="selectProductSubcategory">
+                {% for subcategory in product_form.fields.subcategory.queryset %}
+                <option value="{{ subcategory.id }}" data-category-id="{{ subcategory.category_id }}">{{ subcategory.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="add-product-form-field child_subcategory">
+            <label for="child_subcategory">Product type:</label>
+            <select name="child_subcategory" class="product-childsubcategory" id="addProductSubcategory">
+                {% for child_subcategory in product_form.fields.child_subcategory.queryset %}
+                <option value="{{ child_subcategory.id }}" data-subcategory-id="{{ child_subcategory.subcategory_id }}">{{ child_subcategory.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="add-product-form-field stock">
+            {{ product_form.stock.label }}: {{ product_form.stock }}
+        </div>
+        <div class="add-product-form-field price">
+            {{ product_form.price.label }}: {{ product_form.price }}
+        </div>
+    </div>
+    <button type="submit">Save</button>
 </form>
+{%endblock content%}

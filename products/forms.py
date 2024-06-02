@@ -1,12 +1,12 @@
 from django import forms
 from django.core.validators import MaxLengthValidator
 
-from .models import ChildSubcategory, Product
+from .models import Category, ChildSubcategory, Product, Subcategory
 
 
 class ProductForm(forms.ModelForm):
     image = forms.ImageField(
-        label="Image",
+        label="Imaffge",
         required=False,
         widget=forms.FileInput(
             attrs={"id": "addProductImage", "class": "add-product-image"}
@@ -30,11 +30,14 @@ class ProductForm(forms.ModelForm):
             attrs={"id": "addProductDescription", "class": "add-product-description"}
         ),
     )
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.all(),
+    )
+    subcategory = forms.ModelChoiceField(
+        queryset=Subcategory.objects.all(),
+    )
     child_subcategory = forms.ModelChoiceField(
         queryset=ChildSubcategory.objects.all(),
-        widget=forms.Select(attrs={"class": "product-subcategory"}),
-        empty_label="Select a subcategory",
-        label="Subcategory",
     )
     stock = forms.IntegerField(
         label="Stock",
@@ -61,9 +64,26 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields = ["image", "name", "description", "child_subcategory", "stock", "price"]
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # check instanve
+        instance = kwargs.get("instance")
+        print(instance)
+
+        if instance:
+            category = instance.category
+            self.fields["subcategory"].queryset = Subcategory.objects.filter(
+                category=category
+            )
+            self.fields["child_subcategory"].queryset = ChildSubcategory.objects.filter(
+                subcategory=category
+            )
+
     def save(self, commit=True, user=None):
         # automatically add a user
         product = super().save(commit=False)
+
         if user:
             product.user = user
         if commit:

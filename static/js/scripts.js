@@ -1,4 +1,36 @@
 // changes the rotation of the arrow for categories tab upon clicking for 3 buttons:
+console.log("dusss")
+
+document.addEventListener('DOMContentLoaded', function () {
+    const categorySelect = document.querySelector('.product-category');
+    const subcategorySelect = document.querySelector('.product-subcategory');
+    const childSubcategorySelect = document.querySelector('.product-childsubcategory');
+
+    const allSubcategories = Array.from(subcategorySelect.options);
+    const allChildSubcategories = Array.from(childSubcategorySelect.options);
+
+    categorySelect.addEventListener('change', function () {
+
+        const categoryId = this.value;
+        console.log(categoryId)
+        console.log(allSubcategories)
+        subcategorySelect.innerHTML = '<option value="">Select a subcategory</option>';
+
+        const filteredSubcategories = allSubcategories.filter(option => option.dataset.categoryId === categoryId);
+        filteredSubcategories.forEach(option => subcategorySelect.appendChild(option));
+    });
+
+    subcategorySelect.addEventListener('change', function () {
+        const subcategoryId = this.value;
+
+        childSubcategorySelect.innerHTML = '<option value="">Select a child subcategory</option>';
+
+        const filteredChildSubcategories = allChildSubcategories.filter(option => option.dataset.subcategoryId === subcategoryId);
+        filteredChildSubcategories.forEach(option => childSubcategorySelect.appendChild(option));
+    });
+});
+
+
 function dropdownCategory() {
     var dropdownList = document.getElementById("dropdownListCategory");
     dropdownList.classList.toggle("show-categories");
@@ -419,3 +451,5 @@ document.getElementById("editAccountForm").addEventListener("submit", function(e
     }
     // TODO: add a logic that check the validity of a phone number
 });
+
+console.log("WTF")
