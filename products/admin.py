@@ -12,7 +12,6 @@ class ProductAdmin(admin.ModelAdmin):
         "slug",
         "child_subcategory",
         "user",
-        "image",
         "formatted_price",
         "in_stock",
         "stock",
@@ -35,7 +34,6 @@ class ProductAdmin(admin.ModelAdmin):
                     "price",
                     "in_stock",
                     "stock",
-                    "image",
                     "description",
                 ]
             },

@@ -1,0 +1,4 @@
+.add-product-form-field.subcategory,
+.add-product-form-field.child_subcategory {
+    display: none;
+}

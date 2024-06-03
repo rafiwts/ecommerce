@@ -2,15 +2,16 @@
 
 {%load static%}
 
+{% block extra_styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/product/product-form.css' %}">
+{% endblock %}
+
 {%block content%}
 <br>
 <br>
 <form action="/product/add-product/" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="add-product-form-box">
-        <div class="add-product-form-field image">
-            {{ product_form.image.label }}: {{ product_form.image }}
-        </div>
         <div class="add-product-form-field name">
             {{ product_form.name.label }}: {{ product_form.name }}
         </div>
@@ -49,6 +50,11 @@
             {{ product_form.price.label }}: {{ product_form.price }}
         </div>
     </div>
+    {{ formset.management_form }}
+    {% for form in formset %}
+        {{ form.as_p }}
+    {% endfor %}
     <button type="submit">Save</button>
 </form>
+<script src="{% static 'js/product-scripts.js' %}"></script>
 {%endblock content%}

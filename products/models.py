@@ -23,12 +23,6 @@ class Product(ProductModelMixin):
     )
     product_id = models.IntegerField(unique=True, verbose_name="Product ID")
     description = models.TextField()
-    image = models.ImageField(
-        upload_to=image_directory_path,
-        null=True,
-        blank=True,
-        verbose_name="product picture",
-    )
     price = models.DecimalField(max_digits=10, decimal_places=2)
     slug = models.SlugField(max_length=255)
     stock = models.PositiveBigIntegerField()
@@ -155,3 +149,51 @@ class Category(ProductModelMixin):
         verbose_name = "category"
         verbose_name_plural = "categories"
         indexes = [models.Index(fields=["slug"]), models.Index(fields=["name"])]
+
+
+class ProductImage(models.Model):
+    product = models.ForeignKey(
+        "Product", on_delete=models.CASCADE, related_name="images"
+    )
+    image = models.ImageField(
+        upload_to=image_directory_path,
+        null=True,
+        blank=True,
+        verbose_name="product picture",
+    )
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            try:
+                old_instance = ProductImage.objects.get(pk=self.pk)
+                # when image field has been updated
+                if old_instance.image and old_instance.image != self.image:
+                    if os.path.isfile(old_instance.image.path):
+                        os.remove(old_instance.image.path)
+            except ProductImage.DoesNotExist:
+                pass
+
+        super().save(*args, *kwargs)
+
+    def delete(self, *args, **kwargs):
+        """
+        deleting image from media directory when user removed from database
+        """
+        if self.image:
+            image = self.image
+            if os.path.isfile(image.path):
+                os.remove(image.path)
+
+        super().delete(*args, **kwargs)
+
+    def __str__(self):
+        return self.product.name
+
+    class Meta:
+        db_table = "product_images"
+        ordering = ["-uploaded_at"]
+        verbose_name = "product_images"
+        indexes = [
+            models.Index(fields=["id", "product"]),
+        ]
