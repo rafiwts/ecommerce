@@ -1,14 +1,19 @@
-{%extends "base.html"%}
+{% extends "base.html" %}
 
-{%load static%}
+{% load static %}
 
 {% block extra_styles %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/product/product-form.css' %}">
 {% endblock %}
 
-{%block content%}
+{% block content %}
 <br>
 <br>
+{% for field in product_form %}
+    {% for error in field.errors %}
+    <div class="edit-address-error-message">{{ error }}</div>
+    {% endfor %}
+{% endfor %}
 <form action="/product/add-product/" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="add-product-form-box">
@@ -23,15 +28,20 @@
             <select name="category" class="product-category" id="selectProductCategory">
                 <option value="">Select a category</option>
                 {% for category in product_form.fields.category.queryset %}
-                <option value="{{ category.id }}">{{ category.name }}</option>
+                <option value="{{ category.id }}" {% if category.id|stringformat:"s" == selected_category|stringformat:"s" %}selected{% endif %}>
+                    {{ category.name }}
+                </option>
                 {% endfor %}
             </select>
         </div>
         <div class="add-product-form-field subcategory">
             <label for="subcategory">Subcategory:</label>
             <select name="subcategory" class="product-subcategory" id="selectProductSubcategory">
+                <option value="">Select a subcategory</option>
                 {% for subcategory in product_form.fields.subcategory.queryset %}
-                <option value="{{ subcategory.id }}" data-category-id="{{ subcategory.category_id }}">{{ subcategory.name }}</option>
+                <option value="{{ subcategory.id }}" data-category-id="{{ subcategory.category_id }}" {% if subcategory.id|stringformat:"s" == selected_subcategory|stringformat:"s" %}selected{% endif %}>
+                    {{ subcategory.name }}
+                </option>
                 {% endfor %}
             </select>
         </div>
@@ -39,7 +49,9 @@
             <label for="child_subcategory">Product type:</label>
             <select name="child_subcategory" class="product-childsubcategory" id="addProductSubcategory">
                 {% for child_subcategory in product_form.fields.child_subcategory.queryset %}
-                <option value="{{ child_subcategory.id }}" data-subcategory-id="{{ child_subcategory.subcategory_id }}">{{ child_subcategory.name }}</option>
+                <option value="{{ child_subcategory.id }}" data-subcategory-id="{{ child_subcategory.subcategory_id }}" {% if child_subcategory.id|stringformat:"s" == selected_child_subcategory|stringformat:"s" %}selected{% endif %}>
+                    {{ child_subcategory.name }}
+                </option>
                 {% endfor %}
             </select>
         </div>
@@ -53,8 +65,11 @@
     {{ formset.management_form }}
     {% for form in formset %}
         {{ form.as_p }}
+        {% if form.instance.pk %}
+            <img src="{{ form.instance.image.url }}" alt="Existing Image">
+        {% endif %}
     {% endfor %}
     <button type="submit">Save</button>
 </form>
 <script src="{% static 'js/product-scripts.js' %}"></script>
-{%endblock content%}
+{% endblock content %}

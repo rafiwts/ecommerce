@@ -8,10 +8,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const allSubcategories = Array.from(subcategorySelect.options);
     const allChildSubcategories = Array.from(childSubcategorySelect.options);
 
-    categorySelect.addEventListener('change', function () {
-        const categoryId = this.value;
+    console.log(allSubcategories)
+    console.log(allChildSubcategories)
 
-        // if no category is chosen
+    function updateSubcategories(categoryId) {
         if (!categoryId) {
             hiddenSubcategory.style.display = "none";
             hiddenChildSubcategory.style.display = "none";
@@ -20,15 +20,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         hiddenSubcategory.style.display = "block";
         subcategorySelect.innerHTML = '<option value="">Select a subcategory</option>';
-        childSubcategorySelect.innerHTML = '<option value="">Select a child subcategory</option>';
-
         const filteredSubcategories = allSubcategories.filter(option => option.dataset.categoryId === categoryId);
         filteredSubcategories.forEach(option => subcategorySelect.appendChild(option));
-    });
+    }
 
-    subcategorySelect.addEventListener('change', function () {
-        const subcategoryId = this.value;
-
+    function updateChildSubcategories(subcategoryId) {
         if (!subcategoryId) {
             hiddenChildSubcategory.style.display = "none";
             childSubcategorySelect.innerHTML = '<option value="">Select a child subcategory</option>';
@@ -37,8 +33,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
         hiddenChildSubcategory.style.display = "block";
         childSubcategorySelect.innerHTML = '<option value="">Select a child subcategory</option>';
-
         const filteredChildSubcategories = allChildSubcategories.filter(option => option.dataset.subcategoryId === subcategoryId);
         filteredChildSubcategories.forEach(option => childSubcategorySelect.appendChild(option));
+    }
+
+    // fetch initial values
+    const initialCategoryId = categorySelect.value;
+    const initialSubcategoryId = subcategorySelect.value;
+
+    updateSubcategories(initialCategoryId);
+    updateChildSubcategories(initialSubcategoryId);
+
+    // event listeners for changing value
+    categorySelect.addEventListener('change', function () {
+        updateSubcategories(this.value);
+        childSubcategorySelect.innerHTML = '<option value="">Select a child subcategory</option>';
+    });
+
+    subcategorySelect.addEventListener('change', function () {
+        updateChildSubcategories(this.value);
     });
 });

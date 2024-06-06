@@ -7,9 +7,8 @@ from .models import ProductImage
 
 
 def add_product(request):
-    ImageFormSet = modelformset_factory(
-        ProductImage, form=ProductImageForm, extra=3, can_delete=True
-    )
+    ImageFormSet = modelformset_factory(ProductImage, form=ProductImageForm, extra=10)
+
     if request.method == "POST":
         product_form = ProductForm(data=request.POST)
         formset = ImageFormSet(
@@ -33,25 +32,31 @@ def add_product(request):
                     photo.save()
 
             return redirect(reverse("home"))
+
     else:
         product_form = ProductForm()
         formset = ImageFormSet(queryset=ProductImage.objects.none())
 
-    return render(
-        request,
-        "product/add-product.html",
-        {"product_form": product_form, "formset": formset},
-    )
+    context = {
+        "product_form": product_form,
+        "formset": formset,
+    }
+
+    # if there is field error, retain the chosen categories
+    if request.method == "POST":
+        context.update(
+            {
+                "selected_category": request.POST.get("category"),
+                "selected_subcategory": request.POST.get("subcategory"),
+                "selected_child_subcategory": request.POST.get("child_subcategory"),
+            }
+        )
+
+    return render(request, "product/add-product.html", context)
 
 
-# TODO: think how to add many images to one product - not only one
-# improve how to add it - one more if all pictures added
-# check JS and view
-# and also the main image and it moves and dispalys
-# TODO: stock and price cannot be negative
+# TODO: chosen files disappear when form is invalid - perhaps js will solve the issue?
+# TODO: verify the labels
+# TODO: price cannot be negative
 # TODO: see allegro what can be also added
 # TODO: add it somewhere and only when the user is logged in and work on the display
-# TODO:
-# TODO:
-# TODO:
-# TODO:
