@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "accounts",
     "products",
+    "file_resubmit",
     "phonenumber_field",
     "django_extensions",
 ]
@@ -166,3 +167,13 @@ EMAIL_USE_TLS = True
 
 # Shell_plus settings
 SHELL_PLUS_PRINT_SQL_TRUNCATE = 10000
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    },
+    "file_resubmit": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": os.path.join(BASE_DIR, "tmp/file_resubmit/"),
+    },
+}

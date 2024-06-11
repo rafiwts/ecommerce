@@ -85,6 +85,17 @@ files = [
 Django = ">=3.2"
 
 [[package]]
+name = "django-file-resubmit"
+version = "0.5.2"
+description = "Keeps submited files when validation errors occur."
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-file-resubmit-0.5.2.tar.gz", hash = "sha256:f4c9edf27bb6956d06987e4376cd09fb0175dd8ce6dc640e593c09ddd959016f"},
+    {file = "django_file_resubmit-0.5.2-py3-none-any.whl", hash = "sha256:2b21516b88f5202cb56077c199883f2d8c93e28338f984b630e3d6be870f9a3e"},
+]
+
+[[package]]
 name = "django-phonenumber-field"
 version = "7.3.0"
 description = "An international phone number field for django models."
@@ -560,4 +571,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "bbeec72a2be8b9096eeb89d0ab21312dab7f823cfbbdb72f77ec2fa0d8bc986f"
+content-hash = "b1b0afbd059340f558c1a75a73a15f7ea4d5a8f8bb8ad1c98686b25a83a876f6"

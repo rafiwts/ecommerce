@@ -24,6 +24,7 @@ phonenumbers = "^8.13.27"
 django-extensions = "^3.2.3"
 pytest-django = "^4.8.0"
 freezegun = "^1.5.0"
+django-file-resubmit = "^0.5.2"
 
 
 [build-system]

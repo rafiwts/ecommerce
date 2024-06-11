@@ -1,5 +1,6 @@
 from django import forms
 from django.core.validators import MaxLengthValidator
+from file_resubmit.admin import AdminResubmitFileWidget, AdminResubmitImageWidget
 
 from .models import Category, ChildSubcategory, Product, ProductImage, Subcategory
 
@@ -81,4 +82,8 @@ class ProductForm(forms.ModelForm):
 class ProductImageForm(forms.ModelForm):
     class Meta:
         model = ProductImage
+        widgets = {
+            "picture": AdminResubmitImageWidget,
+            "file": AdminResubmitFileWidget,
+        }
         fields = ["image"]
