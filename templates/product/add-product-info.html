@@ -14,7 +14,7 @@
     <div class="edit-address-error-message">{{ error }}</div>
     {% endfor %}
 {% endfor %}
-<form action="/product/add-product/" method="post" enctype="multipart/form-data">
+<form action="/product/add-product-info/" method="post">
     {% csrf_token %}
     <div class="add-product-form-box">
         <div class="add-product-form-field name">
@@ -62,13 +62,6 @@
             {{ product_form.price.label }}: {{ product_form.price }}
         </div>
     </div>
-    {{ formset.management_form }}
-    {% for form in formset %}
-        {{ form.as_p }}
-        {% if form.instance.pk %}
-            <img src="{{ form.instance.image.url }}" alt="Existing Image">
-        {% endif %}
-    {% endfor %}
     <button type="submit">Save</button>
 </form>
 <script src="{% static 'js/product-scripts.js' %}"></script>

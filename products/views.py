@@ -6,15 +6,34 @@ from .forms import ProductForm, ProductImageForm
 from .models import ProductImage
 
 
-def add_product(request):
-    ImageFormSet = modelformset_factory(ProductImage, form=ProductImageForm, extra=10)
-
+def add_product_images(request):
+    image_formset = modelformset_factory(ProductImage, form=ProductImageForm, extra=10)
+    uploaded_images = []
     if request.method == "POST":
-        product_form = ProductForm(data=request.POST)
-        formset = ImageFormSet(
+        formset = image_formset(
             data=request.POST, files=request.FILES, queryset=ProductImage.objects.none()
         )
-        if product_form.is_valid() and formset.is_valid():
+        if formset.is_valid():
+            for form in formset.cleaned_data:
+                if form:
+                    image = form["image"]
+                    uploaded_images.append(image)
+
+        return add_product_info(request, *uploaded_images)
+    else:
+        formset = image_formset(queryset=ProductImage.objects.none())
+
+    return render(request, "product/add-product-images.html", {"formset": formset})
+
+
+def add_product_info(request, *args):
+    # FIXME: fix the issue with passing a parameter
+    uploaded_images = args
+    print(uploaded_images)
+    print(request.method)
+    if request.method == "POST":
+        product_form = ProductForm(data=request.POST)
+        if product_form.is_valid():
             # workaround for deleting cat and subcat from cleaned data
             cleaned_data = product_form.cleaned_data
             category = cleaned_data.pop("category", None)
@@ -25,7 +44,7 @@ def add_product(request):
             product.subcategory = subcategory
             product.save(user=request.user)
 
-            for form in formset.cleaned_data:
+            for form in uploaded_images:
                 if form:
                     image = form["image"]
                     photo = ProductImage(product=product, image=image)
@@ -35,11 +54,9 @@ def add_product(request):
 
     else:
         product_form = ProductForm()
-        formset = ImageFormSet(queryset=ProductImage.objects.none())
 
     context = {
         "product_form": product_form,
-        "formset": formset,
     }
 
     # if there is field error, retain the chosen categories
@@ -52,7 +69,7 @@ def add_product(request):
             }
         )
 
-    return render(request, "product/add-product.html", context)
+    return render(request, "product/add-product-info.html", context)
 
 
 # TODO: chosen files disappear when form is invalid - perhaps js will solve the issue?

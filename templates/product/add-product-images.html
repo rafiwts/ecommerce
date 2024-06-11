@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block extra_styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/product/product-form.css' %}">
+{% endblock %}
+
+{% block content %}
+<br>
+<br>
+<form action="/product/add-product-images/" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ formset.as_p }}
+    <button type="submit">Save</button>
+</form>
+<script src="{% static 'js/product-scripts.js' %}"></script>
+{% endblock content %}
