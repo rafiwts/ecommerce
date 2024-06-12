@@ -8,9 +8,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const allSubcategories = Array.from(subcategorySelect.options);
     const allChildSubcategories = Array.from(childSubcategorySelect.options);
 
-    console.log(allSubcategories)
-    console.log(allChildSubcategories)
-
     function updateSubcategories(categoryId) {
         if (!categoryId) {
             hiddenSubcategory.style.display = "none";
@@ -54,3 +51,21 @@ document.addEventListener('DOMContentLoaded', function () {
         updateChildSubcategories(this.value);
     });
 });
+
+// if no images are added to product, confirm it
+function confirmNoImages(event) {
+    const formsetInputs = document.querySelectorAll('input[type="file"]');
+    let hasImages = false;
+
+    formsetInputs.forEach(input => {
+        if(input.value) {
+            hasImages = true;
+        }
+    });
+    if(!hasImages) {
+        const confirmationMessage = confirm("No images were uploaded. Do you want to proceed without uploading any images?")
+    if (!confirmationMessage) {
+        event.preventDefault();
+    }
+    }
+}

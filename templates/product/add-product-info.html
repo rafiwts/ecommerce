@@ -14,7 +14,7 @@
     <div class="edit-address-error-message">{{ error }}</div>
     {% endfor %}
 {% endfor %}
-<form action="/product/add-product-info/" method="post">
+<form method="post">
     {% csrf_token %}
     <div class="add-product-form-box">
         <div class="add-product-form-field name">

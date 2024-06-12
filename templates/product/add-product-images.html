@@ -9,7 +9,7 @@
 {% block content %}
 <br>
 <br>
-<form action="/product/add-product-images/" method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data", onsubmit="confirmNoImages(event)">
     {% csrf_token %}
     {{ formset.as_p }}
     <button type="submit">Save</button>
