@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, ChildSubcategory, Product, Subcategory
+from .models import Category, ChildSubcategory, Product, ProductImage, Subcategory
 
 
 @admin.register(Product)
@@ -106,3 +106,11 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ["name"]
     ordering = ["id", "name"]
     prepopulated_fields = {"slug": ("name",)}
+
+
+@admin.register(ProductImage)
+class ProductImageAdmin(admin.ModelAdmin):
+    list_display = ["product", "image"]
+    list_filter = ["product__user"]
+    search_fields = ["product"]
+    ordering = ["product"]

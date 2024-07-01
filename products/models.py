@@ -188,12 +188,12 @@ class ProductImage(models.Model):
         super().delete(*args, **kwargs)
 
     def __str__(self):
-        return self.product.name
+        return self.image
 
     class Meta:
         db_table = "product_images"
         ordering = ["-uploaded_at"]
-        verbose_name = "product_images"
+        verbose_name = "product_image"
         indexes = [
             models.Index(fields=["id", "product"]),
         ]
