@@ -91,7 +91,20 @@
                     </div>
                     <div class="account-container">
                         <a href="#" class="icon"><img src="{% static 'images/account.svg' %}"></a>
-                        <!--Implement logic later for displaying image when logged in-->
+                        <div class="account-details">
+                            <div class="account-settings-details">
+                                <p>Account settings</p>
+                                <a href="{% url 'account:profile-view' request.user.username %}">Edit profile</a>
+                                <a onclick="(() => openBlock('editAccountBlock'))()">Edit account</a>
+                                <a onclick="(() => openBlock('editAddressBlock'))()">Edit address</a>
+                                <a onclick="(() => openBlock('changePasswordBlock'))()">Change password</a>
+                                <a href="#">Add account</a>
+                            </div>
+                            <div class="sale-details">
+                                <p>Sale</p>
+                                <a href="{% url 'product:add-product' step='info' %}">Sell item</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

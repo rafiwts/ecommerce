@@ -290,6 +290,62 @@
 .show-languages,
 .show-currencies {display: block;}
 
+.account-details {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    top: 90px;
+    font-size: 14px;
+    background-color: #e9e9e9;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 1;
+    width: 300px;
+    border: rgb(0, 0, 0) 1px solid;
+}
+
+.account-details div {
+    background-color: rgb(245, 245, 245);
+}
+
+.sale-details,
+.account-settings-details {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 5px 0px 5px 10px;
+}
+
+.sale-details {
+    border-top: rgb(148, 148, 148)  1px solid;
+}
+
+.account-settings-details {
+    border-bottom: rgb(148, 148, 148)  1px solid;
+}
+
+.account-settings-details a,
+.sale-details a {
+    cursor: pointer;
+    color: rgb(159, 65, 65);
+    text-decoration: none;
+}
+
+.account-settings-details a:hover,
+.sale-details a:hover {
+    color: rgb(114, 114, 114);
+}
+
+.account-details p {
+    font-weight: 550;
+    color: #343434;
+}
+
+.account-container:hover .account-details {
+    display: flex;
+}
+
 @media (max-width: 425px) {
     .separator.favourites,
     .separator.other {
