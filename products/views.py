@@ -8,6 +8,7 @@ from .models import Product, ProductImage
 
 
 class ProductCreateView(View):
+    login_required = True
     template_name_images = "product/add-product-images.html"
     template_name_info = "product/add-product-info.html"
 
@@ -101,9 +102,13 @@ class ProductCreateView(View):
             del request.session["product_id"]
 
 
-# TODO: revise form display in html
-# TODO: update admin
-# TODO: verify the labels
-# TODO: price cannot be negative
-# TODO: see allegro what can be also added
-# TODO: add it somewhere and only when the user is logged in and work on the display
+# TODO: sponsored - first look view in
+#  home/then recommended/ last seen /favourite /four random categories
+# TODO: add
+# categories to a drop down list - a random query
+# of a list of products from a given category
+# TODO: add for sale and sponsored to model - sale as a choice of percentage
+# TODO: add vendors/companies
+# TODO: shop - all products and apply filters
+# TODO: for sale - 4 categories with for sale - random
+# TODO: search bar - make a use of it
