@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator
 from file_resubmit.admin import AdminResubmitFileWidget, AdminResubmitImageWidget
 
@@ -7,7 +8,7 @@ from .models import Category, ChildSubcategory, Product, ProductImage, Subcatego
 
 class ProductForm(forms.ModelForm):
     image = forms.ImageField(
-        label="Imaffge",
+        label="Image",
         required=False,
         widget=forms.FileInput(
             attrs={"id": "addProductImage", "class": "add-product-image"}
@@ -32,10 +33,12 @@ class ProductForm(forms.ModelForm):
         ),
     )
     category = forms.ModelChoiceField(
+        label="Category",
         required=True,
         queryset=Category.objects.all(),
     )
     subcategory = forms.ModelChoiceField(
+        label="Subcategory",
         required=True,
         queryset=Subcategory.objects.all(),
     )
@@ -77,6 +80,14 @@ class ProductForm(forms.ModelForm):
         if commit:
             product.save()
         return product
+
+    def clean_price(self):
+        price = self.cleaned_data.get("price")
+        if price <= 0:
+            raise ValidationError(
+                "Please insert a correct price! It cannot be lower than 0!"
+            )
+        return price
 
 
 class ProductImageForm(forms.ModelForm):

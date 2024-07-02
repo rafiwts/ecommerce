@@ -17,6 +17,18 @@ class ProductModelMixin(models.Model):
 
 
 class Product(ProductModelMixin):
+    DISCOUNT_CHOICES = [
+        (5, "5%"),
+        (10, "10%"),
+        (15, "15%"),
+        (20, "20%"),
+        (25, "25%"),
+        (30, "30%"),
+        (35, "35%"),
+        (40, "40%"),
+        (45, "45%"),
+        (50, "50%"),
+    ]
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="products")
     child_subcategory = models.ForeignKey(
         "ChildSubcategory", on_delete=models.CASCADE, related_name="products"
@@ -27,6 +39,7 @@ class Product(ProductModelMixin):
     slug = models.SlugField(max_length=255)
     stock = models.PositiveBigIntegerField()
     in_stock = models.BooleanField(default=True)
+    for_sale = models.PositiveBigIntegerField(choices=DISCOUNT_CHOICES, default=0)
     created_at = models.DateTimeField(
         auto_now_add=True,
         null=True,
@@ -62,6 +75,11 @@ class Product(ProductModelMixin):
                         os.remove(old_instance.image.path)
             except Product.DoesNotExist:
                 pass
+
+        if self.for_sale:
+            discount = self.for_sale / 100
+            discounted_price = self.price * (1 - discount)
+            self.price = discounted_price
 
         super().save(*args, *kwargs)
 
