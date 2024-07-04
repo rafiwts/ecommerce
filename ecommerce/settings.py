@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "accounts",
     "products",
+    "coupons",
     "file_resubmit",
     "phonenumber_field",
     "django_extensions",
