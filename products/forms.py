@@ -7,13 +7,6 @@ from .models import Category, ChildSubcategory, Product, ProductImage, Subcatego
 
 
 class ProductForm(forms.ModelForm):
-    image = forms.ImageField(
-        label="Image",
-        required=False,
-        widget=forms.FileInput(
-            attrs={"id": "addProductImage", "class": "add-product-image"}
-        ),
-    )
     name = forms.CharField(
         max_length=100,
         validators=[MaxLengthValidator(100)],
@@ -66,10 +59,33 @@ class ProductForm(forms.ModelForm):
             }
         ),
     )
+    for_sale = forms.ChoiceField(
+        label="Discount",
+        required=False,
+        choices=Product.DISCOUNT_CHOICES,
+        widget=forms.Select(
+            attrs={"id": "addProductDiscount", "class": "add-product-discount"}
+        ),
+    )
+    sponsored = forms.BooleanField(
+        label="Sponsored",
+        required=False,
+        widget=forms.CheckboxInput(
+            attrs={"id": "addProductSponsored", "class": "add-product-sponsored"}
+        ),
+    )
 
     class Meta:
         model = Product
-        fields = ["image", "name", "description", "child_subcategory", "stock", "price"]
+        fields = [
+            "name",
+            "description",
+            "child_subcategory",
+            "stock",
+            "price",
+            "for_sale",
+            "sponsored",
+        ]
 
     def save(self, commit=True, user=None):
         # automatically add a user

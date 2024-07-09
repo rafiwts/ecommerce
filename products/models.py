@@ -1,5 +1,6 @@
 import os
 import uuid
+from decimal import Decimal
 
 from django.db import models
 from django.utils.text import slugify
@@ -18,6 +19,7 @@ class ProductModelMixin(models.Model):
 
 class Product(ProductModelMixin):
     DISCOUNT_CHOICES = [
+        (0, "0%"),
         (5, "5%"),
         (10, "10%"),
         (15, "15%"),
@@ -36,10 +38,13 @@ class Product(ProductModelMixin):
     product_id = models.IntegerField(unique=True, verbose_name="Product ID")
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    reduced_price = models.DecimalField(null=True, max_digits=10, decimal_places=2)
     slug = models.SlugField(max_length=255)
     stock = models.PositiveBigIntegerField()
     in_stock = models.BooleanField(default=True)
     for_sale = models.PositiveBigIntegerField(choices=DISCOUNT_CHOICES, default=0)
+    # TODO: think about types of it
+    sponsored = models.BooleanField(default=False)
     created_at = models.DateTimeField(
         auto_now_add=True,
         null=True,
@@ -77,9 +82,9 @@ class Product(ProductModelMixin):
                 pass
 
         if self.for_sale:
-            discount = self.for_sale / 100
-            discounted_price = self.price * (1 - discount)
-            self.price = discounted_price
+            discount = self.for_sale / Decimal(100)
+            discounted_price = self.price * (Decimal(1) - discount)
+            self.reduced_price = discounted_price
 
         super().save(*args, *kwargs)
 
