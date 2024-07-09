@@ -239,7 +239,9 @@
     display: block;
 }
 
-.dropdown-categories a:hover {background-color: rgba(146, 30, 30, 0.336);}
+.categories-dropdown a:hover {
+    background-color: rgba(146, 30, 30, 0.336);
+}
 
 .language-dropbtn,
 .currency-dropbtn {

@@ -2,9 +2,10 @@ from django.forms import modelformset_factory
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views import View
+from django.views.generic.list import ListView
 
 from .forms import ProductForm, ProductImageForm
-from .models import Product, ProductImage
+from .models import Category, Product, ProductImage
 
 
 class ProductCreateView(View):
@@ -100,6 +101,33 @@ class ProductCreateView(View):
     def clear_product_from_session(self, request):
         if "product_id" in request.session:
             del request.session["product_id"]
+
+
+class ProductListView(ListView):
+    model = Product
+    paginate_by = 5
+    context_object_name = "products"
+    template_name = "product/product-list.html"
+
+    def get_queryset(self):
+        # fetch the slug if exists
+        category_slug = self.kwargs.get("category_slug")
+
+        if category_slug:
+            category = Category.objects.get(slug=category_slug)
+            queryset = Product.objects.filter(
+                child_subcategory__subcategory__category=category
+            )
+            return queryset
+
+        queryset = Product.objects.all()
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["category_slug"] = self.kwargs.get("category_slug")
+        return context
 
 
 # TODO: sponsored - first look view in

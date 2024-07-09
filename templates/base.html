@@ -62,9 +62,9 @@
                         Browse All Categories <img class="category-arrow" src="{% static 'images/arrow.svg' %}">
                     </button>
                     <div id="dropdownListCategory" class="categories-dropdown">
-                        <a href="#">Category 1</a>
-                        <a href="#">Category 2</a>
-                        <a href="#">Category 3</a>
+                        {% for category in categories %}
+                            <a href="{% url 'product:product-list' category.slug %}">{{ category.name }}</a>
+                        {% endfor %}
                         <!-- Add more categories as needed -->
                     </div>
                 </div>
