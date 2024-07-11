@@ -55,7 +55,7 @@
         <div class="header-container">
             <div class="header">
                 <div class="logo-section">
-                    <a href="{% url 'home' %}"><img src="{% static 'images/ecommerce-logo.svg' %}"></a>
+                    <a href="{% url 'products:home-page-products' %}"><img src="{% static 'images/ecommerce-logo.svg' %}"></a>
                 </div>
                 <div class="dropdown-button">
                     <button class="category-dropbtn" id="category-dropbtn" onclick="dropdownCategory()">
@@ -63,7 +63,7 @@
                     </button>
                     <div id="dropdownListCategory" class="categories-dropdown">
                         {% for category in categories %}
-                            <a href="{% url 'product:product-list' category.slug %}">{{ category.name }}</a>
+                            <a href="{% url 'product:category-products' category.slug %}">{{ category.name }}</a>
                         {% endfor %}
                         <!-- Add more categories as needed -->
                     </div>
@@ -112,7 +112,7 @@
         <div class="tabs-container">
             <div class="tab-bar">
                 <ul class="tabs">
-                    <button onclick="window.location.href='{% url 'home' %}'" {%block active_shop%}{%endblock active_shop%}>Shop</button>
+                    <button onclick="window.location.href='{% url 'products:home-page-products' %}'" {%block active_shop%}{%endblock active_shop%}>Shop</button>
                     <button onclick="window.location.href='{% url 'home' %}'" {%block active_sale%}{%endblock active_sale%}>For Sale</a></button>
                     <button>To be added</button>
                     <button>To be added</button>

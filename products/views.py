@@ -1,7 +1,8 @@
 from django.forms import modelformset_factory
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views import View
+from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.list import ListView
 
 from .forms import ProductForm, ProductImageForm
@@ -103,31 +104,66 @@ class ProductCreateView(View):
             del request.session["product_id"]
 
 
-class ProductListView(ListView):
+class ProductListHomePageView(ListView):
+    model = Product
+    context_object_name = "products"
+    template_name = "product/home-page-product-list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # random sponsored products
+        sponsored_products = Product.objects.filter(sponsored=True).order_by("?")[:10]
+
+        # random products from random category
+        random_category = Category.objects.order_by("?").first()
+
+        if random_category:
+            category_products = Product.objects.filter(
+                child_subcategory__subcategory__category=random_category
+            ).order_by("?")[:10]
+
+        # random for sale products
+        for_sale_products = Product.objects.filter(for_sale__gt=0).order_by("?")[:10]
+
+        # TODO: later add favorite, recommended, and recently seen
+
+        context["sponsored_products"] = sponsored_products
+        context["random_category"] = random_category
+        context["category_products"] = category_products
+        context["sale_products"] = for_sale_products
+
+        return context
+
+
+class ProductListCategoryView(SingleObjectMixin, ListView):
     model = Product
     paginate_by = 5
-    context_object_name = "products"
     template_name = "product/product-list.html"
 
-    def get_queryset(self):
-        # fetch the slug if exists
-        category_slug = self.kwargs.get("category_slug")
-
-        if category_slug:
-            category = Category.objects.get(slug=category_slug)
-            queryset = Product.objects.filter(
-                child_subcategory__subcategory__category=category
-            )
-            return queryset
-
-        queryset = Product.objects.all()
-
-        return queryset
+    def get(self, request, *args, **kwargs):
+        # Fetch the category object or return 404 if not found
+        if "category_slug" in self.kwargs:
+            self.object = get_object_or_404(Category, slug=self.kwargs["category_slug"])
+        else:
+            self.object = None
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["category_slug"] = self.kwargs.get("category_slug")
+        context["category"] = self.object
+
         return context
+
+    def get_queryset(self):
+        if self.object:
+            # if the category is chosen
+            category = self.object
+            return Product.objects.filter(
+                child_subcategory__subcategory__category=category
+            )
+        return Product.objects.all()
 
 
 # TODO: sponsored - first look view in

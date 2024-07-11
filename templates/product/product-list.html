@@ -7,7 +7,19 @@
 {% endblock %}
 
 {% block content %}
-{% for product in products %}
+
+<h1>Product List</h1>
+
+<nav>
+    <ul>
+        <li><a href="{% url 'product:all-products' %}">All Products</a></li>
+        {% if category %}
+            <li><a href="{% url 'product:category-products' category_slug=category.slug %}">{{ category.name }}</a></li>
+        {% endif %}
+    </ul>
+</nav>
+
+{% for product in object_list %}
     <li>{{ product.name }}</li>
 {% empty %}
     <li>No products yet.</li>
@@ -16,8 +28,8 @@
     <div class="pagination">
         <span class="step-links">
             {% if page_obj.has_previous %}
-                <a href="?category_slug={{ category_slug }}&page=1">&laquo; first</a>
-                <a href="?category_slug={{ category_slug }}&page={{ page_obj.previous_page_number }}">previous</a>
+                <a href="?category={{ category_slug }}&page=1">&laquo; first</a>
+                <a href="?category={{ category_slug }}&page={{ page_obj.previous_page_number }}">previous</a>
             {% endif %}
 
             <span class="current">
@@ -25,8 +37,8 @@
             </span>
 
             {% if page_obj.has_next %}
-                <a href="?category_slug={{ category_slug }}&page={{ page_obj.next_page_number }}">next</a>
-                <a href="?category_slug={{ category_slug }}&page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                <a href="?category={{ category_slug }}&page={{ page_obj.next_page_number }}">next</a>
+                <a href="?category={{ category_slug }}&page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
             {% endif %}
         </span>
     </div>
