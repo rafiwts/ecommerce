@@ -1,6 +1,13 @@
 from django.contrib import admin
 
-from .models import Category, ChildSubcategory, Product, ProductImage, Subcategory
+from .models import (
+    Category,
+    ChildSubcategory,
+    FavoriteProduct,
+    Product,
+    ProductImage,
+    Subcategory,
+)
 
 
 @admin.register(Product)
@@ -114,3 +121,8 @@ class ProductImageAdmin(admin.ModelAdmin):
     list_filter = ["product__user"]
     search_fields = ["product"]
     ordering = ["product"]
+
+
+@admin.register(FavoriteProduct)
+class FavoriteProductAdmin(admin.ModelAdmin):
+    list_display = ["product", "user"]
