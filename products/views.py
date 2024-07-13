@@ -1,5 +1,6 @@
+from django.contrib.auth.decorators import login_required
 from django.forms import modelformset_factory
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views import View
@@ -7,7 +8,7 @@ from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.list import ListView
 
 from .forms import ProductForm, ProductImageForm
-from .models import Category, Product, ProductImage
+from .models import Category, FavoriteProduct, Product, ProductImage
 
 
 class ProductCreateView(View):
@@ -166,6 +167,16 @@ class ProductListCategoryView(SingleObjectMixin, BaseProductListView):
         context["category_slug"] = self.kwargs.get("category_slug")
         context["category"] = self.object
 
+        print(context)
+        if self.request.user.is_authenticated:
+            context["favorite_product_ids"] = FavoriteProduct.objects.filter(
+                user=self.request.user
+            ).values_list("product_id", flat=True)
+        else:
+            context["favorite_product_ids"] = []
+
+        print(context)
+
         return context
 
     def get_queryset(self):
@@ -183,6 +194,8 @@ class CustomProductListView(BaseProductListView):
     supported_query_types = ["sponsored", "sale"]
 
     def get(self, request, *args, **kwargs):
+        print(request.user)
+        print("lol")
         self.query_type = self.kwargs.get("type", None)
         if self.query_type and self.query_type not in self.supported_query_types:
             self.query_type = None
@@ -204,6 +217,23 @@ class CustomProductListView(BaseProductListView):
         raise Http404("Invalid query type")
 
 
+@login_required
+def toggle_favorite(request, product_id):
+    try:
+        product = get_object_or_404(Product, id=product_id)
+        favorite, created = FavoriteProduct.objects.get_or_create(
+            user=request.user, product=product
+        )
+
+        if not created:
+            favorite.delete()
+            return JsonResponse({"status": "removed"})
+        return JsonResponse({"status": "added"})
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
+
+# add copy link with favorite
 # TODO: sponsored - first look view in
 #  home/then recommended/ last seen /favourite /four random categories
 # TODO: add

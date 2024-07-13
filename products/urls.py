@@ -5,6 +5,7 @@ from .views import (
     ProductCreateView,
     ProductListCategoryView,
     ProductListHomePageView,
+    toggle_favorite,
 )
 
 app_name = "product"
@@ -19,5 +20,6 @@ urlpatterns = [
         name="category-products",
     ),
     path("all-products/", ProductListCategoryView.as_view(), name="all-products"),
+    path("favorite/toggle/<int:product_id>/", toggle_favorite, name="toggle-favorite"),
     path("<str:type>/", CustomProductListView.as_view(), name="custom-product-list"),
 ]

@@ -4,6 +4,7 @@
 
 {% block extra_styles %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/product/product-form.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/product/product-list.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -15,4 +16,5 @@
 {% empty %}
     <li>No products yet.</li>
 {% endfor %}
+<script src="{% static 'js/product-scripts.js' %}"></script>
 {% endblock content %}

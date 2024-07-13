@@ -52,6 +52,49 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+// add and remove from favorites
+document.addEventListener("DOMContentLoaded", function() {
+    const favoriteIcons = document.querySelectorAll(".favorite-icon");
+    const csrfTokenElement = document.querySelector('[name=csrfmiddlewaretoken]');
+    const csrfToken = csrfTokenElement.value;
+
+    // add a listener to each star and handle the logic
+    favoriteIcons.forEach(function(favoriteIcon) {
+        favoriteIcon.addEventListener("click", function() {
+            const productId = this.getAttribute("data-product-id");
+            fetch(`/product/favorite/toggle/${productId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                },
+            })
+            .then(response => {
+                console.log(response);
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(text) });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                if (data.status === "added") {
+                    favoriteIcon.innerHTML = "&#9733;";
+                    favoriteIcon.classList.add("favorited");
+                } else if (data.status === "removed") {
+                    favoriteIcon.innerHTML = "&#9734;";
+                    favoriteIcon.classList.remove("favorited");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+            });
+        });
+    });
+});
+
+
 // if no images are added to product, confirm it
 function confirmNoImages(event) {
     const formsetInputs = document.querySelectorAll('input[type="file"]');
