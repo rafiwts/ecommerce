@@ -1,4 +1,5 @@
 from django.forms import modelformset_factory
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views import View
@@ -104,11 +105,24 @@ class ProductCreateView(View):
             del request.session["product_id"]
 
 
-class ProductListHomePageView(ListView):
+class BaseProductListView(ListView):
     model = Product
-    context_object_name = "products"
+    paginate_by = 5
     template_name = "product/home-page-product-list.html"
+    context_object_name = "products"
 
+    def get_queryset(self):
+        return (
+            self.model.objects.all()
+        )  # Default queryset, should be overridden in subclasses
+
+    def get_template_names(self):
+        if self.template_name:
+            return [self.template_name]
+        return super().get_template_names()
+
+
+class ProductListHomePageView(BaseProductListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -136,9 +150,7 @@ class ProductListHomePageView(ListView):
         return context
 
 
-class ProductListCategoryView(SingleObjectMixin, ListView):
-    model = Product
-    paginate_by = 5
+class ProductListCategoryView(SingleObjectMixin, BaseProductListView):
     template_name = "product/product-list.html"
 
     def get(self, request, *args, **kwargs):
@@ -164,6 +176,32 @@ class ProductListCategoryView(SingleObjectMixin, ListView):
                 child_subcategory__subcategory__category=category
             )
         return Product.objects.all()
+
+
+class CustomProductListView(BaseProductListView):
+    template_name = "product/custom-product-list.html"
+    supported_query_types = ["sponsored", "sale"]
+
+    def get(self, request, *args, **kwargs):
+        self.query_type = self.kwargs.get("type", None)
+        if self.query_type and self.query_type not in self.supported_query_types:
+            self.query_type = None
+            return self.handle_invalid_query_type(request)
+
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        try:
+            if self.query_type == "sponsored":
+                return Product.objects.filter(sponsored=True)
+            elif self.query_type == "sale":
+                return Product.objects.filter(for_sale__gt=0)
+        except Exception as e:
+            print(f"Error occured while fetching a queryset: {e}")
+            return Product.objects.none()
+
+    def handle_invalid_query_type(self, request):
+        raise Http404("Invalid query type")
 
 
 # TODO: sponsored - first look view in

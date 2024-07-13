@@ -7,7 +7,7 @@
 <h1>Custom Product List</h1>
 
 <h2>Sponsored Products</h2>
-<p><a href="#">See all sponsored products</a></p>
+<p><a href="{% url 'product:custom-product-list' type='sponsored' %} ">See all sponsored products</a></p>
 <ul>
     {% for product in sponsored_products %}
         <li>{{ product.name }} - {{ product.price }}</li>
@@ -29,7 +29,7 @@
 {% endif %}
 
 <h2>Products on Sale</h2>
-<p><a href="#">See all products on sale</a></p>
+<p><a href="{% url 'product:custom-product-list' type='sale'%}">See all products on sale</a></p>
 <ul>
     {% for product in sale_products %}
         <li>{{ product.name }} - {{ product.price }} - {{ product.reduced_price }} (Discount: {{ product.for_sale }}%)</li>
