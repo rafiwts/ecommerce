@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "accounts",
     "products",
     "coupons",
+    "cart",
     "file_resubmit",
     "phonenumber_field",
     "django_extensions",
@@ -179,3 +180,5 @@ CACHES = {
         "LOCATION": os.path.join(BASE_DIR, "tmp/file_resubmit/"),
     },
 }
+
+CART_SESSION_ID = "cart"
