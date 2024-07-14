@@ -3,45 +3,41 @@
 {% load static %}
 
 {% block extra_styles %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/product/product-form.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/product/product-list.css' %}">
+<script src="https://kit.fontawesome.com/e48d166edc.js" crossorigin="anonymous"></script>
 {% endblock %}
 
 {% block content %}
 
 <h1>Product List</h1>
 
-<nav>
-    <ul>
-        <li><a href="{% url 'product:all-products' %}">All Products</a></li>
-        {% if category %}
-            <li><a href="{% url 'product:category-products' category_slug=category.slug %}">{{ category.name }}</a></li>
-        {% endif %}
-    </ul>
-</nav>
+<li><a href="{% url 'product:all-products' %}">All Products</a></li>
 
+<span class="home-products-redirection"><a href="{% url 'product:home-page-products' %}" title="Go back">Go back</a></span>
 <h1>Products</h1>
-<div class="product-list"></div>
+<div class="product-list">
     {% for product in object_list %}
-        <div class="product-item"></div>
+        <div class="product-item">
             <h2>{{ product.name }}</h2>
             <p>Price: {{ product.price }}</p>
             {% if user.is_authenticated %}
-                <span id="favorite-icon" class="favorite-icon {% if product in favorite_product_ids %}favorited{% endif %}" data-product-id="{{ product.id }}">
+                <span id="favorite-icon" class="favorite-icon {% if product.id in favorite_product_ids %}favorited{% endif %}" data-product-id="{{ product.id }}">
                     {% if product.id in favorite_product_ids %}
-                    &#9733;  <!-- Solid star for favorited -->
+                        <i class="fa fa-heart"></i>
                     {% else %}
-                    &#9734;  <!-- Empty star for not favorited -->
+                        <i class="far fa-heart"></i>
                     {% endif %}
-                    </span>
+                </span>
             {% else %}
             <p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to add to favorites.</p>
             {% endif %}
-            {% empty %}
-            <li>No products yet.</li>
+    {% empty %}
+    <li>No products yet.</li>
         </div>
     {% endfor %}
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 </div>
+
 {% if is_paginated %}
     <div class="pagination">
         <span class="step-links">
@@ -61,7 +57,6 @@
         </span>
     </div>
     {% endif %}
-    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 
 <script src="{% static 'js/product-scripts.js' %}"></script>
 {% endblock content %}

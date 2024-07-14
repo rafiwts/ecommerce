@@ -69,20 +69,13 @@ document.addEventListener("DOMContentLoaded", function() {
                     'X-CSRFToken': csrfToken,
                 },
             })
-            .then(response => {
-                console.log(response);
-                if (!response.ok) {
-                    return response.text().then(text => { throw new Error(text) });
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                console.log(data);
                 if (data.status === "added") {
-                    favoriteIcon.innerHTML = "&#9733;";
+                    favoriteIcon.innerHTML = '<i class="fa fa-heart"></i>';
                     favoriteIcon.classList.add("favorited");
                 } else if (data.status === "removed") {
-                    favoriteIcon.innerHTML = "&#9734;";
+                    favoriteIcon.innerHTML = '<i class="far fa-heart"></i>';
                     favoriteIcon.classList.remove("favorited");
                 }
             })

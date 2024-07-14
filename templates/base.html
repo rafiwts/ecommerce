@@ -16,7 +16,7 @@
                     {% if request.user.is_authenticated %}
                     <span class="separator logout"><a href="{% url 'account:logout' %}" title="Log out">Log out</a></span>
                     <span class="separator profile"><a href="{% url 'account:profile-view' request.user.username %}" title="Account">Account</a></span>
-                    <span class="separator favourites"><a href="#" title="Favourites">Favourites</a></span>
+                    <span class="separator favourites"><a href="{% url 'product:custom-product-list' type='favorite'%}" title="Favourites">Favorites</a></span>
                     <span class="separator other"><a href="#" title="Other">Other</a></span>
                     {% else %}
                     <span class="separator"><a href="{% url 'account:login' %}" title="Sign in">Sign in</a>
@@ -79,7 +79,9 @@
                 <div class="icon-section">
                     <div class="wishlist-container">
                         <a href="#" class="icon"><img src="{% static 'images/wishlist.svg' %}"></a>
-                        <div class="wishlist-count">3</div>
+                        {% if user.is_authenticated %}
+                            <div class="wishlist-count">{{ favorite_count }}</div>
+                        {% endif %}
                     </div>
                     <div class="shopcart-container">
                         <a href="#" class="icon"><img src="{% static 'images/shopcart.svg' %}"></a>

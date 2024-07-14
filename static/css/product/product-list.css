@@ -1,7 +1,8 @@
 .favorite-icon {
     cursor: pointer;
-    font-size: 24px;
+    font-size: 30px;
   }
-  .favorite-icon.favorited {
-    color: gold;
-  }
+
+.favorite-icon.favorited {
+    color: red;
+}

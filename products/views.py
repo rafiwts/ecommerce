@@ -117,6 +117,19 @@ class BaseProductListView(ListView):
             self.model.objects.all()
         )  # Default queryset, should be overridden in subclasses
 
+    def get_context_data(self, **kwargs):
+        # add context to all child views
+        context = super().get_context_data(**kwargs)
+
+        if self.request.user.is_authenticated:
+            context["favorite_product_ids"] = FavoriteProduct.objects.filter(
+                user=self.request.user
+            ).values_list("product_id", flat=True)
+        else:
+            context["favorite_product_ids"] = []
+
+        return context
+
     def get_template_names(self):
         if self.template_name:
             return [self.template_name]
@@ -141,12 +154,20 @@ class ProductListHomePageView(BaseProductListView):
         # random for sale products
         for_sale_products = Product.objects.filter(for_sale__gt=0).order_by("?")[:10]
 
-        # TODO: later add favorite, recommended, and recently seen
+        # random for favorite products
+        favorite_products = Product.objects.filter(
+            favoriteproduct__user=self.request.user
+        )
+
+        # TODO: later add recommended, and recently seen, last bought
 
         context["sponsored_products"] = sponsored_products
         context["random_category"] = random_category
         context["category_products"] = category_products
         context["sale_products"] = for_sale_products
+        context["favorite_products"] = favorite_products
+
+        print(context)
 
         return context
 
@@ -167,16 +188,6 @@ class ProductListCategoryView(SingleObjectMixin, BaseProductListView):
         context["category_slug"] = self.kwargs.get("category_slug")
         context["category"] = self.object
 
-        print(context)
-        if self.request.user.is_authenticated:
-            context["favorite_product_ids"] = FavoriteProduct.objects.filter(
-                user=self.request.user
-            ).values_list("product_id", flat=True)
-        else:
-            context["favorite_product_ids"] = []
-
-        print(context)
-
         return context
 
     def get_queryset(self):
@@ -191,11 +202,9 @@ class ProductListCategoryView(SingleObjectMixin, BaseProductListView):
 
 class CustomProductListView(BaseProductListView):
     template_name = "product/custom-product-list.html"
-    supported_query_types = ["sponsored", "sale"]
+    supported_query_types = ["sponsored", "sale", "favorite"]
 
     def get(self, request, *args, **kwargs):
-        print(request.user)
-        print("lol")
         self.query_type = self.kwargs.get("type", None)
         if self.query_type and self.query_type not in self.supported_query_types:
             self.query_type = None
@@ -209,6 +218,8 @@ class CustomProductListView(BaseProductListView):
                 return Product.objects.filter(sponsored=True)
             elif self.query_type == "sale":
                 return Product.objects.filter(for_sale__gt=0)
+            elif self.query_type == "favorite":
+                return Product.objects.filter(favoriteproduct__user=self.request.user)
         except Exception as e:
             print(f"Error occured while fetching a queryset: {e}")
             return Product.objects.none()
