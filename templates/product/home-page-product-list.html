@@ -15,7 +15,7 @@
 <div class="product-list">
     {% for product in sponsored_products %}
         <div class="product-item">
-            <h2>{{ product.name }}</h2>
+            <h2><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h2>
             <p>Price: {{ product.price }}</p>
             {% if user.is_authenticated %}
                 <span id="favorite-icon" class="favorite-icon {% if product.id in favorite_product_ids %}favorited{% endif %}" data-product-id="{{ product.id }}">
@@ -25,12 +25,17 @@
                         <i class="far fa-heart"></i>
                     {% endif %}
                 </span>
+                <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                    {{ cart_product_form }}
+                    {% csrf_token %}
+                    <input type="submit" value="Add to cart">
+                </form>
             {% else %}
             <p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to add to favorites.</p>
             {% endif %}
-            {% empty %}
-            <li>No products yet.</li>
         </div>
+    {% empty %}
+    <li>No products yet.</li>
     {% endfor %}
     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 </div>
@@ -40,7 +45,7 @@
 <div class="product-list">
     {% for product in category_products %}
         <div class="product-item">
-            <h2>{{ product.name }}</h2>
+            <h2><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h2>
             <p>Price: {{ product.price }}</p>
             {% if user.is_authenticated %}
                 <span id="favorite-icon" class="favorite-icon {% if product.id in favorite_product_ids %}favorited{% endif %}" data-product-id="{{ product.id }}">
@@ -50,12 +55,17 @@
                     <i class="far fa-heart"></i>
                 {% endif %}
                 </span>
+                <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                    {{ cart_product_form }}
+                    {% csrf_token %}
+                    <input type="submit" value="Add to cart">
+                </form>
             {% else %}
             <p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to add to favorites.</p>
             {% endif %}
+        </div>
     {% empty %}
     <li>No products yet.</li>
-        </div>
     {% endfor %}
     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 </div>
@@ -65,7 +75,7 @@
 <div class="product-list">
     {% for product in sale_products %}
         <div class="product-item">
-            <h2>{{ product.name }}</h2>
+            <h2><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h2>
             <p>Price: {{ product.price }}</p>
             <p>New Price: {{ product.reduced_price  }}</p>
             {% if user.is_authenticated %}
@@ -76,12 +86,17 @@
                     <i class="far fa-heart"></i>
                 {% endif %}
                 </span>
+                <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                    {{ cart_product_form }}
+                    {% csrf_token %}
+                    <input type="submit" value="Add to cart">
+                </form>
             {% else %}
             <p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to add to favorites.</p>
             {% endif %}
+        </div>
     {% empty %}
     <li>No products yet.</li>
-        </div>
     {% endfor %}
     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 </div>
@@ -91,7 +106,7 @@
 <div class="product-list">
     {% for product in favorite_products %}
         <div class="product-item">
-            <h2>{{ product.name }}</h2>
+            <h2><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h2>
             <p>Price: {{ product.price }}</p>
             {% if user.is_authenticated %}
                 <span id="favorite-icon" class="favorite-icon {% if product.id in favorite_product_ids %}favorited{% endif %}" data-product-id="{{ product.id }}">
@@ -101,12 +116,17 @@
                     <i class="far fa-heart"></i>
                 {% endif %}
                 </span>
+                <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                    {{ cart_product_form }}
+                    {% csrf_token %}
+                    <input type="submit" value="Add to cart">
+                </form>
             {% else %}
             <p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to add to favorites.</p>
             {% endif %}
+        </div>
     {% empty %}
     <li>No products yet.</li>
-        </div>
     {% endfor %}
     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 </div>
