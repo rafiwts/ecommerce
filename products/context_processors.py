@@ -1,3 +1,5 @@
+from cart.cart import Cart
+
 from .models import Category, Product
 
 
@@ -9,6 +11,13 @@ def categories_processor(request):
             favoriteproduct__user=request.user
         ).count()
 
-    context = {"categories": categories, "favorite_count": favorite_count}
+    cart = Cart(request)
+    cart_length = len(cart)
+
+    context = {
+        "categories": categories,
+        "favorite_count": favorite_count,
+        "cart_length": cart_length,
+    }
 
     return context

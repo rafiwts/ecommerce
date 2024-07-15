@@ -5,7 +5,7 @@ from django.conf import settings
 from products.models import Product
 
 
-class Cart(object):
+class Cart:
     def __init__(self, request):
         self.session = request.session
         cart = self.session.get(settings.CART_SESSION_ID)
@@ -28,6 +28,12 @@ class Cart(object):
         self.session[settings.CART_SESSION_ID] = self.cart
         self.session.modified = True
 
+    def remove(self, product):
+        product_id = str(product.id)
+        if product_id in self.cart:
+            del self.cart[product_id]
+            self.save()
+
     def __iter__(self):
         product_ids = self.cart.keys()
         products = Product.objects.filter(id__in=product_ids)
@@ -40,7 +46,9 @@ class Cart(object):
             yield item
 
     def __len__(self):
-        return sum(item["quantity"] for item in self.cart.values())
+        return len([item for item in self.cart])
+
+    # return (item["quantity"] for item in self.cart.values())
 
     def get_total_price(self):
         return sum(
