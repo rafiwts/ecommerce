@@ -4,8 +4,10 @@ from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views import View
-from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.list import ListView
+
+from cart.forms import ProductCartAddForm
 
 from .forms import ProductForm, ProductImageForm
 from .models import Category, FavoriteProduct, Product, ProductImage
@@ -128,6 +130,9 @@ class BaseProductListView(ListView):
         else:
             context["favorite_product_ids"] = []
 
+        # add a form for displaying cart
+        context["cart_product_form"] = ProductCartAddForm()
+
         return context
 
     def get_template_names(self):
@@ -166,8 +171,6 @@ class ProductListHomePageView(BaseProductListView):
         context["category_products"] = category_products
         context["sale_products"] = for_sale_products
         context["favorite_products"] = favorite_products
-
-        print(context)
 
         return context
 
@@ -242,6 +245,27 @@ def toggle_favorite(request, product_id):
         return JsonResponse({"status": "added"})
     except Exception as e:
         return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = "product/product-detail.html"
+    context_object_name = "product"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if self.request.user.is_authenticated:
+            context["favorite_product_ids"] = FavoriteProduct.objects.filter(
+                user=self.request.user
+            ).values_list("product_id", flat=True)
+        else:
+            context["favorite_product_ids"] = []
+
+        # add a form for displaying cart
+        context["cart_product_form"] = ProductCartAddForm()
+
+        return context
 
 
 # add copy link with favorite

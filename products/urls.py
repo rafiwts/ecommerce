@@ -3,6 +3,7 @@ from django.urls import path
 from .views import (
     CustomProductListView,
     ProductCreateView,
+    ProductDetailView,
     ProductListCategoryView,
     ProductListHomePageView,
     toggle_favorite,
@@ -21,5 +22,10 @@ urlpatterns = [
     ),
     path("all-products/", ProductListCategoryView.as_view(), name="all-products"),
     path("favorite/toggle/<int:product_id>/", toggle_favorite, name="toggle-favorite"),
-    path("<str:type>/", CustomProductListView.as_view(), name="custom-product-list"),
+    path(
+        "products/<str:type>/",
+        CustomProductListView.as_view(),
+        name="custom-product-list",
+    ),
+    path("<pk>/", ProductDetailView.as_view(), name="product-detail"),
 ]

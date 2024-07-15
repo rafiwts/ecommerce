@@ -6,3 +6,8 @@
 .favorite-icon.favorited {
     color: red;
 }
+
+.product-item {
+  border: black 2px solid;
+  margin: 10px;
+}

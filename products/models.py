@@ -3,6 +3,7 @@ import uuid
 from decimal import Decimal
 
 from django.db import models
+from django.urls import reverse
 from django.utils.text import slugify
 
 from accounts.models import User
@@ -98,6 +99,9 @@ class Product(ProductModelMixin):
                 os.remove(image.path)
 
         super().delete(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse("product:product-detail", args=[str(self.id)])
 
     def __str__(self):
         return self.name
