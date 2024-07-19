@@ -31,7 +31,7 @@
                     <input type="submit" value="Add to cart">
                 </form>
             {% else %}
-            <p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to add to favorites.</p>
+            <p><a href="{% url 'account:login' %}">Log in</a> to add to favorites or add to chart.</p>
             {% endif %}
         </div>
     {% empty %}
@@ -61,7 +61,7 @@
                     <input type="submit" value="Add to cart">
                 </form>
             {% else %}
-            <p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to add to favorites.</p>
+            <p><a href="{% url 'account:login' %}">Log in</a> to add to favorites or add to chart.</p>
             {% endif %}
         </div>
     {% empty %}
@@ -92,7 +92,7 @@
                     <input type="submit" value="Add to cart">
                 </form>
             {% else %}
-            <p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to add to favorites.</p>
+            <p><a href="{% url 'account:login' %}">Log in</a> to add to favorites or add to chart.</p>
             {% endif %}
         </div>
     {% empty %}
@@ -101,6 +101,7 @@
     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 </div>
 
+{% if user.is_authenticated %}
 <h2>Favorite products</h2>
 <p><a href="{% url 'product:custom-product-list' type='favorite'%}">See all favorite products</a></p>
 <div class="product-list">
@@ -122,7 +123,7 @@
                     <input type="submit" value="Add to cart">
                 </form>
             {% else %}
-            <p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to add to favorites.</p>
+            <p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to add to favorites or add to chart.</p>
             {% endif %}
         </div>
     {% empty %}
@@ -130,7 +131,7 @@
     {% endfor %}
     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 </div>
-
+{% endif %}
 
 <script src="{% static 'js/product-scripts.js' %}"></script>
 {% endblock content %}

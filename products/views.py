@@ -160,9 +160,12 @@ class ProductListHomePageView(BaseProductListView):
         for_sale_products = Product.objects.filter(for_sale__gt=0).order_by("?")[:10]
 
         # random for favorite products
-        favorite_products = Product.objects.filter(
-            favoriteproduct__user=self.request.user
-        )
+        if self.request.user.is_authenticated:
+            favorite_products = Product.objects.filter(
+                favoriteproduct__user=self.request.user
+            )
+        else:
+            favorite_products = None
 
         # TODO: later add recommended, and recently seen, last bought
 
