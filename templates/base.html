@@ -14,14 +14,14 @@
             <div class="help-bar">
                 <div class="left-help-bar">
                     {% if request.user.is_authenticated %}
-                    <span class="separator logout"><a href="{% url 'account:logout' %}" title="Log out">Log out</a></span>
-                    <span class="separator profile"><a href="{% url 'account:profile-view' request.user.username %}" title="Account">Account</a></span>
-                    <span class="separator favourites"><a href="{% url 'product:custom-product-list' type='favorite'%}" title="Favourites">Favorites</a></span>
-                    <span class="separator other"><a href="#" title="Other">Other</a></span>
+                        <span class="separator logout"><a href="{% url 'account:logout' %}" title="Log out">Log out</a></span>
+                        <span class="separator profile"><a href="{% url 'account:profile-view' request.user.username %}" title="Account">Account</a></span>
+                        <span class="separator favourites"><a href="{% url 'product:custom-product-list' type='favorite'%}" title="Favourites">Favorites</a></span>
+                        <span class="separator other"><a href="#" title="Other">Other</a></span>
                     {% else %}
-                    <span class="separator"><a href="{% url 'account:login' %}" title="Sign in">Sign in</a>
-                        or <a href="{% url 'account:register' %}" title="Register">Register</a>
-                    </span>
+                        <span class="separator"><a href="{% url 'account:login' %}" title="Sign in">Sign in</a>
+                            or <a href="{% url 'account:register' %}" title="Register">Register</a>
+                        </span>
                     {% endif %}
                 </div>
                 <div class="middle-help-bar">
@@ -78,34 +78,60 @@
                 </div>
                 <div class="icon-section">
                     <div class="wishlist-container">
-                        <a href="#" class="icon"><img src="{% static 'images/wishlist.svg' %}"></a>
-                        {% if user.is_authenticated %}
-                            <div class="wishlist-count">{{ favorite_count }}</div>
-                        {% endif %}
+                        <img src="{% static 'images/wishlist.svg' %}">
+                        <div class="wishlist-count">{{ favorite_count }}</div>
+                        <div class="wishlist-details">
+                            {% if user.is_authenticated %}
+                                <div class="wishlist-settings-details">
+                                    {% if favorite_products %}
+                                        {% for product in favorite_products|slice:":5" %}
+                                            <p><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></p>
+                                        {% endfor %}
+                                        {% if favorite_products|length > 5 %}
+                                            <p><a href="{% url 'product:custom-product-list' type='favorite'%}" title="See all favorite products">More</a></p>
+                                        {% endif %}
+                                    {% else %}
+                                        <p>No products in favorites</p>
+                                    {% endif %}
+                                </div>
+                            {% else %}
+                                <div class="wish-settings-details">
+                                    <p><a href="{% url 'account:login' %}" title="Sign in">Sign in</a> to see favorite products</p>
+                                </div>
+                            {% endif %}
+                        </div>
                     </div>
                     <div class="shopcart-container">
-                        <a href="#" class="icon"><img src="{% static 'images/shopcart.svg' %}"></a>
+                        <img src="{% static 'images/shopcart.svg' %}">
                         <div class="shopcart-count">{{ cart_length }}</div>
                     </div>
                     <div class="notification-container">
-                        <a href="#" class="icon"><img src="{% static 'images/notifications.svg' %}"></a>
+                        <img src="{% static 'images/notifications.svg' %}">
                         <div class="notification-count">3</div>
                     </div>
                     <div class="account-container">
-                        <a href="#" class="icon"><img src="{% static 'images/account.svg' %}"></a>
+                        <img src="{% static 'images/account.svg' %}">
                         <div class="account-details">
-                            <div class="account-settings-details">
-                                <p>Account settings</p>
-                                <a href="{% url 'account:profile-view' request.user.username %}">Edit profile</a>
-                                <a onclick="(() => openBlock('editAccountBlock'))()">Edit account</a>
-                                <a onclick="(() => openBlock('editAddressBlock'))()">Edit address</a>
-                                <a onclick="(() => openBlock('changePasswordBlock'))()">Change password</a>
-                                <a href="#">Add account</a>
-                            </div>
-                            <div class="sale-details">
-                                <p>Sale</p>
-                                <a href="{% url 'product:add-product' step='info' %}">Sell item</a>
-                            </div>
+                            {% if user.is_authenticated %}
+                                <div class="account-settings-details">
+                                    <p>Account settings</p>
+                                    <a href="{% url 'account:profile-view' request.user.username %}">Edit profile</a>
+                                    <a onclick="(() => openBlock('editAccountBlock'))()">Edit account</a>
+                                    <a onclick="(() => openBlock('editAddressBlock'))()">Edit address</a>
+                                    <a onclick="(() => openBlock('changePasswordBlock'))()">Change password</a>
+                                    <a href="#">Add account</a>
+                                </div>
+                                <div class="sale-details">
+                                    <p>Sale</p>
+                                    <a href="{% url 'product:add-product' step='info' %}">Sell item</a>
+                                </div>
+                            {% else %}
+                                <div class="account-settings-details">
+                                    <p>You are not logged in:</p>
+                                    <a href="{% url 'account:login' %}" title="Sign in">Sign in</a>
+                                    <a href="{% url 'account:register' %}" title="Register">Register</a>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

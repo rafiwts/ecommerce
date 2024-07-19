@@ -145,6 +145,12 @@
 .account-container {
     flex: 1;
     margin-right: 30px;
+    cursor: pointer;
+}
+
+/* workaround */
+.account-container img {
+    margin-top: 10px;
 }
 
 .wishlist-container,
@@ -292,7 +298,8 @@
 .show-languages,
 .show-currencies {display: block;}
 
-.account-details {
+.account-details,
+.wishlist-details {
     position: absolute;
     display: none;
     flex-direction: column;
@@ -307,12 +314,19 @@
     border: rgb(0, 0, 0) 1px solid;
 }
 
-.account-details div {
+.wishlist-details {
+    top: 30px;
+    width: 180px;
+}
+
+.account-details div,
+.wishlist-details div {
     background-color: rgb(245, 245, 245);
 }
 
 .sale-details,
-.account-settings-details {
+.account-settings-details,
+.wishlist-settings-details {
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -323,28 +337,33 @@
     border-top: rgb(148, 148, 148)  1px solid;
 }
 
-.account-settings-details {
+.account-settings-details,
+.wishlist-settings-details {
     border-bottom: rgb(148, 148, 148)  1px solid;
 }
 
 .account-settings-details a,
-.sale-details a {
+.sale-details a,
+.wishlist-settings-details a {
     cursor: pointer;
     color: rgb(159, 65, 65);
     text-decoration: none;
 }
 
 .account-settings-details a:hover,
-.sale-details a:hover {
+.sale-details a:hover,
+.wishlist-settings-details a:hover {
     color: rgb(114, 114, 114);
 }
 
-.account-details p {
+.account-details p,
+.wishlist-details p {
     font-weight: 550;
     color: #343434;
 }
 
-.account-container:hover .account-details {
+.account-container:hover .account-details,
+.wishlist-container:hover .wishlist-details {
     display: flex;
 }
 

@@ -19,15 +19,16 @@
                 <i class="far fa-heart"></i>
             {% endif %}
         </span>
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        <form action="{% url 'cart:cart_add' product.id %}" method="post">
+            {{ cart_product_form }}
+            {% csrf_token %}
+            <input type="submit" value="Add to cart">
+        </form>
     {% else %}
-    <p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to add to favorites.</p>
+    <p><a href="{% url 'account:login' %}">Log in</a> to add to favorites or add to chart.</p>
     {% endif %}
-    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-    <form action="{% url 'cart:cart_add' product.id %}" method="post">
-        {{ cart_product_form }}
-        {% csrf_token %}
-        <input type="submit" value="Add to cart">
-    </form>
+
 
 </div>
 
