@@ -5,6 +5,7 @@ from products.models import Product
 
 from .cart import Cart
 from .forms import ProductCartAddForm
+from .utils import add_update_quantity_form_to_cart
 
 
 @require_POST
@@ -31,9 +32,6 @@ def remove_from_cart(request, product_id):
 
 def cart_detail(request):
     cart = Cart(request)
-    for item in cart:
-        item["update_quantity_form"] = ProductCartAddForm(
-            initial={"quantity": item["quantity"], "update": True}
-        )
+    add_update_quantity_form_to_cart(cart)
 
     return render(request, "cart/cart-detail.html", {"cart": cart})
