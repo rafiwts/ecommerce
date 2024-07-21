@@ -140,7 +140,7 @@
 }
 
 .wishlist-container,
-.shopcart-container,
+.cart-container,
 .notification-container,
 .account-container {
     flex: 1;
@@ -154,7 +154,7 @@
 }
 
 .wishlist-container,
-.shopcart-container,
+.cart-container,
 .notification-container {
     position: relative;
     width: 24px;
@@ -162,7 +162,7 @@
 }
 
 .wishlist-count,
-.shopcart-count,
+.cart-count,
 .notification-count{
     position: absolute;
     top: 0px;
@@ -299,7 +299,8 @@
 .show-currencies {display: block;}
 
 .account-details,
-.wishlist-details {
+.wishlist-details,
+.cart-details {
     position: absolute;
     display: none;
     flex-direction: column;
@@ -314,19 +315,26 @@
     border: rgb(0, 0, 0) 1px solid;
 }
 
-.wishlist-details {
+.wishlist-details,
+.cart-details {
     top: 30px;
-    width: 180px;
+    width: 250px;
+    justify-content: flex-start;
+    max-height: 400px; /* Set this to the height that fits 4 products */
+    overflow-y: auto; /* Enable vertical scrolling */
 }
 
+
 .account-details div,
-.wishlist-details div {
+.wishlist-details div,
+.cart-details div {
     background-color: rgb(245, 245, 245);
 }
 
 .sale-details,
 .account-settings-details,
-.wishlist-settings-details {
+.wishlist-settings-details,
+.cart-settings-details {
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -338,13 +346,15 @@
 }
 
 .account-settings-details,
-.wishlist-settings-details {
+.wishlist-settings-details,
+.cart-settings-details {
     border-bottom: rgb(148, 148, 148)  1px solid;
 }
 
 .account-settings-details a,
 .sale-details a,
-.wishlist-settings-details a {
+.wishlist-settings-details a,
+.cart-settings-details a {
     cursor: pointer;
     color: rgb(159, 65, 65);
     text-decoration: none;
@@ -352,18 +362,21 @@
 
 .account-settings-details a:hover,
 .sale-details a:hover,
-.wishlist-settings-details a:hover {
+.wishlist-settings-details a:hover
+.cart-settings-details a:hover {
     color: rgb(114, 114, 114);
 }
 
 .account-details p,
-.wishlist-details p {
+.wishlist-details p,
+.cart-details p {
     font-weight: 550;
     color: #343434;
 }
 
 .account-container:hover .account-details,
-.wishlist-container:hover .wishlist-details {
+.wishlist-container:hover .wishlist-details,
+.cart-container:hover .cart-details {
     display: flex;
 }
 
