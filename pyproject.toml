@@ -25,6 +25,8 @@ django-extensions = "^3.2.3"
 pytest-django = "^4.8.0"
 freezegun = "^1.5.0"
 django-file-resubmit = "^0.5.2"
+django-haystack = "^3.3.0"
+elasticsearch = "7.0.0"
 
 
 [build-system]

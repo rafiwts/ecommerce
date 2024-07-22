@@ -69,12 +69,14 @@
                     </div>
                 </div>
                 <div class="search-section">
-                    <input class="search-bar" type="text" placeholder="Search...">
-                        <!--TODO: later change it - add select categories-->
-                    <button class="search-button">
-                        <img class="search-icon" src="{% static 'images/search.svg' %}">
-                        <div class="header-tooltip">Search</div>
-                    </button>
+                    <form method="GET" action="{% url 'product:product-search' %}">
+                        <input class="search-bar" type="text" name="q" placeholder="Search...">
+                            <!--TODO: later change it - add select categories-->
+                        <button class="search-button" type="submit">
+                            <img class="search-icon" src="{% static 'images/search.svg' %}">
+                            <div class="header-tooltip">Search</div>
+                        </button>
+                    </form>
                 </div>
                 <div class="icon-section">
                     <div class="wishlist-container">

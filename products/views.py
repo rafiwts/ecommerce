@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.list import ListView
+from haystack.exceptions import SearchBackendError
+from haystack.query import SearchQuerySet
 
 from cart.forms import ProductCartAddForm
 
@@ -271,13 +273,35 @@ class ProductDetailView(DetailView):
         return context
 
 
-# add copy link with favorite
-# TODO: sponsored - first look view in
-#  home/then recommended/ last seen /favourite /four random categories
-# TODO: add
-# categories to a drop down list - a random query
-# of a list of products from a given category
-# TODO: add for sale and sponsored to model - sale as a choice of percentage
+def product_search(request):
+    query = request.GET.get("q", "").strip()
+    results = []
+
+    if query:
+        try:
+            # Search specifically by the 'name' field
+            results = SearchQuerySet().filter(
+                name__icontains=query
+            )  # Case-insensitive search
+        except SearchBackendError as e:
+            print(f"Search backend error: {e}")
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+
+    context = {"results": results, "query": query}
+
+    print(results)
+    # Debugging: Print each result's text for verification
+    for result in results:
+        print(result)
+
+    return render(request, "product/product-search.html", context)
+
+
+# TODO: add search function to searchbar
+# TODO: finish the account icon
+# TODO: add some tabs to site and add active to it
+# TODO: add recommended / last seen
 # TODO: add vendors/companies
 # TODO: shop - all products and apply filters
 # TODO: for sale - 4 categories with for sale - random

@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "file_resubmit",
     "phonenumber_field",
     "django_extensions",
+    "haystack",
 ]
 
 MIDDLEWARE = [
@@ -180,5 +181,15 @@ CACHES = {
         "LOCATION": os.path.join(BASE_DIR, "tmp/file_resubmit/"),
     },
 }
+
+HAYSTACK_CONNECTIONS = {
+    "default": {
+        "ENGINE": "haystack.backends.elasticsearch7_backend.Elasticsearch7SearchEngine",
+        "URL": "http://elasticsearch:9200/",  # Replace with your Elasticsearch URL
+        "INDEX_NAME": "haystack",  # Name of the Elasticsearch index to use
+    },
+}
+
+HAYSTACK_SIGNAL_PROCESSOR = "haystack.signals.RealtimeSignalProcessor"
 
 CART_SESSION_ID = "cart"

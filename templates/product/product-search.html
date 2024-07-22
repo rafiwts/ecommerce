@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block extra_styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/product/product-form.css' %}">
+{% endblock %}
+
+{% block content %}
+<p>wtf</p>
+
+<h1>Search Results</h1>
+{% if query %}
+    <p>You searched for: "{{ query }}"</p>
+{% endif %}
+{% if results %}
+    <ul>
+      {% for result in results %}
+        <li>{{ result.object.name }} - {{ result.object.price }}</li>
+      {% endfor %}
+    </ul>
+{% else %}
+    <p>No products found.</p>
+{% endif %}
+{% endblock content %}

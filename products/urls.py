@@ -6,6 +6,7 @@ from .views import (
     ProductDetailView,
     ProductListCategoryView,
     ProductListHomePageView,
+    product_search,
     toggle_favorite,
 )
 
@@ -27,5 +28,6 @@ urlpatterns = [
         CustomProductListView.as_view(),
         name="custom-product-list",
     ),
+    path("search/", product_search, name="product-search"),
     path("<pk>/", ProductDetailView.as_view(), name="product-detail"),
 ]
