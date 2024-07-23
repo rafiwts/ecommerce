@@ -3,23 +3,44 @@
 {% load static %}
 
 {% block extra_styles %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/product/product-form.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/product/product-list.css' %}">
+<script src="https://kit.fontawesome.com/e48d166edc.js" crossorigin="anonymous"></script>
 {% endblock %}
 
 {% block content %}
-<p>wtf</p>
-
 <h1>Search Results</h1>
 {% if query %}
     <p>You searched for: "{{ query }}"</p>
 {% endif %}
 {% if results %}
-    <ul>
-      {% for result in results %}
-        <li>{{ result.object.name }} - {{ result.object.price }}</li>
-      {% endfor %}
-    </ul>
-{% else %}
-    <p>No products found.</p>
+<div class="product-list">
+  {% for result in results %}
+    <div class="product-item">
+      <h2><a href="{{ result.object.get_absolute_url }}">{{ result.object.name }}</a></h2>
+      <p>Price: {{ result.object.price }}</p>
+      {% if user.is_authenticated %}
+        <span id="favorite-icon" class="favorite-icon {% if result.object.id in favorite_product_ids %}favorited{% endif %}" data-product-id="{{ result.object.id }}">
+          {% if result.object.id in favorite_product_ids %}
+              <i class="fa fa-heart"></i>
+          {% else %}
+              <i class="far fa-heart"></i>
+          {% endif %}
+        </span>
+        <form action="{% url 'cart:cart_add' result.object.id %}" method="post">
+            {{ cart_product_form }}
+            {% csrf_token %}
+            <input type="submit" value="Add to cart">
+        </form>
+      {% else %}
+      <p><a href="{% url 'account:login' %}">Log in</a> to add to favorites or add to chart.</p>
+      {% endif %}
+    </div>
+  {% empty %}
+  <li>No products yet.</li>
+  {% endfor %}
+  <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+</div>
 {% endif %}
+
+<script src="{% static 'js/product-scripts.js' %}"></script>
 {% endblock content %}
