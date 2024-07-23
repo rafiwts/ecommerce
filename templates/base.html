@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/general.css' %}">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         {% block extra_styles %}{% endblock %}
         <title>Ecommerce</title>
     </head>
@@ -78,6 +79,8 @@
                         </button>
                     </form>
                 </div>
+                <input type="text" id="search-input" placeholder="Search for products..." data-autocomplete-url="{% url 'product:autocomplete' %}">
+                <div id="autocomplete-list" class="autocomplete-suggestions"></div>
                 <div class="icon-section">
                     <div class="wishlist-container">
                         <a href="{% url 'product:custom-product-list' type='favorite'%}"><img src="{% static 'images/wishlist.svg' %}"></a>
@@ -194,5 +197,7 @@
             <p>footer</p>
         </div>
     </body>
+
     <script src="{% static 'js/home-scripts.js' %}"></script>
+
 </html>

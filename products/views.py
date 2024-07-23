@@ -112,6 +112,7 @@ class ProductCreateView(View):
 
 class BaseProductListView(ListView):
     model = Product
+    # TODO: change pagination
     paginate_by = 5
     template_name = "product/home-page-product-list.html"
     context_object_name = "products"
@@ -236,20 +237,27 @@ class CustomProductListView(BaseProductListView):
         raise Http404("Invalid query type")
 
 
-@login_required
-def toggle_favorite(request, product_id):
-    try:
-        product = get_object_or_404(Product, id=product_id)
-        favorite, created = FavoriteProduct.objects.get_or_create(
-            user=request.user, product=product
-        )
+class ProductListSearchView(BaseProductListView):
+    template_name = "product/product-search.html"
+    context_object_name = "results"
 
-        if not created:
-            favorite.delete()
-            return JsonResponse({"status": "removed"})
-        return JsonResponse({"status": "added"})
-    except Exception as e:
-        return JsonResponse({"status": "error", "message": str(e)}, status=500)
+    def get_queryset(self):
+        query = self.request.GET.get("q", "").strip()
+
+        if query:
+            try:
+                return SearchQuerySet().filter(name__iscontains=query)
+            except SearchBackendError as e:
+                print(f"Search backend error: {e}")
+            except Exception as e:
+                print(f"An unexpected error occured: {e}")
+        return SearchQuerySet().none()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        query = self.request.GET.get("q", "").strip()
+        context["query"] = query
+        return context
 
 
 class ProductDetailView(DetailView):
@@ -273,29 +281,47 @@ class ProductDetailView(DetailView):
         return context
 
 
-def product_search(request):
-    query = request.GET.get("q", "").strip()
-    results = []
+@login_required
+def toggle_favorite(request, product_id):
+    try:
+        product = get_object_or_404(Product, id=product_id)
+        favorite, created = FavoriteProduct.objects.get_or_create(
+            user=request.user, product=product
+        )
+
+        if not created:
+            favorite.delete()
+            return JsonResponse({"status": "removed"})
+        return JsonResponse({"status": "added"})
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
+
+def autocomplete(request):
+    # TODO: add recently seen at the very beginning and sponsored
+    query = request.GET.get("q", "")
+    suggestions = []
 
     if query:
-        try:
-            # Search specifically by the 'name' field
-            results = SearchQuerySet().filter(
-                name__icontains=query
-            )  # Case-insensitive search
-        except SearchBackendError as e:
-            print(f"Search backend error: {e}")
-        except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+        categories = Category.objects.filter(name__icontains=query)
+        category_suggestions = [
+            {
+                "name": category.name,
+                "id": category.id,
+                "url": reverse("product:category-products", args=[category.slug]),
+            }
+            for category in categories
+        ]
 
-    context = {"results": results, "query": query}
+        products = Product.objects.filter(name__icontains=query)[:5]
+        product_suggestions = [
+            {"name": product.name, "id": product.id, "url": product.get_absolute_url()}
+            for product in products
+        ]
 
-    print(results)
-    # Debugging: Print each result's text for verification
-    for result in results:
-        print(result)
+        suggestions = category_suggestions + product_suggestions
 
-    return render(request, "product/product-search.html", context)
+    return JsonResponse(suggestions, safe=False)
 
 
 # TODO: add search function to searchbar

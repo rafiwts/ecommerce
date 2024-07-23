@@ -66,17 +66,17 @@
     align-items: center;
 }
 
-.search-section {
+.search-section,
+.search-section form {
     position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: 500px;
+    max-width: 650px;
 }
 
 .search-bar {
     width: 100%;
-    max-width: 500px;
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
     font-size: 14px;
@@ -378,6 +378,25 @@
 .wishlist-container:hover .wishlist-details,
 .cart-container:hover .cart-details {
     display: flex;
+}
+
+#search-input {
+    border: 2px solid black;
+}
+
+.autocomplete-suggestions {
+    border: 2px solid black;
+    max-height: 100px;
+    overflow-y: auto;
+    background: #fff;
+    position: absolute;
+}
+.autocomplete-suggestion {
+    padding: 10px;
+    cursor: pointer;
+}
+.autocomplete-suggestion:hover {
+    background: #f0f0f0;
 }
 
 @media (max-width: 425px) {

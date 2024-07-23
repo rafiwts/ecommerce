@@ -64,3 +64,47 @@ window.onclick = function (event) {
         }
     }
 }
+
+// suggestions while searching - to improve
+$(document).ready(function() {
+    const autocompleteUrl = $('#search-input').data('autocomplete-url');
+
+    $('#search-input').on('input', function() {
+        let query = $(this).val();
+        if (query.length > 1) {
+            $.ajax({
+                url: autocompleteUrl,
+                data: {'q': query},
+                dataType: 'json',
+                success: function(data) {
+                    console.log('Data received:', data);
+                    $('#autocomplete-list').empty();
+                    if (data.length > 0) {
+                        data.forEach(item => {
+                            let suggestion = `<div class="autocomplete-suggestion" data-url="${item.url}" data-type="${item.type}">${item.name}</div>`;
+                            $('#autocomplete-list').append(suggestion);
+                        });
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log('Error:', textStatus, errorThrown);
+                }
+            });
+        } else {
+            $('#autocomplete-list').empty();
+        }
+    });
+
+    $(document).on('click', '.autocomplete-suggestion', function() {
+        let url = $(this).data('url');
+        if (url) {
+            window.location.href = url;
+        }
+    });
+
+    $(document).click(function(e) {
+        if (!$(e.target).closest('#search-input').length) {
+            $('#autocomplete-list').empty();
+        }
+    });
+});
