@@ -84,6 +84,8 @@ $(document).ready(function() {
                             let suggestion = `<div class="autocomplete-suggestion" data-url="${item.url}" data-type="${item.type}">${item.name}</div>`;
                             $('#autocomplete-list').append(suggestion);
                         });
+                        $('.autocomplete-suggestions').removeClass("no-data");
+                        $('.autocomplete-suggestions').addClass("has-data");
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -92,7 +94,18 @@ $(document).ready(function() {
             });
         } else {
             $('#autocomplete-list').empty();
+            $('.autocomplete-suggestions').removeClass('has-data');
+            $('.autocomplete-suggestions').addClass("no-data")
         }
+    });
+
+    $('.search-input').on('focus', function() {
+        setTimeout(function() { // Delay to allow click on suggestion
+            if (!$('#search-input').val()) {
+                $('.autocomplete-suggestions').removeClass('has-data');
+                $('.autocomplete-suggestions').addClass('no-data');
+            }
+        }, 100);
     });
 
     $(document).on('click', '.autocomplete-suggestion', function() {

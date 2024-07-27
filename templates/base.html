@@ -70,17 +70,14 @@
                     </div>
                 </div>
                 <div class="search-section">
-                    <form method="GET" action="{% url 'product:product-search' %}">
-                        <input class="search-bar" type="text" name="q" placeholder="Search...">
-                            <!--TODO: later change it - add select categories-->
-                        <button class="search-button" type="submit">
-                            <img class="search-icon" src="{% static 'images/search.svg' %}">
-                            <div class="header-tooltip">Search</div>
-                        </button>
-                    </form>
+                    <input class="search-bar" type="text" id="search-input" placeholder="Search for products..." data-autocomplete-url="{% url 'product:autocomplete' %}">
+                        <!--TODO: later change it - add select categories-->
+                    <button class="search-button" type="submit">
+                        <img class="search-icon" src="{% static 'images/search.svg' %}">
+                        <div class="header-tooltip">Search</div>
+                    </button>
+                    <div id="autocomplete-list" class="autocomplete-suggestions no-data"></div>
                 </div>
-                <input type="text" id="search-input" placeholder="Search for products..." data-autocomplete-url="{% url 'product:autocomplete' %}">
-                <div id="autocomplete-list" class="autocomplete-suggestions"></div>
                 <div class="icon-section">
                     <div class="wishlist-container">
                         <a href="{% url 'product:custom-product-list' type='favorite'%}"><img src="{% static 'images/wishlist.svg' %}"></a>

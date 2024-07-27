@@ -384,12 +384,19 @@
     border: 2px solid black;
 }
 
-.autocomplete-suggestions {
-    border: 2px solid black;
-    max-height: 100px;
+.autocomplete-suggestions.no-data {
+    display: none;
+}
+
+.autocomplete-suggestions.has-data {
+    position: absolute;
+    top: 48px;
+    max-height: 300px;
+    width: 283px;
     overflow-y: auto;
     background: #fff;
-    position: absolute;
+    border: 2px solid black;
+
 }
 .autocomplete-suggestion {
     padding: 10px;
