@@ -65,9 +65,24 @@ window.onclick = function (event) {
     }
 }
 
-// suggestions while searching - to improve
+// suggestions while searching
 $(document).ready(function() {
     const autocompleteUrl = $('#search-input').data('autocomplete-url');
+    const autocompleteList = $('.autocomplete-suggestions');
+    const autocompleteListID = $('#autocomplete-list');
+
+    function updateAutocompleteClass(hasData, object) {
+        if (hasData) {
+            object.removeClass('no-data').addClass('has-data');
+        } else {
+            object.removeClass('has-data').addClass('no-data');
+        }
+    }
+
+    function clearAutocompleteList() {
+        autocompleteListID.empty();
+        updateAutocompleteClass(false, autocompleteList);
+    }
 
     $('#search-input').on('input', function() {
         let query = $(this).val();
@@ -77,15 +92,15 @@ $(document).ready(function() {
                 data: {'q': query},
                 dataType: 'json',
                 success: function(data) {
-                    console.log('Data received:', data);
                     $('#autocomplete-list').empty();
                     if (data.length > 0) {
                         data.forEach(item => {
                             let suggestion = `<div class="autocomplete-suggestion" data-url="${item.url}" data-type="${item.type}">${item.name}</div>`;
                             $('#autocomplete-list').append(suggestion);
                         });
-                        $('.autocomplete-suggestions').removeClass("no-data");
-                        $('.autocomplete-suggestions').addClass("has-data");
+                        updateAutocompleteClass(true, autocompleteList);
+                    } else {
+                        clearAutocompleteList();
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -93,19 +108,8 @@ $(document).ready(function() {
                 }
             });
         } else {
-            $('#autocomplete-list').empty();
-            $('.autocomplete-suggestions').removeClass('has-data');
-            $('.autocomplete-suggestions').addClass("no-data")
+            clearAutocompleteList();
         }
-    });
-
-    $('.search-input').on('focus', function() {
-        setTimeout(function() { // Delay to allow click on suggestion
-            if (!$('#search-input').val()) {
-                $('.autocomplete-suggestions').removeClass('has-data');
-                $('.autocomplete-suggestions').addClass('no-data');
-            }
-        }, 100);
     });
 
     $(document).on('click', '.autocomplete-suggestion', function() {
@@ -116,8 +120,16 @@ $(document).ready(function() {
     });
 
     $(document).click(function(e) {
-        if (!$(e.target).closest('#search-input').length) {
-            $('#autocomplete-list').empty();
+        if (!$(e.target).closest('#search-input, #autocomplete-list').length) {
+            clearAutocompleteList();
         }
+    });
+
+    $('#search-input').on('blur', function() {
+        setTimeout(function() {
+            if (!$('#search-input').val()) {
+                clearAutocompleteList();
+            }
+        }, 300);
     });
 });

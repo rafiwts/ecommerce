@@ -1,3 +1,59 @@
+// handle url while opening and closing blocks
+document.addEventListener('DOMContentLoaded', function() {
+    function toggleBlock(blockId, displayStyle) {
+        let block = document.getElementById(blockId);
+        let overlay = document.getElementById('overlay');
+
+        block.style.display = displayStyle;
+        overlay.style.display = displayStyle === 'flex' ? 'block' : 'none';
+
+        updateUrl(blockId, displayStyle);
+    }
+
+    function openBlock(blockId) {
+        toggleBlock(blockId, 'flex')
+    }
+
+    function closeBlock(blockId) {
+        toggleBlock(blockId, 'none')
+    }
+
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    function updateUrl (blockId, displayStyle) {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (displayStyle === 'flex') {
+            urlParams.set('block', blockId)
+        } else {
+            urlParams.delete('block')
+        }
+        const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
+        history.pushState(null, '', newUrl);
+    }
+
+    const block = getQueryParam('block');
+    if (block) {
+        openBlock(block);
+    }
+
+    document.addEventListener('click', function(event) {
+        const overlay = document.getElementById('overlay');
+        if (overlay && event.target === overlay) {
+            const blockId = getQueryParam('block');
+            if (blockId) {
+                closeBlock(blockId);
+            }
+        }
+    });
+
+    // make functions global
+    window.openBlock = openBlock;
+    window.closeBlock = closeBlock;
+});
+
 // adds login and register fields transition
 function addClass(){
     let parent = this.parentNode.parentNode;
@@ -59,22 +115,6 @@ function closeImageBlock() {
 
     block.style.display = "none";
     overlay.style.display = "none";
-}
-
-function toggleBlock(blockId, displayStyle) {
-    let block = document.getElementById(blockId);
-    let overlay = document.getElementById('overlay');
-
-    block.style.display = displayStyle;
-    overlay.style.display = displayStyle === 'flex' ? 'block' : 'none';
-}
-
-function openBlock(blockId) {
-    toggleBlock(blockId, 'flex');
-}
-
-function closeBlock(blockId) {
-    toggleBlock(blockId, 'none');
 }
 
 function openEditShippingAddressBlock(blockID) {
