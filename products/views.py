@@ -233,6 +233,13 @@ class CustomProductListView(BaseProductListView):
             print(f"Error occured while fetching a queryset: {e}")
             return Product.objects.none()
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        type = self.query_type
+        context["type"] = type
+
+        return context
+
     def handle_invalid_query_type(self, request):
         raise Http404("Invalid query type")
 
@@ -313,7 +320,7 @@ def autocomplete(request):
             for category in categories
         ]
 
-        products = Product.objects.filter(name__icontains=query)[:5]
+        products = Product.objects.filter(name__icontains=query)[:10]
         product_suggestions = [
             {"name": product.name, "id": product.id, "url": product.get_absolute_url()}
             for product in products
@@ -324,8 +331,6 @@ def autocomplete(request):
     return JsonResponse(suggestions, safe=False)
 
 
-# TODO: add search function to searchbar
-# TODO: finish the account icon
 # TODO: add some tabs to site and add active to it
 # TODO: add recommended / last seen
 # TODO: add vendors/companies

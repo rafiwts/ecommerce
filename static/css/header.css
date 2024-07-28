@@ -59,6 +59,10 @@
     padding: 0px 5px 0px 5px;
 }
 
+.active {
+    background-color: red;
+}
+
 .icon-section {
     display: flex;
     flex-direction: row;

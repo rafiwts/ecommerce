@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% if type == "sale" %}
+    {%block sale_active%}class="active"{%endblock sale_active%}
+{% endif %}
+
 {% load static %}
 
 {% block extra_styles %}
@@ -10,6 +14,7 @@
 {% block content %}
 
 <h1>Product List</h1>
+{{type}}
 <span class="home-products-redirection"><a href="{% url 'product:home-page-products' %}" title="Go back">Go back</a></span>
 <div class="product-list">
     {% for product in object_list %}

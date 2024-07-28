@@ -148,9 +148,9 @@
                                 <div class="account-settings-details">
                                     <p>Account settings</p>
                                     <a href="{% url 'account:profile-view' request.user.username %}">Edit profile</a>
-                                    <a onclick="(() => openBlock('editAccountBlock'))()">Edit account</a>
-                                    <a onclick="(() => openBlock('editAddressBlock'))()">Edit address</a>
-                                    <a onclick="(() => openBlock('changePasswordBlock'))()">Change password</a>
+                                    <a href="{% url 'account:profile-view' request.user.username %}?block=editAccountBlock">Edit account</a>
+                                    <a href="{% url 'account:profile-view' request.user.username %}?block=editAddressBlock">Edit address</a>
+                                    <a href="{% url 'account:profile-view' request.user.username %}?block=changePasswordBlock">Change password</a>
                                     <a href="#">Add account</a>
                                 </div>
                                 <div class="sale-details">
@@ -172,8 +172,8 @@
         <div class="tabs-container">
             <div class="tab-bar">
                 <ul class="tabs">
-                    <button onclick="window.location.href='{% url 'products:home-page-products' %}'" {%block active_shop%}{%endblock active_shop%}>Shop</button>
-                    <button onclick="window.location.href='{% url 'home' %}'" {%block active_sale%}{%endblock active_sale%}>For Sale</a></button>
+                    <button {%block products_active%}{%endblock products_active%} onclick="window.location.href='{% url 'products:home-page-products' %}'" {%block active_shop%}{%endblock active_shop%}>Shop</button>
+                    <button {%block sale_active%}{%endblock sale_active%} onclick="window.location.href='{% url 'products:custom-product-list' type='sale' %}'" {%block active_sale%}{%endblock active_sale%}>On Sale</a></button>
                     <button>To be added</button>
                     <button>To be added</button>
                     <button>To be added</button>
