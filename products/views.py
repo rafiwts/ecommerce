@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.decorators import login_required
 from django.forms import modelformset_factory
 from django.http import Http404, JsonResponse
@@ -13,6 +15,7 @@ from cart.forms import ProductCartAddForm
 
 from .forms import ProductForm, ProductImageForm
 from .models import Category, FavoriteProduct, Product, ProductImage
+from .utils import get_recommendations, handle_last_seen_products
 
 
 class ProductCreateView(View):
@@ -153,32 +156,50 @@ class ProductListHomePageView(BaseProductListView):
 
         # random products from random category
         random_category = Category.objects.order_by("?").first()
-
-        if random_category:
-            category_products = Product.objects.filter(
-                child_subcategory__subcategory__category=random_category
-            ).order_by("?")[:10]
+        category_products = (
+            self.get_products_by_category(random_category) if random_category else []
+        )
 
         # random for sale products
-        for_sale_products = Product.objects.filter(for_sale__gt=0).order_by("?")[:10]
+        sale_products = Product.objects.filter(for_sale__gt=0).order_by("?")[:10]
 
         # random for favorite products
-        if self.request.user.is_authenticated:
-            favorite_products = Product.objects.filter(
-                favoriteproduct__user=self.request.user
-            )
-        else:
-            favorite_products = None
+        favorite_products = self.get_favorite_products(self.request.user)
 
-        # TODO: later add recommended, and recently seen, last bought
+        # handle last seen products
+        last_seen_products_ids = handle_last_seen_products(self.request)
+        last_seen_products = Product.objects.filter(id__in=last_seen_products_ids)
 
-        context["sponsored_products"] = sponsored_products
-        context["random_category"] = random_category
-        context["category_products"] = category_products
-        context["sale_products"] = for_sale_products
-        context["favorite_products"] = favorite_products
+        # handle recommended products
+        recommendations = get_recommendations(last_seen_products, favorite_products)
+
+        # TODO: later add last bought
+
+        context.update(
+            {
+                "sponsored_products": sponsored_products,
+                "random_category": random_category,
+                "category_products": category_products,
+                "sale_products": sale_products,
+                "favorite_products": favorite_products,
+                "last_seen_products": last_seen_products,
+                "recommended_products": recommendations,
+            }
+        )
 
         return context
+
+    def get_favorite_products(self, user):
+        if user.is_authenticated:
+            return Product.objects.filter(
+                id__in=user.favorite_products.values_list("product_id", flat=True)
+            )
+        return Product.objects.none()
+
+    def get_products_by_category(self, category):
+        return Product.objects.filter(
+            child_subcategory__subcategory__category=category
+        ).order_by("?")[:10]
 
 
 class ProductListCategoryView(SingleObjectMixin, BaseProductListView):
@@ -285,7 +306,21 @@ class ProductDetailView(DetailView):
         # add a form for displaying cart
         context["cart_product_form"] = ProductCartAddForm()
 
+        # handle last seen products
+        self.last_seen_products = handle_last_seen_products(
+            self.request, self.object.id
+        )
+        last_seen_products = Product.objects.filter(id__in=self.last_seen_products)
+        context["last_seen_products"] = last_seen_products
+
         return context
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        response = self.render_to_response(context)
+        response.set_cookie("last_seen_products", json.dumps(self.last_seen_products))
+        return response
 
 
 @login_required
@@ -331,9 +366,9 @@ def autocomplete(request):
     return JsonResponse(suggestions, safe=False)
 
 
-# TODO: add some tabs to site and add active to it
-# TODO: add recommended / last seen
+# TODO: update search
 # TODO: add vendors/companies
 # TODO: shop - all products and apply filters
 # TODO: for sale - 4 categories with for sale - random
-# TODO: search bar - make a use of it
+# TODO: add tabs
+# TODO: add some tabs to site and add active to it - fix activation

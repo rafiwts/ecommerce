@@ -227,7 +227,9 @@ class ProductImage(models.Model):
 
 
 class FavoriteProduct(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="favorite_products"
+    )
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     def __str__(self):
