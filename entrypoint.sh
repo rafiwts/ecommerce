@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Wait for the database to be ready
-python /app/ecommerce/poewait_for_db.py
+python /app/ecommerce/wait_for_db.py
 
 # Apply database migrations
 python manage.py migrate
