@@ -15,6 +15,7 @@
 
 <span class="home-products-redirection"><a href="{% url 'product:home-page-products' %}" title="Go back">Go back</a></span>
 <h1>Products</h1>
+<h2>{{ category }}</h2>
 <div class="product-list">
     {% for product in object_list %}
         <div class="product-item">
