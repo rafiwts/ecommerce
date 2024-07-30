@@ -11,3 +11,13 @@
   border: black 2px solid;
   margin: 10px;
 }
+
+.main-container {
+  width: 1200px;
+}
+
+@media (max-width: 1400px) {
+  .main-container {
+    max-width: 1400px;
+  }
+}

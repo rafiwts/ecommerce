@@ -2,24 +2,22 @@
     display: grid;
     row-gap: 40px;
     margin-top: 20px;
-    max-width: 250px;
-    transition: left 0.5s ease, right 0.5s ease, max-width 0.5s ease;
+    max-width: 300px;
+    max-height: 1800px;
 }
 
-.sidebar-top,
-.sidebar-middle,
-.sidebar-bottom {
+.sidebar {
     height: 400px;
     background-color: rgb(236, 236, 236);
-    width: 210px;
+    max-width: 300px;
     padding-top: 5px;
     border-radius: 8px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 900px) {
     .sidebar-container {
         max-width: 0;
-        overflow: hidden;
+        display: none;
     }
 }

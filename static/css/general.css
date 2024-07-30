@@ -24,4 +24,13 @@ body {
     max-width: 1400px;
     margin-right: auto;
     margin-left: auto;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
 }
+
+@media (max-width: 1400px) {
+    .main-content {
+      max-width: 1400px;
+    }
+  }

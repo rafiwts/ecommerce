@@ -402,10 +402,20 @@
     border: 2px solid black;
 
 }
+
 .autocomplete-suggestion {
     padding: 10px;
     cursor: pointer;
 }
+
+.autocomplete-suggestion:hover {
+    background: #f0f0f0;
+}
+
+.autocomplete-suggestion.category {
+    background-color: rgb(213, 169, 169);
+}
+
 .autocomplete-suggestion:hover {
     background: #f0f0f0;
 }
