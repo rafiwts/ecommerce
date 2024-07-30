@@ -274,7 +274,7 @@ class ProductListSearchView(BaseProductListView):
 
         if query:
             try:
-                return SearchQuerySet().filter(name__iscontains=query)
+                return SearchQuerySet().filter(name__startswith=query)
             except SearchBackendError as e:
                 print(f"Search backend error: {e}")
             except Exception as e:
@@ -348,6 +348,7 @@ def autocomplete(request):
         categories = Category.objects.filter(name__icontains=query)
         category_suggestions = [
             {
+                "type": "category",
                 "name": category.name,
                 "id": category.id,
                 "url": reverse("product:category-products", args=[category.slug]),
@@ -357,7 +358,15 @@ def autocomplete(request):
 
         products = Product.objects.filter(name__icontains=query)[:10]
         product_suggestions = [
-            {"name": product.name, "id": product.id, "url": product.get_absolute_url()}
+            {
+                "type": "product",
+                "name": product.name,
+                "id": product.id,
+                "url": product.get_absolute_url(),
+                "child_subcategory": product.child_subcategory.name,
+                "subcategory": product.child_subcategory.subcategory.name,
+                "category": product.child_subcategory.subcategory.category.name,
+            }
             for product in products
         ]
 
@@ -366,9 +375,9 @@ def autocomplete(request):
     return JsonResponse(suggestions, safe=False)
 
 
-# TODO: update search
-# TODO: add vendors/companies
 # TODO: shop - all products and apply filters
+# TODO: add vendors/companies
+# TODO: add coupons to a cart
 # TODO: for sale - 4 categories with for sale - random
 # TODO: add tabs
 # TODO: add some tabs to site and add active to it - fix activation

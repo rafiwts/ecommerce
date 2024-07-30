@@ -95,7 +95,12 @@ $(document).ready(function() {
                     $('#autocomplete-list').empty();
                     if (data.length > 0) {
                         data.forEach(item => {
-                            let suggestion = `<div class="autocomplete-suggestion" data-url="${item.url}" data-type="${item.type}">${item.name}</div>`;
+                            let suggestion;
+                            if (item.type === "category") {
+                                suggestion = `<div class="autocomplete-suggestion category" data-url="${item.url}">${item.name}<p>Search in category: ${item.name}</p></div>`;
+                            } else if (item.type === "product") {
+                                suggestion = `<div class="autocomplete-suggestion" data-url="${item.url}">${item.name}<p>${item.child_subcategory} > ${item.subcategory} > ${item.category}</p></div>`;
+                            }
                             $('#autocomplete-list').append(suggestion);
                         });
                         updateAutocompleteClass(true, autocompleteList);
@@ -125,11 +130,31 @@ $(document).ready(function() {
         }
     });
 
+    // if clicked-away the list disappears
     $('#search-input').on('blur', function() {
         setTimeout(function() {
             if (!$('#search-input').val()) {
                 clearAutocompleteList();
             }
         }, 300);
+    });
+
+    // search by clicking an icon
+    $('.search-button').on('click', function() {
+        let query = $('#search-input').val();
+        if (query) {
+            window.location.href = `/product/search/?q=${query}`;
+        }
+    });
+
+    // search by clicking enter
+    $('#search-input').on('keydown', function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            let query = $(this).val();
+            if (query) {
+                window.location.href = `/product/search/?q=${query}`;
+            }
+        }
     });
 });
